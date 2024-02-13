@@ -1,0 +1,67 @@
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+@import "./theme/loader.css";
+@import "./theme/fonts/font.css";
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+:focus {
+  outline: none !important;
+}
+
+@media screen and (max-width: 640px) {
+  body,
+  html {
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.home-slicker-image {
+  filter: brightness(73%);
+  -webkit-filter: brightness(73%);
+  -moz-filter: brightness(73%);
+}
+
+.custom-prev-arrow,
+.custom-next-arrow {
+  background-color: rgba(211, 204, 204, 0.5);
+  padding: 5px 10px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.slick-track {
+  margin: 0;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #57ccb5;
+  opacity: 1;
+  font-size: 2rem;
+}
+
+.slick-prev {
+  left: -45px;
+}
