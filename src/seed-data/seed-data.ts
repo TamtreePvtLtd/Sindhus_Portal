@@ -36,7 +36,7 @@ export const ourServicesData: IOurServices[] = [
 
 export const homePageSlicker = {
   image: "assets/Sindhus-BannerImage.webp",
-  heading: "Sindhu's Kitchen",
+  heading: "SINDHU's Kitchen",
   subHeading: "CATERING TO YOUR NEEDS",
   content:
     "Authentic South Indian Food and Snacks prepared to give you the very best in town",
@@ -132,7 +132,7 @@ export const cateringSpecialData: ICateringSpecials[] = [
   {
     id: 4,
     title: "Cooking Methods",
-    description: "No colors, no preservatives, No MCG, 100% same day cooking",
+    description: "No colors, no preservatives, No MSG, 100% same day cooking",
     iconkey: CateringSpecialEnum.OUTDOORGRILLICON,
   },
 ];

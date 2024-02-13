@@ -8,10 +8,15 @@ import { useGetFetchProductsByMenuId } from "../../customRQHooks/Hooks";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
+import React from "react";
 
 function CategoryProducts() {
   const { menuId } = useParams();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const selectedCategory = useGetFetchProductsByMenuId(menuId ?? "");
 
@@ -31,7 +36,7 @@ function CategoryProducts() {
           }}
         >
           <Box display={"flex"} alignItems={"center"}>
-            <IconButton onClick={() => navigate(-1)}sx={{ mr:1 }}>
+            <IconButton onClick={() => navigate(-1)} sx={{ mr: 1 }}>
               <ArrowBackIcon fontSize="medium" />
             </IconButton>
 

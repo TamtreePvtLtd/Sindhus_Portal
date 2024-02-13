@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
 import CateringSpecial from "./CateringSpecial";
+import Marquee from "react-fast-marquee";
 
 function CateringPage() {
   const theme = useTheme();
@@ -109,6 +110,17 @@ function CateringPage() {
               </Grid>
             )}
           </Grid>
+          <Box>
+            <Marquee>
+              <Typography
+                variant="h5"
+                color="secondary"
+                sx={{ fontSize: "25px", fontWeight: "bold" }}
+              >
+                For catering inquiries, please fill out the form below.
+              </Typography>
+            </Marquee>
+          </Box>
         </Box>
       </Box>
 

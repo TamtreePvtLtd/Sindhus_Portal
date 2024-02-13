@@ -133,7 +133,6 @@ const getProductsByMenuIdWithSearchTerm = async (
     const response = await httpWithoutCredentials.get<IProductDropDownData[]>(
       homePageProduct
     );
-console.log(response);
 
     return response;
   } catch (error) {

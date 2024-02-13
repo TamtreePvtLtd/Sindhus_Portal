@@ -340,6 +340,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                                               sx={{
                                                 lineHeight: 1,
                                                 padding: 0,
+                                                zIndex: 99,
                                                 "& .MuiButtonGroup-grouped": {
                                                   minWidth: "32px",
                                                 },

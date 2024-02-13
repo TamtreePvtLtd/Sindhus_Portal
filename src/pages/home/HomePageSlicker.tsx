@@ -25,7 +25,6 @@ import { paths } from "../../routes/path";
 
 function HomePageSlicker() {
   const theme = useTheme();
-
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
   const [menus, setMenus] = useState<IMenuList[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,7 +45,7 @@ function HomePageSlicker() {
     if (!selectedMenuId && !!searchTerm) {
       timeoutId = setTimeout(() => {
         fetchProducts(selectedMenuId, searchTerm);
-      }, 100);
+      }, 1000);
     } else {
       fetchProducts(selectedMenuId, searchTerm);
     }
@@ -59,7 +58,6 @@ function HomePageSlicker() {
     searchTerm: string = ""
   ) => {
     try {
-      setSearchTerm(searchTerm);
       let response;
 
       if (searchTerm.length < 3 && !menuId) {
@@ -68,7 +66,6 @@ function HomePageSlicker() {
         response = await getProductsByMenuIdWithSearchTerm(menuId, searchTerm);
       }
 
-      console.log("API Response:", response);
       if (response && response.data) {
         const products: IProductDropDownData[] = response.data.map(
           (product) => ({
@@ -88,13 +85,9 @@ function HomePageSlicker() {
     }
   };
 
-  const handleProductSearch = (_event, newValue) => {
-    if (newValue) {
-      setSearchTerm(""); // Clear search term when product is selected
-    } else {
-      const newSearchTerm = _event.target.value;
-      setSearchTerm(newSearchTerm || "");
-    }
+  const handleProductSearch = (_event) => {
+    const newSearchTerm = _event.target.value;
+    setSearchTerm(newSearchTerm || "");
   };
 
   const handleMenuChange = (_event, newValue: IMenuList | null) => {
@@ -112,14 +105,9 @@ function HomePageSlicker() {
     }
   }, [menuData, isLoading, isError]);
 
-  const options = products.map((item) => ({
-    ...item,
-    label: item.title,
-  }));
-
   return (
     <Box sx={{ position: "relative" }}>
-      <Box className="page-banner" sx={{ position: "relative" }}>
+      <Box className="page-banner" style={{ position: "relative" }}>
         <img
           src={homePageSlicker.image}
           alt={homePageSlicker.heading}
@@ -267,62 +255,56 @@ function HomePageSlicker() {
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon color="secondary" />
             </IconButton>
-
             <Autocomplete
               sx={{ width: "100%" }}
               onChange={handleProductSearch}
-              options={options}
-              getOptionLabel={(option) => {
-                console.log("getOptionLabel called with option:", option);
-                return option.title;
-              }}
-              onInputChange={(event, newInputValue) => {
-                if (newInputValue) {
-                  setSearchTerm(newInputValue);
+              options={products.map((item) => ({
+                ...item,
+                label: item.title,
+              }))}
+              onInputChange={(_event, newInputValue) => {
+                if (!newInputValue.trim()) {
+                  setSearchTerm("");
                 }
               }}
-              renderOption={(props, option) => {
-                console.log("Render Option:", option);
-                return (
-                  <Link
-                    to={`/detail/${option._id}`}
-                    state={{ previousPath: paths.DAILYMENU }}
+              renderOption={(props, option) => (
+                <Link
+                  to={`/detail/${option._id}`}
+                  state={{ previousPath: paths.DAILYMENU }}
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                  key={option._id}
+                >
+                  <li
+                    {...props}
                     style={{
-                      textDecoration: "none",
-                      color: "black",
+                      margin: "5px 0",
+                      display: "flex",
+                      alignItems: "center",
                     }}
-                    key={option._id}
                   >
-                    <li
-                      {...props}
+                    <img
+                      src={option.posterURL ?? ""}
                       style={{
-                        margin: "5px 0",
-                        display: "flex",
-                        alignItems: "center",
+                        width: "4rem",
+                        height: "4rem",
+                        borderRadius: "50%",
+                        marginRight: "10px",
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
                       }}
                     >
-                      <img
-                        src={option.posterURL ?? ""}
-                        style={{
-                          width: "4rem",
-                          height: "4rem",
-                          borderRadius: "50%",
-                          marginRight: "10px",
-                        }}
-                      />
-
-                      <Typography
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                        }}
-                      >
-                        {option.title}
-                      </Typography>
-                    </li>
-                  </Link>
-                );
-              }}
+                      {option.title}
+                    </Typography>
+                  </li>
+                </Link>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -330,8 +312,10 @@ function HomePageSlicker() {
                   InputProps={{
                     ...params.InputProps,
                     disableUnderline: true,
-                    type: "search",
-                    // autoComplete: true,
+                    onChange: (event) => {
+                      const newSearchTerm = event.target.value;
+                      setSearchTerm(newSearchTerm || "");
+                    },
                   }}
                   fullWidth
                   variant="standard"

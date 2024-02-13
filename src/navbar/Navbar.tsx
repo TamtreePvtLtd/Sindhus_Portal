@@ -21,10 +21,10 @@ import CallIcon from "@mui/icons-material/Call";
 
 const navMenus = [
   { name: "Home", linkurl: paths.HOME },
-  { name: "Specials", linkurl: paths.SPECIALS },
   { name: "Daily Menu", linkurl: paths.DAILYMENU },
   { name: "Snacks", linkurl: paths.SNACKS },
   { name: "Catering", linkurl: paths.CATERING },
+  { name: "Specials", linkurl: paths.SPECIALS },
 ];
 
 function NavBar() {
@@ -96,7 +96,7 @@ function NavBar() {
           borderStyle: "solid",
           borderWidth: 0,
           height: "70px",
-          //backgroundColor: "rgba(255,255,255,0.7)",
+          //backgroundColor: "rgba(255,255,255,0.7)",          
           backgroundColor: "white",
           position: isBelowSMScreen ? "fixed" : appBarPosition,
         }}

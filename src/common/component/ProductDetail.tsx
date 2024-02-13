@@ -96,6 +96,7 @@ function ProductDetail() {
                             height="100%"
                             width="100%"
                             src={image}
+                            sx={{ objectFit: "contain" }}
                           ></CardMedia>
                         </Box>
                       </Card>
@@ -107,7 +108,12 @@ function ProductDetail() {
             <>
               {menuDetail && (
                 <>
-                  <Typography sx={{ fontWeight: "bolder", fontSize: "28px" }}>
+                  <Typography
+                    sx={{
+                      fontWeight: "bolder",
+                      fontSize: "20px",
+                    }}
+                  >
                     {menuDetail.title}
                   </Typography>
 

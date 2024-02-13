@@ -55,7 +55,7 @@ function Footer() {
 
   const ourTimingStyles = {
     borderBottom: "none",
-    p: 1,
+    p: 0.5,
     color: "white",
     fontSize: "15px",
   };
@@ -117,7 +117,7 @@ function Footer() {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ background: "white" }}
+              sx={{ background: "white", marginBottom: "25px" }}
             />
             <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
               <Fade bottom delay={300}>
@@ -181,7 +181,7 @@ function Footer() {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ background: "white" }}
+              sx={{ background: "white", marginBottom: "25px" }}
             />
             <Grid item lg={2.9} xs={12} className={classes.commonGridStyle}>
               <Fade bottom delay={400}>
@@ -215,7 +215,7 @@ function Footer() {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ background: "white" }}
+              sx={{ background: "white", marginBottom: "25px" }}
             />
             <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
               <Box sx={{ my: 1 }}>

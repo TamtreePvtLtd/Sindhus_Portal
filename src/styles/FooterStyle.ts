@@ -9,7 +9,6 @@ export const useCommonGridStyle = makeStyles(() => ({
     zIndex: 1,
   },
   footerContainer: {
-    backgroundImage: `url("/assets/footer-background-home.png")`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
