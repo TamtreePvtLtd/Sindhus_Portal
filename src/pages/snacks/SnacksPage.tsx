@@ -36,7 +36,7 @@ function SnacksPage() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          color: "#57ccb5",padding:"10px",
+          color: "#57ccb5",padding:"20px",
           fontWeight: 600,
         }}
       >
