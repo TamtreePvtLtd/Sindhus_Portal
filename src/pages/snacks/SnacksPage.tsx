@@ -53,14 +53,14 @@ function SnacksPage() {
           {snacksPageData &&
           snacksPageData.products &&
           snacksPageData.products.length > 0 ? (
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
               {snacksPageData.products.map((product) => (
                 <Grid
                   item
                   xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
+                  sm={4}
+                  md={3}
+                  lg={2.4}
                   sx={{ display: "flex", justifyContent: "center" }}
                   key={product._id}
                 >

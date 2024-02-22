@@ -35,20 +35,20 @@ function Carousel(props: IProps) {
   const settings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 4.2,
+    slidesToShow: 5,
     slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2.5,
+          slidesToShow: 3.2,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 2.2,
           slidesToScroll: 1,
         },
       },
