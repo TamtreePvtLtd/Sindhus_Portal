@@ -253,7 +253,7 @@ function CateringRequestModel(props: IProps) {
               Cancel
             </Button>
             <Button type="submit" variant="contained">
-              confirm
+              Confirm
             </Button>
           </DialogActions>
         </Container>
