@@ -68,12 +68,12 @@ function CommonProductCard(props: IProps) {
         <Typography
           variant="body1"
           sx={{
-            fontWeight: 600,
+            fontWeight: 500,
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 2,
-          }}
+                          }}
           component="div"
         >
           {product.title}

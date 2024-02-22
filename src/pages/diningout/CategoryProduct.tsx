@@ -47,7 +47,7 @@ function CategoryProducts() {
             >
               <Typography
                 sx={{
-                  fontWeight: 600,
+                  fontWeight: 400,
                   display: "-webkit-box",
                   WebkitLineClamp: 1,
                   WebkitBoxOrient: "vertical",

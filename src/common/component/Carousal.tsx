@@ -84,11 +84,11 @@ function Carousel(props: IProps) {
               sx={{
                 margin: "0px 10px 0px 0px",
                 marginLeft: "20px",
-                fontWeight: 800,
+                fontWeight: 400,
                 color: "white",
                 lineHeight: 2,
               }}
-              variant="h5"
+              variant="h6"
             >
               {category.menuDatas.title}
             </Typography>
