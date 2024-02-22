@@ -33,15 +33,15 @@ function CommonProductCard(props: IProps) {
   return (
     <Card
       sx={{
-        boxShadow: 4,
         mr: 2,
-        width: "250px",
-        height: "300px",
+        width: "200px",
+        height: "260px",
+        border: "gray",
       }}
     >
       <Box
         sx={{
-          height: "180px",
+          height: "140px",
           width: "100%",
           overflow: "hidden",
         }}
@@ -59,9 +59,6 @@ function CommonProductCard(props: IProps) {
               height: "100%",
               objectFit: "contain",
               transition: "transform 400ms",
-              "&:hover": {
-                transform: "scale(1.2)",
-              },
             }}
             loading="lazy"
           />
