@@ -25,8 +25,6 @@ import { Divider } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
-
-
 const EnquiryFormInitialValue: ICateringEnquiry = {
   fullName: "",
   email: "",
@@ -54,8 +52,7 @@ const schema = yup.object().shape({
 function CateringEnquiryForm() {
   const { updateSnackBarState } = useSnackBar();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [formData, setFormData] = useState<ICateringEnquiry | null>(null);
-
+  const [formData, setFormData] = useState<ICateringEnquiry | null>(null);
 
   const {
     handleSubmit,
@@ -74,20 +71,21 @@ function CateringEnquiryForm() {
   };
 
   const handleCloseDialog = () => {
-     reset();
+    reset();
     setIsDialogOpen(false);
   };
 
   const onSubmitCateringEnquiry = async (data: ICateringEnquiry) => {
+    handleOpenDialog(); // Open dialog when form is submitted
     setFormData(data); // Store form data in state
     handleConfirmSubmit();
-    handleOpenDialog(); // Open dialog when form is submitted
   };
 
   const handleConfirmSubmit = async () => {
     try {
       if (formData) {
         await createCateringEnquiry(formData); // Submit form data
+        handleOpenDialog();
         updateSnackBarState(
           true,
           "Form submitted successfully",
@@ -234,11 +232,7 @@ function CateringEnquiryForm() {
                 justifyContent: "center",
               }}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                onClick={handleOpenDialog}
-              >
+              <Button type="submit" variant="contained">
                 Send Request
               </Button>
             </Grid>
@@ -253,10 +247,10 @@ function CateringEnquiryForm() {
             alignItems: "center",
           }}
         >
-        <DialogTitle>Confirm Submission</DialogTitle>
-        <IconButton onClick={handleCloseDialog}>
-          <CloseIcon />
-        </IconButton>
+          <DialogTitle>Confirm Submission</DialogTitle>
+          <IconButton onClick={handleCloseDialog}>
+            <CloseIcon />
+          </IconButton>
         </Box>
         <Divider />
         <DialogContent>Are you sure you want to submit the form?</DialogContent>
@@ -265,7 +259,7 @@ function CateringEnquiryForm() {
             Cancel
           </Button>
           <Button
-            onClick={handleSubmit(onSubmitCateringEnquiry)}
+            onClick={handleSubmit(handleConfirmSubmit)}
             variant="contained"
             autoFocus
           >

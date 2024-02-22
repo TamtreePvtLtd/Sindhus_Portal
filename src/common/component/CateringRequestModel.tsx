@@ -49,6 +49,7 @@ const RequestFormInitialValue: ICateringRequest = {
   name: "",
   mobileNumber: "",
   email: "",
+  eventName:"",
   eventDate: "",
   eventTime: "",
 };
@@ -64,6 +65,7 @@ const schema = yup.object().shape({
     .string()
     .email("Invalid email address")
     .required("Email is required"),
+  eventName:yup.string(),
   eventDate: yup.string().required("Event date is required"),
   eventTime: yup.string().required("Event time is required"),
 });
@@ -197,6 +199,14 @@ function CateringRequestModel(props: IProps) {
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email ? errors.email.message : ""}
+            />
+            <TextField
+              sx={{ mb: 1.5 }}
+              size="small"
+              label="Event Name"
+              fullWidth
+              variant="outlined"
+              {...register("eventName")}
             />
             <FormControl sx={{ mb: 0.5 }} fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
