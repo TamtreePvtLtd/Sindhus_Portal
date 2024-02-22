@@ -78,12 +78,14 @@ function Carousel(props: IProps) {
             alignItems={"center"}
             pb={1}
             mt={1}
+            sx={{ backgroundColor: "orange" }}
           >
             <Typography
               sx={{
                 margin: "0px 10px 0px 0px",
+                marginLeft: "20px",
                 fontWeight: 800,
-                color: "black",
+                color: "white",
                 lineHeight: 2,
               }}
               variant="h5"
@@ -93,6 +95,9 @@ function Carousel(props: IProps) {
             <Button
               variant="contained"
               size="small"
+              sx={{
+                marginRight: "20px",
+              }}
               onClick={() => handleClickViewAll(category.menuDatas._id)}
             >
               View All
