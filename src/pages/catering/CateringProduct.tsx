@@ -227,7 +227,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                   color: "white",
                   backgroundColor: "orange",
                   my: 2,
-                  fontSize: "2rem",
+                  fontSize: "1.8rem",
                 }}
               >
                 {data.menuTitle}
@@ -277,8 +277,8 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                       >
                         <Typography
                           sx={{
-                            fontWeight: "600",
-                            fontSize: "1.5rem",
+                            fontWeight: "400",
+                            fontSize: "1.4rem",
                             marginBottom: "8px",
                           }}
                         >
@@ -307,10 +307,16 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                               <Table aria-label="simple table">
                                 <TableHead>
                                   <TableRow>
-                                    <TableCell align="center">
+                                    <TableCell
+                                      align="center"
+                                      sx={{ fontSize: "16px" }}
+                                    >
                                       <strong>Serving Size(s)</strong>
                                     </TableCell>
-                                    <TableCell align="center">
+                                    <TableCell
+                                      align="center"
+                                      sx={{ fontSize: "16px" }}
+                                    >
                                       <strong>Quantity</strong>
                                     </TableCell>
                                   </TableRow>

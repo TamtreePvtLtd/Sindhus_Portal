@@ -74,7 +74,7 @@ function Categories() {
               lineHeight: 2,
               mt: 2,
             }}
-            variant="h5"
+            variant="h6"
           >
             Menus
           </Typography>
