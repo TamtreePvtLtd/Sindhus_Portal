@@ -136,6 +136,16 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
             existingSizes[sizeIndex].qty - 1,
             0
           );
+
+          // Remove size if the quantity becomes 0
+          if (existingSizes[sizeIndex].qty === 0) {
+            existingSizes.splice(sizeIndex, 1);
+          }
+        }
+
+        // Remove product if all sizes have quantity 0
+        if (existingSizes.length === 0) {
+          updatedQuantities.splice(productIndex, 1);
         }
       }
 
