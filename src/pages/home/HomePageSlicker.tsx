@@ -111,14 +111,15 @@ function HomePageSlicker() {
         <img
           src={homePageSlicker.image}
           alt={homePageSlicker.heading}
-          height="300px"
+          height="350px"
           width="100%"
           className="home-slicker-image"
+          style={{ objectFit: "cover" }}
         />
         <Container
           sx={{
             position: "absolute",
-            top: isBelowMediumSize ? "30%" : "40%",
+            top: isBelowMediumSize ? "50%" : "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             textAlign: "center",
@@ -132,7 +133,10 @@ function HomePageSlicker() {
               variant="h1"
               sx={{
                 fontWeight: "bolder",
-                fontSize: isBelowMediumSize ? "45px" : "70px",
+                fontSize: isBelowMediumSize ? "30px" : "54px",
+                lineHeight: "1.5",
+                color: "#57ccb5",
+                fontFamily: "sindhus-logo-font",
               }}
             >
               {homePageSlicker.heading}
@@ -140,190 +144,200 @@ function HomePageSlicker() {
             <Typography
               sx={{
                 fontWeight: "bolder",
-                fontSize: isBelowMediumSize ? "20px" : "25px",
+                fontSize: isBelowMediumSize ? "18px" : "20px",
               }}
             >
               {homePageSlicker.subHeading}
             </Typography>
-            <Typography sx={{ fontSize: isBelowMediumSize ? "18px" : "20px" }}>
+            <Typography
+              sx={{
+                fontSize: isBelowMediumSize ? "16px" : "18px",
+                fontWeight: "300",
+              }}
+            >
               {homePageSlicker.content}
             </Typography>
           </Fade>
-        </Container>
-      </Box>
 
-      <Box
-        sx={{
-          position: "absolute",
-          top: isBelowMediumSize ? "60%" : "70%",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Grid
-          container
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: isBelowMediumSize ? "70%" : "50%",
-          }}
-        >
-          <Grid
-            item
-            md={5}
-            xs={12}
+          <Box
             sx={{
+              // position: "absolute",
+              // top: isBelowMediumSize ? "60%" : "70%",
+              paddingTop: "30px",
+              width: "100%",
               display: "flex",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              borderRadius: isBelowMediumSize ? "10px" : "10px 0 0 10px",
-              height: "50px",
+              justifyContent: "center",
             }}
           >
-            <IconButton sx={{ p: "10px" }} aria-label="menu">
-              <RestaurantIcon color="secondary" />
-            </IconButton>
-            <Autocomplete
-              disablePortal
-              sx={{ width: "100%" }}
-              options={menus.map((item) => ({
-                ...item,
-                label: item.title,
-              }))}
-              onChange={(event, newValue) => {
-                handleMenuChange(event, newValue!);
-              }}
-              isOptionEqualToValue={(option, value) =>
-                option.title == value.title
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Menus"
-                  InputProps={{
-                    ...params.InputProps,
-                    disableUnderline: true,
-                  }}
-                  fullWidth
-                  variant="standard"
-                />
-              )}
-              renderOption={(props, option) => (
-                <ListItem
-                  disablePadding
-                  component={"li"}
-                  {...props}
-                  key={option._id}
-                >
-                  <ListItemText>
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                      }}
-                    >
-                      {option.title}
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-              )}
-            />
-          </Grid>
-          <Grid
-            item
-            md={7}
-            xs={12}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              marginTop: isBelowMediumSize ? "5px" : 0,
-              borderRadius: isBelowMediumSize ? "10px" : "0 10px 10px 0",
-              height: "50px",
-            }}
-          >
-            <Divider
+            <Grid
+              container
               sx={{
-                height: 28,
-                m: 0.5,
-                display: isBelowMediumSize ? "none" : "block",
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: isBelowMediumSize ? "70%" : "50%",
               }}
-              orientation="vertical"
-            />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon color="secondary" />
-            </IconButton>
-            <Autocomplete
-              sx={{ width: "100%" }}
-              onChange={handleProductSearch}
-              options={products.map((item) => ({
-                ...item,
-                label: item.title,
-              }))}
-              onInputChange={(_event, newInputValue) => {
-                if (!newInputValue.trim()) {
-                  setSearchTerm("");
-                }
-              }}
-              renderOption={(props, option) => (
-                <Link
-                  to={`/detail/${option._id}`}
-                  state={{ previousPath: paths.DAILYMENU }}
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
+            >
+              <Grid
+                item
+                md={5}
+                xs={12}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#fff",
+                  borderRadius: isBelowMediumSize ? "10px" : "10px 0 0 10px",
+                  height: "50px",
+                }}
+              >
+                <IconButton sx={{ p: "10px" }} aria-label="menu">
+                  <RestaurantIcon color="secondary" />
+                </IconButton>
+                <Autocomplete
+                  disablePortal
+                  sx={{ width: "100%" }}
+                  options={menus.map((item) => ({
+                    ...item,
+                    label: item.title,
+                  }))}
+                  onChange={(event, newValue) => {
+                    handleMenuChange(event, newValue!);
                   }}
-                  key={option._id}
-                >
-                  <li
-                    {...props}
-                    style={{
-                      margin: "5px 0",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={option.posterURL ?? ""}
-                      style={{
-                        width: "4rem",
-                        height: "4rem",
-                        borderRadius: "50%",
-                        marginRight: "10px",
+                  isOptionEqualToValue={(option, value) =>
+                    option.title == value.title
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Menus"
+                      InputProps={{
+                        ...params.InputProps,
+                        disableUnderline: true,
                       }}
+                      fullWidth
+                      variant="standard"
                     />
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                      }}
+                  )}
+                  renderOption={(props, option) => (
+                    <ListItem
+                      disablePadding
+                      component={"li"}
+                      {...props}
+                      key={option._id}
                     >
-                      {option.title}
-                    </Typography>
-                  </li>
-                </Link>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Search Your favorite snacks, food, etc..."
-                  InputProps={{
-                    ...params.InputProps,
-                    disableUnderline: true,
-                    onChange: (event) => {
-                      const newSearchTerm = event.target.value;
-                      setSearchTerm(newSearchTerm || "");
-                    },
-                  }}
-                  fullWidth
-                  variant="standard"
+                      <ListItemText>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {option.title}
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                  )}
                 />
-              )}
-            />
-          </Grid>
-        </Grid>
+              </Grid>
+              <Grid
+                item
+                md={7}
+                xs={12}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#fff",
+                  marginTop: isBelowMediumSize ? "5px" : 0,
+                  borderRadius: isBelowMediumSize ? "10px" : "0 10px 10px 0",
+                  height: "50px",
+                }}
+              >
+                <Divider
+                  sx={{
+                    height: 28,
+                    m: 0.5,
+                    display: isBelowMediumSize ? "none" : "block",
+                  }}
+                  orientation="vertical"
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                >
+                  <SearchIcon color="secondary" />
+                </IconButton>
+                <Autocomplete
+                  sx={{ width: "100%" }}
+                  onChange={handleProductSearch}
+                  options={products.map((item) => ({
+                    ...item,
+                    label: item.title,
+                  }))}
+                  onInputChange={(_event, newInputValue) => {
+                    if (!newInputValue.trim()) {
+                      setSearchTerm("");
+                    }
+                  }}
+                  renderOption={(props, option) => (
+                    <Link
+                      to={`/detail/${option._id}`}
+                      state={{ previousPath: paths.DAILYMENU }}
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                      key={option._id}
+                    >
+                      <li
+                        {...props}
+                        style={{
+                          margin: "5px 0",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          src={option.posterURL ?? ""}
+                          style={{
+                            width: "4rem",
+                            height: "4rem",
+                            borderRadius: "50%",
+                            marginRight: "10px",
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {option.title}
+                        </Typography>
+                      </li>
+                    </Link>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search Your favorite snacks, food, etc..."
+                      InputProps={{
+                        ...params.InputProps,
+                        disableUnderline: true,
+                        onChange: (event) => {
+                          const newSearchTerm = event.target.value;
+                          setSearchTerm(newSearchTerm || "");
+                        },
+                      }}
+                      fullWidth
+                      variant="standard"
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
       </Box>
     </Box>
   );
