@@ -26,16 +26,17 @@ const getAllMenus = async () => {
   }
 };
 
-  const getAllSpecials = async () => {
-    try {
-      const response = await httpWithoutCredentials.get<ISpecials[]>(
-        "/specials/getAllSpecials"
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+const getAllSpecials = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<ISpecials>(
+      "/specials/getAllSpecials"
+    );
+
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
 const cateringfetchProductData = async (
   menuId: string = "",
   searchTerm: string = ""
@@ -238,5 +239,5 @@ export {
   getCateringBag,
   sendCateringRequest,
   getAllDailyMenus,
-  getAllSpecials
+  getAllSpecials,
 };

@@ -7,16 +7,14 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
-import { ISpecials } from "../../interface/types";
+import { ISpecial, ISpecials } from "../../interface/types";
 
 interface Iprops {
-  specials: ISpecials[];
+  specials: ISpecial[];
 }
 
 function SpecialCard(props: Iprops) {
   const { specials } = props;
-
-  // console.log("specials in SpecialCard", specials);
 
   return (
     <Container>
@@ -38,34 +36,39 @@ function SpecialCard(props: Iprops) {
       <Grid container justifyContent="center" alignItems="center">
         {specials &&
           specials.length > 0 &&
-          specials.map((special, index) => (
-            <Grid item xs={12} key={index}>
-              <Bounce left>
-                <Card
-                  sx={{
-                    boxShadow: 6,
-                    my: 5,
-                    minWidth: "70%",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height={"70%"}
-                    width={"100%"}
+          specials.map((special, index) => {
+            console.log("sp", special);
+            return (
+              <Grid item xs={12} key={index}>
+                <Bounce left>
+                  <Card
                     sx={{
-                      backgroundSize: "cover",
+                      boxShadow: 6,
+                      my: 5,
+                      minWidth: "70%",
                     }}
-                    image={special.image} 
-                    title="Special Image"
-                  />
-                </Card>
-              </Bounce>
-            </Grid>
-          ))}
+                  >
+                    {special.images.map((image, imgIndex) => (
+                      <CardMedia
+                        key={imgIndex}
+                        component="img"
+                        height={"70%"}
+                        width={"100%"}
+                        sx={{
+                          backgroundSize: "cover",
+                        }}
+                        image={image}
+                        title={`Special Image ${imgIndex}`}
+                      />
+                    ))}
+                  </Card>
+                </Bounce>
+              </Grid>
+            );
+          })}
       </Grid>
     </Container>
   );
 }
-
 
 export default SpecialCard;

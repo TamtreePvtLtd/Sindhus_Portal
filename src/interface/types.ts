@@ -77,8 +77,14 @@ export interface IPrice {
 }
 
 export interface ISpecials {
-  id: number;
-  image: string;
+  data: ISpecial[];
+  success: boolean;
+  statusCode: number;
+}
+
+export interface ISpecial {
+  _id: string;
+  images: string[];
 }
 
 export interface ICateringEnquiry {
