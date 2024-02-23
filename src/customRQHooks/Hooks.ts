@@ -8,6 +8,7 @@ import {
   getAllSnacksProductsWithSubMenu,
   fetchProductByCateringMenu,
   getAllDailyMenus,
+  getAllSpecials,
 } from "../services/api";
 
 export const useGetAllMenus = () => {
@@ -78,6 +79,14 @@ export const useGetAllDailyMenus = () => {
   return useQuery({
     queryKey: ["dailyMenus"],
     queryFn: getAllDailyMenus,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+};
+export const usegetAllSpecials = () => {
+  return useQuery({
+    queryKey: ["specials"],
+    queryFn: getAllSpecials,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });

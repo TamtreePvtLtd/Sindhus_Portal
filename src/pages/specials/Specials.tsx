@@ -1,12 +1,22 @@
-import SpecialCard from "./SpecialCard";
-import { SpeicalsData } from "../../seed-data/seed-data";
 
-function Specials() {
-  return (
-    <>
-      <SpecialCard specials={SpeicalsData} />
-    </>
-  );
-}
+  import { Box, Container } from "@mui/material";
+  import { usegetAllSpecials } from "../../customRQHooks/Hooks";
+  import SpecialCard from "./SpecialCard";
 
-export default Specials;
+
+  function Specials() {
+  
+
+    const { data: specials = [] } = usegetAllSpecials();
+    console.log("specials",specials);
+
+    return (
+      <Box>
+        <Container maxWidth={false} sx={{ py: 5 }}>
+          <SpecialCard specials={specials}></SpecialCard>
+        </Container>
+      </Box>
+    );
+  }
+
+  export default Specials;

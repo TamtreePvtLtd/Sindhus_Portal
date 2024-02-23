@@ -11,6 +11,7 @@ import {
   IProduct,
   IProductDropDownData,
   PaginationInfo,
+  ISpecials,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -25,6 +26,16 @@ const getAllMenus = async () => {
   }
 };
 
+  const getAllSpecials = async () => {
+    try {
+      const response = await httpWithoutCredentials.get<ISpecials[]>(
+        "/specials/getAllSpecials"
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 const cateringfetchProductData = async (
   menuId: string = "",
   searchTerm: string = ""
@@ -227,4 +238,5 @@ export {
   getCateringBag,
   sendCateringRequest,
   getAllDailyMenus,
+  getAllSpecials
 };

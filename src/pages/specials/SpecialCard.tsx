@@ -1,12 +1,13 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import Fade from "react-reveal/Fade";
 import Bounce from "react-reveal/Bounce";
-import { ISpecials } from "../../interface/types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
+import { ISpecials } from "../../interface/types";
 
 interface Iprops {
   specials: ISpecials[];
@@ -14,6 +15,8 @@ interface Iprops {
 
 function SpecialCard(props: Iprops) {
   const { specials } = props;
+
+  // console.log("specials in SpecialCard", specials);
 
   return (
     <Container>
@@ -33,15 +36,16 @@ function SpecialCard(props: Iprops) {
         </Fade>
       </Box>
       <Grid container justifyContent="center" alignItems="center">
-        {specials.map((special, index) => {
-          return (
+        {specials &&
+          specials.length > 0 &&
+          specials.map((special, index) => (
             <Grid item xs={12} key={index}>
               <Bounce left>
                 <Card
                   sx={{
-                    boxShadow: "6",
+                    boxShadow: 6,
                     my: 5,
-                    minwidth: "70%",
+                    minWidth: "70%",
                   }}
                 >
                   <CardMedia
@@ -51,18 +55,17 @@ function SpecialCard(props: Iprops) {
                     sx={{
                       backgroundSize: "cover",
                     }}
-                    image={special.image}
-                    title="green iguana"
-                    loading="lazy"
+                    image={special.image} 
+                    title="Special Image"
                   />
                 </Card>
               </Bounce>
             </Grid>
-          );
-        })}
+          ))}
       </Grid>
     </Container>
   );
 }
+
 
 export default SpecialCard;
