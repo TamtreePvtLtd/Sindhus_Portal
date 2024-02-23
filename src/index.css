@@ -38,9 +38,9 @@ body {
 }
 
 .home-slicker-image {
-  filter: brightness(73%);
-  -webkit-filter: brightness(73%);
-  -moz-filter: brightness(73%);
+  filter: brightness(55%);
+  -webkit-filter: brightness(55%);
+  -moz-filter: brightness(55%);
 }
 
 .custom-prev-arrow,
