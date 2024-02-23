@@ -44,7 +44,7 @@ function SpecialCard(props: Iprops) {
                   <Card
                     sx={{
                       boxShadow: 6,
-                      my: 5,
+                      marginBottom: 3,
                       minWidth: "70%",
                     }}
                   >
