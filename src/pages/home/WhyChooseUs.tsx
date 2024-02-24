@@ -28,15 +28,17 @@ function WhyChooseUs(props: Iprops) {
         }}
       >
         <Fade right>
-          <Typography variant="h4" fontWeight={"bold"} color={"primary"}>
-            WHY SINDHU'S KITCHEN?
+          <Typography variant="h4" fontWeight={"500"} color={"primary"}>
+            WHY SINDHU'S?
           </Typography>
         </Fade>
         <Fade left>
           <Typography
-            variant="h5"
-            fontWeight={"bold"}
-            sx={{ opacity: 0.7 }}
+            variant="h6"
+            sx={{
+              opacity: 0.7,
+              fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+            }}
             mt={2}
           >
             We prepare our food with the same care and attention as we would for

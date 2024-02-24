@@ -36,7 +36,7 @@ export const ourServicesData: IOurServices[] = [
 
 export const homePageSlicker = {
   image: "assets/Sindhus-BannerImage.webp",
-  heading: "SINDHU's Kitchen",
+  heading: "SINDHU'S",
   subHeading: "CATERING TO YOUR NEEDS",
   content:
     "Authentic South Indian Food and Snacks prepared to give you the very best in town",

@@ -16,6 +16,14 @@ import { createCateringEnquiry } from "../../services/api";
 import { SnackbarSeverityEnum } from "../../enums/SnackbarSeverityEnum";
 import { useSnackBar } from "../../context/SnackBarContext";
 import Zoom from "react-reveal/Zoom";
+import { useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Divider } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
 const EnquiryFormInitialValue: ICateringEnquiry = {
   fullName: "",
@@ -43,6 +51,9 @@ const schema = yup.object().shape({
 
 function CateringEnquiryForm() {
   const { updateSnackBarState } = useSnackBar();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<ICateringEnquiry | null>(null);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -55,15 +66,35 @@ function CateringEnquiryForm() {
     defaultValues: EnquiryFormInitialValue,
   });
 
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    reset();
+    setIsDialogOpen(false);
+  };
+
   const onSubmitCateringEnquiry = async (data: ICateringEnquiry) => {
+    handleOpenDialog(); // Open dialog when form is submitted
+    setFormData(data); // Store form data in state
+    handleConfirmSubmit();
+  };
+
+  const handleConfirmSubmit = async () => {
     try {
-      await createCateringEnquiry(data);
-      updateSnackBarState(
-        true,
-        "Form submitted successfully",
-        SnackbarSeverityEnum.SUCCESS
-      );
-      reset();
+      if (formData) {
+        await createCateringEnquiry(formData); // Submit form data
+        handleOpenDialog();
+        updateSnackBarState(
+          true,
+          "Form submitted successfully",
+          SnackbarSeverityEnum.SUCCESS
+        );
+        reset();
+        setFormData(null); // Reset form data after submission
+        handleCloseDialog(); // Close dialog after form submission
+      }
     } catch (error) {
       updateSnackBarState(
         true,
@@ -208,6 +239,34 @@ function CateringEnquiryForm() {
           </Grid>
         </form>
       </Box>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <DialogTitle>Confirm Submission</DialogTitle>
+          <IconButton onClick={handleCloseDialog}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <DialogContent>Are you sure you want to submit the form?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit(handleConfirmSubmit)}
+            variant="contained"
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Zoom>
   );
 }

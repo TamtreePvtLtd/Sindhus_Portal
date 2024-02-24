@@ -227,6 +227,7 @@ export interface ICateringRequest {
   name: string;
   mobileNumber: string;
   email: string;
+  eventName?: string;
   eventDate: string;
   eventTime: string;
 }
