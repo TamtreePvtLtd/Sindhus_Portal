@@ -128,7 +128,7 @@ function CateringEnquiryForm() {
                 fontWeight={600}
                 sx={{ textAlign: "center", color: "black" }}
               >
-                Catering Request Form
+                Catering Enquiry Form
               </Typography>
             </Grid>
             <Grid item lg={6} xs={12}>
