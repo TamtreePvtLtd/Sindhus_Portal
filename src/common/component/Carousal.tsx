@@ -76,33 +76,31 @@ function Carousel(props: IProps) {
             display={"flex"}
             justifyContent={"space-between"}
             alignItems={"center"}
-            pb={1}
-            mt={1}
-            sx={{ backgroundColor: "orange" }}
+            py={1}
+            // mt={1}
+            sx={{ backgroundColor: "#f7bf3f" }}
           >
             <Typography
               sx={{
                 margin: "0px 10px 0px 0px",
                 marginLeft: "20px",
-                fontWeight: 400,
-                color: "white",
-                lineHeight: 2,
+                fontWeight: 500,
+                color: "#038369",
+                lineHeight: 1.5,
               }}
               variant="h6"
             >
               {category.menuDatas.title}
             </Typography>
-            <Button
-              variant="contained"
-              size="small"
-              sx={{
-                marginRight: "20px",
-              }}
-              onClick={() => handleClickViewAll(category.menuDatas._id)}
-            >
-              View All
-              <ArrowForwardIcon sx={{ fontSize: "18px" }} />
-            </Button>
+            <Box sx={{ color: "#038369" }}>
+              <Typography
+                onClick={() => handleClickViewAll(category.menuDatas._id)}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                View All
+                <ArrowForwardIcon />
+              </Typography>
+            </Box>
           </Box>
           <Box sx={{ py: 2 }}>
             <Slider {...settings}>
