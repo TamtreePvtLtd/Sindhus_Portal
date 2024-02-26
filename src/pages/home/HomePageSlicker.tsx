@@ -22,6 +22,7 @@ import Fade from "react-reveal/Fade";
 import { getProductsByMenuIdWithSearchTerm } from "../../services/api";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
+import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 
 function HomePageSlicker() {
   const theme = useTheme();
@@ -195,7 +196,10 @@ function HomePageSlicker() {
                 </IconButton>
                 <Autocomplete
                   disablePortal
-                  sx={{ width: "100%" }}
+                  sx={{
+                    width: "90%",
+                    "& .MuiSvgIcon-root": { color: "#57ccb5" },
+                  }}
                   options={menus.map((item) => ({
                     ...item,
                     label: item.title,
@@ -268,7 +272,11 @@ function HomePageSlicker() {
                   <SearchIcon color="secondary" />
                 </IconButton>
                 <Autocomplete
-                  sx={{ width: "100%" }}
+                  sx={{
+                    width: "90%",
+                    "& .MuiSvgIcon-root": { color: "#57ccb5" },
+
+                  }}
                   onChange={handleProductSearch}
                   options={products.map((item) => ({
                     ...item,

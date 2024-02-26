@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layout/Layout";
 import { paths } from "./routes/path";
 import Home from "./pages/home/Home";
@@ -33,7 +33,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <SnackBarProvider>
-          <HashRouter>
+          <BrowserRouter>
             <Suspense fallback={<Loader showSuspendLoading={true} />}>
               <Routes>
                 <Route path={paths.ROOT} element={<Layout />}>
@@ -63,7 +63,7 @@ function App() {
                 </Route>
               </Routes>
             </Suspense>
-          </HashRouter>
+          </BrowserRouter>
           <CustomSnackBar />
         </SnackBarProvider>
       </QueryClientProvider>
