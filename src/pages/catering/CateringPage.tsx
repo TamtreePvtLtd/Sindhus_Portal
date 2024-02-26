@@ -5,18 +5,16 @@ import CateringProduct from "./CateringProduct";
 import SearchBar from "./SearchBar";
 import Fade from "react-reveal/Fade";
 import { useState } from "react";
-import Rotate from "react-reveal/Rotate";
-import Grid from "@mui/material/Grid";
-import useMediaQuery from "@mui/material/useMediaQuery";
+
 import useTheme from "@mui/material/styles/useTheme";
 import CateringSpecial from "./CateringSpecial";
-import Marquee from "react-fast-marquee";
+
+import { Button } from "@mui/material";
 
 function CateringPage() {
   const theme = useTheme();
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
-  const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>
@@ -36,16 +34,8 @@ function CateringPage() {
             </Typography>
           </Fade>
 
-          <Box>
-            <Marquee>
-              <Typography
-                variant="h5"
-                color="secondary"
-                sx={{ fontSize: "25px", fontWeight: "bold" }}
-              >
-                For catering inquiries, please fill out the form below.
-              </Typography>
-            </Marquee>
+          <Box sx={{ textAlign: "center", fontWeight: "400", py: 2 }}>
+            <Button variant="contained">Enquiry Now</Button>
           </Box>
         </Box>
       </Box>

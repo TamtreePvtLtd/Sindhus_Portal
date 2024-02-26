@@ -49,7 +49,7 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       "Our culinary creations start with the purest water in all our food and snacks preparation.",
     imageicon: "🌊",
-    image: "/assets/images/water.webp",
+    // image: "/assets/images/water.webp",
   },
   {
     id: 2,
@@ -57,7 +57,7 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       "Exclusively cold-pressed Sesame and Peanut oils enhance our dishes.",
     imageicon: "🥜",
-    image: "/assets/images/premiumOils.webp",
+    // image: "/assets/images/premiumOils.webp",
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       "We curate our dishes with premium ingredients, some specially sourced from the heart of Tamil Nadu, India.",
     imageicon: "🌾",
-    image: "/assets/images/1source.webp",
+    // image: "/assets/images/1source.webp",
   },
   {
     id: 4,
@@ -73,7 +73,7 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       "Enjoy meals prepared on the very same day, using our own freshly made masalas and freshly cut vegetables.",
     imageicon: "🌿",
-    image: "/assets/images/UnmatchedFreshness.webp",
+    // image: "/assets/images/UnmatchedFreshness.webp",
   },
   {
     id: 5,
@@ -81,7 +81,7 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       " Our commitment to traditional cooking techniques not only preserves nutrients but also enhances flavors.",
     imageicon: "🕰️",
-    image: "/assets/images/Time-HonoredTradition.webp",
+    // image: "/assets/images/Time-HonoredTradition.webp",
   },
   {
     id: 6,
@@ -89,24 +89,24 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     description:
       "Rest assured, we never recycle our cooking oil, maintaining the highest quality standards.",
     imageicon: "♻️",
-    image: "/assets/images/qualityAssurance.webp",
+    // image: "/assets/images/qualityAssurance.webp",
   },
 ];
 
-export const SpeicalsData: ISpecials[] = [
-  {
-    id: 1,
-    image: "/assets/images/mysorepak.png",
-  },
-  {
-    id: 2,
-    image: "/assets/images/sweetsandsavories.png",
-  },
-  {
-    id: 3,
-    image: "/assets/images/diwaliposter1.png",
-  },
-];
+// export const SpeicalsData: ISpecials[] = [
+//   {
+//     id: 1,
+//     image: "/assets/images/mysorepak.png",
+//   },
+//   {
+//     id: 2,
+//     image: "/assets/images/sweetsandsavories.png",
+//   },
+//   {
+//     id: 3,
+//     image: "/assets/images/diwaliposter1.png",
+//   },
+// ];
 
 export const cateringSpecialData: ICateringSpecials[] = [
   {

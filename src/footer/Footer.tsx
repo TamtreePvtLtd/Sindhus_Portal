@@ -26,8 +26,6 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-import { Instagram } from "@mui/icons-material";
 
 function Footer() {
   const location = useLocation();
@@ -55,9 +53,9 @@ function Footer() {
 
   const ourTimingStyles = {
     borderBottom: "none",
-    p: 0.5,
+    p: 0.3,
     color: "white",
-    fontSize: "15px",
+    fontSize: "14px",
   };
 
   return (

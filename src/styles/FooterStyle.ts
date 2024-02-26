@@ -6,7 +6,7 @@ export const useCommonGridStyle = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1,
+    // zIndex: 1,
   },
   footerContainer: {
     backgroundSize: "cover",
@@ -16,7 +16,7 @@ export const useCommonGridStyle = makeStyles(() => ({
     boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.2)",
     color: "white",
     position: "relative",
-    zIndex: 1,
+    // zIndex: 1,
   },
   overlay: {
     content: "",
