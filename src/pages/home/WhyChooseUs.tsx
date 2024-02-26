@@ -55,9 +55,8 @@ function WhyChooseUs(props: Iprops) {
               item
               key={index}
               xs={12}
-              sm={6}
-              md={4}
-              py={1}
+              sm={5}
+              md={3.6}
               className={classes.centerImage}
             >
               <Bounce bottom>
