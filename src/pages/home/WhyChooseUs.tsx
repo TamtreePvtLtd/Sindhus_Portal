@@ -34,9 +34,9 @@ function WhyChooseUs(props: Iprops) {
         </Fade>
         <Fade left>
           <Typography
-            variant="h6"
             sx={{
-              opacity: 0.7,
+              fontSize: "1rem",
+              fontWeight: "400",
               fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
             }}
             mt={2}
@@ -65,9 +65,9 @@ function WhyChooseUs(props: Iprops) {
                   <Box className={classes.flipCardInner}>
                     <Box
                       className={classes.flipCardFront}
-                      style={{
-                        backgroundImage: `url(${whychoose.image})`,
-                      }}
+                      // style={{
+                      //   backgroundImage: `url(${whychoose.image})`,
+                      // }}
                     >
                       <Box
                         className={`${classes.overlay} ${classes.centerImage}`}
@@ -81,16 +81,12 @@ function WhyChooseUs(props: Iprops) {
                           {whychoose.imageicon}
                         </Box>
 
-                        <Typography gutterBottom variant="h5" fontWeight={600}>
+                        <Typography gutterBottom variant="h5" fontWeight={400}>
                           {whychoose.title}
                         </Typography>
                       </Box>
                     </Box>
-                    <Typography
-                      variant="h5"
-                      p={2}
-                      className={classes.flipCardBack}
-                    >
+                    <Typography p={2} className={classes.flipCardBack}>
                       {whychoose.description}
                     </Typography>
                   </Box>

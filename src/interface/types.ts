@@ -41,7 +41,6 @@ export interface IWhyChooseUs {
   imageicon: string;
   title: string;
   description: string;
-  image: string;
 }
 
 export interface IProductDropDownData {

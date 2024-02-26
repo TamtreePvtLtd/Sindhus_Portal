@@ -8,6 +8,9 @@ export const whyChooseUsSytle = makeStyles((theme: Theme) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
+    fontSize: "1rem",
+    fontWeight: "400",
+    fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
   },
   imageWithBorder: {
     borderRadius: "50%",

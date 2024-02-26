@@ -134,7 +134,7 @@ function HomePageSlicker() {
               sx={{
                 fontWeight: "bolder",
                 fontSize: isBelowMediumSize ? "30px" : "54px",
-                lineHeight: "1.5",
+                lineHeight: "1",
                 color: "#57ccb5",
                 fontFamily: "sindhus-logo-font",
               }}
