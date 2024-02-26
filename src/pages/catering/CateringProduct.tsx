@@ -25,7 +25,6 @@ import Fade from "react-reveal/Fade";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import { useGetProductByCateringMenu } from "../../customRQHooks/Hooks";
 import { paths } from "../../routes/path";
-
 interface IProps {
   selectedMenuId: string;
   selectedProductId: string;
