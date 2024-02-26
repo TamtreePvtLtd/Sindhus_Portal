@@ -22,7 +22,7 @@ function CateringSpecial() {
         elevation={0}
       >
         {icon}
-        <Box sx={{mr:2}}>
+        <Box sx={{ mr: 2 }}>
           <Typography variant="h6">{title}</Typography>
           <Typography>{description}</Typography>
         </Box>
