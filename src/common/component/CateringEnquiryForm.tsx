@@ -49,7 +49,11 @@ const schema = yup.object().shape({
   eventDate: yup.string().required("Event date is required"),
 });
 
-function CateringEnquiryForm() {
+interface CateringEnquiryFormProps {
+  onClose: () => void;
+}
+
+const CateringEnquiryForm: React.FC<CateringEnquiryFormProps> = ({ onClose }) => {
   const { updateSnackBarState } = useSnackBar();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<ICateringEnquiry | null>(null);

@@ -5,16 +5,20 @@ import CateringProduct from "./CateringProduct";
 import SearchBar from "./SearchBar";
 import Fade from "react-reveal/Fade";
 import { useState } from "react";
-
 import useTheme from "@mui/material/styles/useTheme";
 import CateringSpecial from "./CateringSpecial";
-
 import { Button } from "@mui/material";
+import CateringEnquiryForm from "../../common/component/CateringEnquiryForm";
 
 function CateringPage() {
   const theme = useTheme();
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [showEnquiryForm, setShowEnquiryForm] = useState(false);
+
+  const handleEnquiryClick = () => {
+    setShowEnquiryForm(true);
+  };
 
   return (
     <>
@@ -35,10 +39,14 @@ function CateringPage() {
           </Fade>
 
           <Box sx={{ textAlign: "center", fontWeight: "400", py: 2 }}>
-            <Button variant="contained">Enquiry Now</Button>
+            <Button variant="contained" onClick={handleEnquiryClick}>Enquiry Now</Button>
           </Box>
         </Box>
       </Box>
+
+      {showEnquiryForm ? (
+        <CateringEnquiryForm onClose={() => setShowEnquiryForm(false)} />
+      ) : null}
 
       <CateringSpecial></CateringSpecial>
 
