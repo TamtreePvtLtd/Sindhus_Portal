@@ -48,7 +48,7 @@ function WhyChooseUs(props: Iprops) {
         </Fade>
       </Box>
 
-      <Grid container spacing={6} justifyContent="center" alignItems="center">
+      <Grid container spacing={6} justifyContent="center" alignItems="center" marginBottom="4">
         {whyChooseUs.map((whychoose, index) => {
           return (
             <Grid
