@@ -10,11 +10,16 @@ import useTheme from "@mui/material/styles/useTheme";
 import CateringSpecial from "./CateringSpecial";
 
 import { Button } from "@mui/material";
+import { RefObject, useRef } from "react";
 
 function CateringPage() {
   const theme = useTheme();
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
+  const footerRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const handleEnquiryButtonClick = () => {
+    footerRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
@@ -35,7 +40,9 @@ function CateringPage() {
           </Fade>
 
           <Box sx={{ textAlign: "center", fontWeight: "400", py: 2 }}>
-            <Button variant="contained">Enquiry Now</Button>
+            <Button variant="contained" onClick={handleEnquiryButtonClick}>
+              Enquiry Now
+            </Button>
           </Box>
         </Box>
       </Box>
@@ -56,6 +63,7 @@ function CateringPage() {
         selectedMenuId={selectedMenuId}
         selectedProductId={selectedProductId}
       />
+      <Box ref={footerRef}></Box>
     </>
   );
 }

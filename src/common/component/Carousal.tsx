@@ -66,6 +66,8 @@ function Carousel(props: IProps) {
     navigate(`/productsByCategory/${menuId}`);
   };
 
+  const showViewAllArrowIcon = category.menuDatas.products.length > 5;
+
   return (
     category &&
     category.menuDatas && (
@@ -91,21 +93,24 @@ function Carousel(props: IProps) {
             >
               {category.menuDatas.title}
             </Typography>
-            <Box sx={{ color: "white" }}>
-              <Typography
-                onClick={() => handleClickViewAll(category.menuDatas._id)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontWeight: 500,
-                  marginRight: "20px",
-                  fontSize: "1.1rem",
-                }}
-              >
-                View All
-                <KeyboardArrowRightIcon />
-              </Typography>
-            </Box>
+            {showViewAllArrowIcon && (
+
+              <Box sx={{ color: "white" }}>
+                <Typography
+                  onClick={() => handleClickViewAll(category.menuDatas._id)}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontWeight: 500,
+                    marginRight: "20px",
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  View All
+                  <KeyboardArrowRightIcon />
+                </Typography>
+              </Box>
+            )}
           </Box>
           <Box sx={{ py: 2 }}>
             <Slider {...settings}>

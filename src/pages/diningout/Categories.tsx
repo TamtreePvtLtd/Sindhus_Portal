@@ -99,7 +99,7 @@ function Categories() {
                     lineHeight: 1.5,
                     fontSize: "1.5rem",
                     "&:hover": {
-                      backgroundColor: "#02a48b",
+                      backgroundColor: theme.palette.primary.main,
                       color: "white",
                     },
                     boxShadow: 2,
