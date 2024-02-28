@@ -65,7 +65,7 @@ function Footer() {
         className={`${classes.footerContainer} ${classes.innerBox}`}
       >
         <Box className={classes.overlay}></Box>
-        <Container sx={{ paddingBottom: 2 ,pt:2}}>
+        <Container sx={{ paddingBottom: 2, pt: 2 }}>
           {isCateringMenuPage && (
             <Box
               sx={{
@@ -80,7 +80,7 @@ function Footer() {
           )}
           <Fade top>
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
-              <Typography variant="h4" fontWeight={600}>
+              <Typography variant="h4" fontWeight={400}>
                 Contact Us
               </Typography>
             </Box>
@@ -103,9 +103,9 @@ function Footer() {
                       sx={{ color: theme.palette.secondary.main }}
                     />
 
-                    <Typography variant="h5"> Store Address</Typography>
+                    <Typography variant="h6"> Store Address</Typography>
 
-                    <Typography>
+                    <Typography variant="body2">
                       2700 E Eldorado Pkwy, #203,
                       <br /> Little Elm, Texas - 75068
                     </Typography>
@@ -128,7 +128,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "white", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "25px" }}
               />
               <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
                 <Fade bottom delay={300}>
@@ -136,8 +136,10 @@ function Footer() {
                     <ChatBubbleIcon
                       sx={{ color: theme.palette.secondary.main }}
                     ></ChatBubbleIcon>
-                    <Typography variant="h5">General Enquiries</Typography>
-                    <Typography my={1}>skvbalaji@gmail.com</Typography>
+                    <Typography variant="h6">General Enquiries</Typography>
+                    <Typography variant="body2" my={1}>
+                      skvbalaji@gmail.com
+                    </Typography>
                     <Box
                       sx={{
                         gap: 2,
@@ -153,7 +155,7 @@ function Footer() {
                         <Button
                           startIcon={<EmailIcon />}
                           variant="contained"
-                          fullWidth
+                          // fullWidth
                           sx={{
                             lineHeight: 0,
                             "&:hover": {
@@ -172,7 +174,7 @@ function Footer() {
                         <Button
                           startIcon={<WhatsAppIcon />}
                           variant="contained"
-                          fullWidth
+                          // fullWidth
                           sx={{
                             lineHeight: 0,
                             backgroundColor: "#4caf50",
@@ -181,7 +183,7 @@ function Footer() {
                             },
                           }}
                         >
-                          Chat on Whatsapp
+                          Whatsapp
                         </Button>
                       </Link>
                     </Box>
@@ -191,7 +193,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "white", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "25px" }}
               />
               <Grid item lg={2.9} xs={12} className={classes.commonGridStyle}>
                 <Fade bottom delay={400}>
@@ -199,8 +201,8 @@ function Footer() {
                     <PhoneIcon
                       sx={{ color: theme.palette.secondary.main }}
                     ></PhoneIcon>
-                    <Typography variant="h5">Call us</Typography>
-                    <Typography>+1 940-279-2536</Typography>
+                    <Typography variant="h6">Call us</Typography>
+                    <Typography variant="body2">+1 940-279-2536</Typography>
                     <Box mt={1}>
                       <Link
                         to={`${import.meta.env.VITE_SINDHUS_FACEBOOK}`}
@@ -290,7 +292,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "white", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "25px" }}
               />
               <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
                 <Box sx={{ my: 1 }}>
@@ -298,9 +300,7 @@ function Footer() {
                     <AccessTimeFilledIcon
                       sx={{ color: theme.palette.secondary.main }}
                     ></AccessTimeFilledIcon>
-                    <Typography variant="h5" my={1}>
-                      Our Timing
-                    </Typography>
+                    <Typography variant="h6">Our Timing</Typography>
 
                     <TableContainer>
                       <Table>
@@ -323,7 +323,7 @@ function Footer() {
               </Grid>
               <Grid item lg={12} xs={12} className={classes.commonGridStyle}>
                 <Typography
-                  variant="h6"
+                  variant="body1"
                   style={{
                     display: "flex",
                     alignItems: "center",

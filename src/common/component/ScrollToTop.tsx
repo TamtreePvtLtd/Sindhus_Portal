@@ -6,13 +6,15 @@ const ScrollToTop = () => {
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 100) {
-        setShowTopBtn(true);
-      } else {
-        setShowTopBtn(false);
-      }
-    });
+    const handleScroll = () => {
+      setShowTopBtn(window.scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const goToTop = () => {
@@ -26,17 +28,17 @@ const ScrollToTop = () => {
     <Box>
       {showTopBtn && (
         <KeyboardArrowUpIcon
-          sx={{ color: "white",my: 40 }}
+          sx={{ color: "white" }}
           onClick={goToTop}
           style={{
             position: "fixed",
-            top: "20px",
-            right: "30px",
-            height: "35px",
-            width: "35px",
+            bottom: "20px",
+            right: "100px",
+            height: "30px",
+            width: "30px",
             cursor: "pointer",
             backgroundColor: " #57ccb5",
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.5)",
+            // boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
             zIndex: "1",
             borderRadius: "50%",
           }}

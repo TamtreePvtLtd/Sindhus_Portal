@@ -95,6 +95,9 @@ function Categories() {
                     justifyContent: "center",
                     alignItems: "center",
                     color: "black",
+                    fontWeight: 500,
+                    lineHeight: 1.5,
+                    fontSize: "1.5rem",
                     "&:hover": {
                       backgroundColor: theme.palette.primary.main,
                       color: "white",

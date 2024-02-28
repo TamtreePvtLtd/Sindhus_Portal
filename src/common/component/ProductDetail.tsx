@@ -88,6 +88,9 @@ function ProductDetail() {
                             height: "350px",
                             width: "100%",
                             overflow: "hidden",
+                            border: "1px solid #ddd",
+                            background: "#fff",
+                            shadows: "none",
                           }}
                         >
                           <CardMedia
@@ -120,18 +123,18 @@ function ProductDetail() {
                   <Typography sx={{ mt: 2 }}>
                     By &nbsp;
                     <span style={{ textDecoration: "underline" }}>
-                      Sindhu's Kitchen
+                      SINDHU'S
                     </span>
                   </Typography>
                   <Divider sx={{ margin: "10px 0" }} />
                   <Typography
                     sx={{
                       fontSize: "18px",
-                      fontWeight: "500",
+                      fontWeight: "600",
                     }}
                   >
                     Description
-                    <Typography sx={{ fontSize: "small", my: 1 }}>
+                    <Typography variant="body2">
                       {menuDetail.description}
                     </Typography>
                   </Typography>
