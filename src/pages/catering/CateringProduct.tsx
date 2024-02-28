@@ -25,6 +25,9 @@ import Fade from "react-reveal/Fade";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import { useGetProductByCateringMenu } from "../../customRQHooks/Hooks";
 import { paths } from "../../routes/path";
+import ScrollToTop from "../../common/component/ScrollToTop";
+// import ScrollToBottom from "../../common/component/ScrollToBottom"; // Import ScrollToBottom component here
+
 interface IProps {
   selectedMenuId: string;
   selectedProductId: string;
@@ -231,7 +234,6 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
               >
                 {data.menuTitle}
               </Typography>
-
               <Grid container spacing={3}>
                 {data.products &&
                   data.products.length > 0 &&
@@ -265,6 +267,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                           />
                         </Link>
                       </Grid>
+
                       <Grid
                         item
                         xs={12}
@@ -484,15 +487,19 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           </Fade>
         </Box>
       )}
-
-      <CateringSelectedProductDrawer
-        isOpen={isDrawerOpen}
-        handleClose={handleCloseModal}
-        productInfo={productInfo}
-        productQuantities={productQuantities}
-        removeCateringProduct={removeCateringProduct}
-        resetQuantityState={resetQuantityState}
-      />
+      <>
+        <ScrollToTop />
+        <CateringSelectedProductDrawer
+          isOpen={isDrawerOpen}
+          handleClose={handleCloseModal}
+          productInfo={productInfo}
+          productQuantities={productQuantities}
+          removeCateringProduct={removeCateringProduct}
+          resetQuantityState={resetQuantityState}
+        />
+        {/* Include ScrollToBottom component here */}
+      </>
+      {/* <ScrollToBottom/> */}
     </>
   );
 }
