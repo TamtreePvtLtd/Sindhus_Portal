@@ -17,18 +17,18 @@ interface Iprops {
 
 function SpecialCard(props: Iprops) {
   const { specials } = props;
-    const [open, setOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-    const handleClickOpen = (image: string) => {
-      setSelectedImage(image);
-      setOpen(true);
+  const handleClickOpen = (image: string) => {
+    setSelectedImage(image);
+    setOpen(true);
   };
-    const handleClose = () => {
-      setOpen(false);
-      setSelectedImage(null);
-    };
- console.log("Specials:", specials);
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedImage(null);
+  };
+  console.log("Specials:", specials);
   return (
     <Container>
       <Box
@@ -71,8 +71,8 @@ function SpecialCard(props: Iprops) {
                         height: "auto",
                         objectFit: "cover",
                       }}
-                       image={image}
-                      // title={`Special Image ${imgIndex}`}
+                      image={image}
+                      title={`Special Image ${imgIndex}`}
                     />
                   ))}
                 </Card>
