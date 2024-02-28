@@ -30,57 +30,59 @@ function SpecialCard(props: Iprops) {
   };
   console.log("Specials:", specials);
   return (
-    <Container>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          p: 3,
-          textAlign: "center",
-        }}
-      >
-        <Fade right>
-          <Typography variant="h4" fontWeight="bold" color="primary">
-            Specials
-          </Typography>
-        </Fade>
-      </Box>
-      <Grid container spacing={2}>
-        {specials &&
-          specials.length > 0 &&
-          specials.map((special, index) => (
-            <Grid item xs={4} key={index}>
-              <Bounce left>
-                <Card
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                    height: "100%",
-                    border: "1px solid gray",
-                  }}
-                  onClick={() => handleClickOpen(special.images[0])}
-                >
-                  {special.images.map((image, imgIndex) => (
-                    <CardMedia
-                      key={imgIndex}
-                      component="img"
-                      sx={{
-                        width: "100%",
-                        height: "auto",
-                        objectFit: "cover",
-                      }}
-                      image={image}
-                      title={`Special Image ${imgIndex}`}
-                    />
-                  ))}
-                </Card>
-              </Bounce>
-            </Grid>
-          ))}
-      </Grid>
-      <Dialog open={open} onClose={handleClose}>
+    <>
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            p: 3,
+            textAlign: "center",
+          }}
+        >
+          <Fade right>
+            <Typography variant="h4" fontWeight="bold" color="primary">
+              Specials
+            </Typography>
+          </Fade>
+        </Box>
+        <Grid container spacing={2}>
+          {specials &&
+            specials.length > 0 &&
+            specials.map((special, index) => (
+              <Grid item xs={4} key={index}>
+                <Bounce left>
+                  <Card
+                    sx={{
+                      display: "flex",
+                      width: "82vw",
+                      height: "60vh",
+                      border: "1px solid gray",
+                    }}
+                    onClick={() => handleClickOpen(special.images[0])}
+                  >
+                    {special.images.map((image, imgIndex) => (
+                      <CardMedia
+                        key={imgIndex}
+                        component="img"
+                        sx={{
+                          maxWidth: "100%", 
+                          maxHeight: "100%", 
+                          objectFit: "cover", 
+                        }}
+                        image={image}
+                        title={`Special Image ${imgIndex}`}
+                      />
+                    ))}
+                  </Card>
+                </Bounce>
+              </Grid>
+            ))}
+        </Grid>
+      </Container>
+
+      {/* <Dialog open={open} onClose={handleClose} sx={{ maxWidth: "100vw" }}>
         <DialogContent>
           <IconButton
             edge="end"
@@ -98,11 +100,11 @@ function SpecialCard(props: Iprops) {
           <img
             src={selectedImage || ""}
             alt="Full Size"
-            style={{ width: "40vw", height: "50vh" }}
+            style={{ width: "100vw", height: "100vh" }}
           />
         </DialogContent>
-      </Dialog>
-    </Container>
+      </Dialog> */}
+    </>
   );
 }
 
