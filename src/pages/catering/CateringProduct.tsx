@@ -26,7 +26,7 @@ import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import { useGetProductByCateringMenu } from "../../customRQHooks/Hooks";
 import { paths } from "../../routes/path";
 import ScrollToTop from "../../common/component/ScrollToTop";
-// import ScrollToBottom from "../../common/component/ScrollToBottom"; // Import ScrollToBottom component here
+import theme from "../../theme/theme";
 
 interface IProps {
   selectedMenuId: string;
@@ -225,11 +225,13 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
             <Box key={data._id}>
               <Typography
                 sx={{
-                  textAlign: "center",
+                  fontWeight: 500,
                   color: "white",
-                  backgroundColor: "orange",
-                  my: 2,
-                  fontSize: "1.8rem",
+                  backgroundColor: theme.palette.primary.main,
+                  my: 1,
+                  fontSize: "1.25rem",
+                  paddingLeft: "10px",
+                  lineHeight: "1.6",
                 }}
               >
                 {data.menuTitle}
@@ -243,10 +245,10 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                       item
                       key={product._id}
                       sx={{
-                        borderBottom:
-                          index === data.products.length - 1
-                            ? "none"
-                            : "1px solid #FFD580",
+                        borderBottomWidth:
+                          index === data.products.length - 1 ? 0 : "0.003px",
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "lightgray",
                         mt: 2,
                       }}
                     >
@@ -258,13 +260,21 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                             textDecoration: "none",
                           }}
                         >
-                          <img
-                            src={product.posterURL}
-                            width={"100%"}
-                            height={"80%"}
-                            alt={product.title}
-                            loading="lazy"
-                          />
+                          <Box
+                            sx={{
+                              height: "150px",
+                              width: "150px",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            <img
+                              src={product.posterURL}
+                              width={"100%"}
+                              height={"100%"}
+                              alt={product.title}
+                              loading="lazy"
+                            />
+                          </Box>
                         </Link>
                       </Grid>
 

@@ -36,7 +36,9 @@ function CommonProductCard(props: IProps) {
         mr: 2,
         width: "200px",
         height: "260px",
-        border: "gray",
+        border: "1px solid #ddd",
+        background: "#fff",
+        shadows: "none",
       }}
     >
       <Box
@@ -73,7 +75,7 @@ function CommonProductCard(props: IProps) {
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 2,
-                          }}
+          }}
           component="div"
         >
           {product.title}

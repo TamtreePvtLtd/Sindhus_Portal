@@ -2,11 +2,10 @@ import { ICategoryWithProducts } from "../../interface/types";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import CommonProductCard from "./CommonProductCard";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -76,29 +75,35 @@ function Carousel(props: IProps) {
             display={"flex"}
             justifyContent={"space-between"}
             alignItems={"center"}
-            py={1}
-            // mt={1}
-            sx={{ backgroundColor: "#f7bf3f" }}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+            }}
           >
             <Typography
               sx={{
                 margin: "0px 10px 0px 0px",
                 marginLeft: "20px",
                 fontWeight: 500,
-                color: "#038369",
+                color: "white",
                 lineHeight: 1.5,
               }}
               variant="h6"
             >
               {category.menuDatas.title}
             </Typography>
-            <Box sx={{ color: "#038369" }}>
+            <Box sx={{ color: "white" }}>
               <Typography
                 onClick={() => handleClickViewAll(category.menuDatas._id)}
-                sx={{ display: "flex", alignItems: "center" }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  fontWeight: 500,
+                  marginRight: "20px",
+                  fontSize: "1.1rem",
+                }}
               >
                 View All
-                <ArrowForwardIcon />
+                <KeyboardArrowRightIcon />
               </Typography>
             </Box>
           </Box>
