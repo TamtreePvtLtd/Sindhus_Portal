@@ -68,13 +68,14 @@ function Categories() {
       {categories && categories.length > 0 ? (
         <>
           <Typography
+            variant="h4"
             sx={{
-              fontWeight: 800,
-              color: "black",
-              lineHeight: 2,
-              mt: 2,
+              display: "flex",
+              justifyContent: "center",
+              color: "#57ccb5",
+              padding: "20px",
+              fontWeight: 600,
             }}
-            variant="h6"
           >
             Menus
           </Typography>

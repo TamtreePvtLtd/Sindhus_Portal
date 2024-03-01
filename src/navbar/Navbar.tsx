@@ -96,7 +96,9 @@ function NavBar() {
           borderStyle: "solid",
           borderWidth: 0,
           height: "70px",
-          //backgroundColor: "rgba(255,255,255,0.7)",          
+          boxShadow:
+            "0px 0px 0px 0px rgba(0,0,0,0), 0px 0px 4px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)",
+          //backgroundColor: "rgba(255,255,255,0.7)",
           backgroundColor: "white",
           position: isBelowSMScreen ? "fixed" : appBarPosition,
         }}
