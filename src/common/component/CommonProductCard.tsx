@@ -38,12 +38,13 @@ function CommonProductCard(props: IProps) {
         height: "260px",
         border: "1px solid #ddd",
         background: "#fff",
-        shadows: "none",
+    
+        boxShadow: "none",
       }}
     >
       <Box
         sx={{
-          height: "140px",
+          height: "65%",
           width: "100%",
           overflow: "hidden",
         }}
@@ -66,7 +67,8 @@ function CommonProductCard(props: IProps) {
           />
         </Link>
       </Box>
-      <CardContent>
+
+      <CardContent sx={{ height: "35%", overflow: "hidden" }}>
         <Typography
           variant="body1"
           sx={{
