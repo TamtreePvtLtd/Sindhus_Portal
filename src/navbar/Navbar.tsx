@@ -37,6 +37,22 @@ function NavBar() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const isMobile = matches;
+  const text = "SINDHU'S";
+
+  const renderTextWithBackground = () => {
+    return text.split("").map((char, index) => (
+      <span
+        key={index}
+        style={{
+          backgroundColor: char.trim() !== "" ? "black" : "transparent",
+          color: char.trim() !== "" ? "#4acc01" : "inherit",
+          padding: "0 4px", // Adjust padding as needed
+        }}
+      >
+        {char}
+      </span>
+    ));
+  };
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -96,7 +112,7 @@ function NavBar() {
           borderStyle: "solid",
           borderWidth: 0,
           height: "70px",
-          //backgroundColor: "rgba(255,255,255,0.7)",          
+          //backgroundColor: "rgba(255,255,255,0.7)",
           backgroundColor: "white",
           position: isBelowSMScreen ? "fixed" : appBarPosition,
         }}
@@ -125,33 +141,49 @@ function NavBar() {
                 loading="lazy"
                 onClick={handleNavigateToHome}
               />
-              <Box>
+              <div>
                 <Typography
+                  variant="h1"
                   sx={{
                     fontWeight: 600,
-                    color: theme.palette.primary.main,
+                    color: "#4acc01",
                     fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
-                    fontFamily: "Sindhus-Logo-Font",
+                    fontFamily: "clearface ts bold",
                     cursor: "pointer",
+                    marginBottom: "-25px",
+                    backgroundColor: "black", // Add background color here
+                    display: "inline-block", // Ensure the background color covers only the text
                   }}
-                  onClick={handleNavigateToHome}
                 >
                   SINDHU&#8217;S
                 </Typography>
-                {isBelowSMScreen && (
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <CallIcon />
-                    <Typography
-                      sx={{
-                        fontSize: "16px",
-                        fontWeight: 500,
-                      }}
-                    >
-                      &nbsp; Call us:+1 940-279-2536
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
+
+                <Typography
+                  sx={{
+                    fontFamily: "Sanskrit",
+                    color: "white",
+                    backgroundColor: "black",
+                    fontSize: "12px",
+                    marginTop: -1,
+                  }}
+                >
+                  Authentic South Indian Food & Snacks
+                </Typography>
+              </div>
+              {isBelowSMScreen && (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <CallIcon />
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    &nbsp; Call us:+1 940-279-2536
+                  </Typography>
+                </Box>
+              )}
+
               {!isBelowSMScreen && (
                 <Box
                   sx={{
