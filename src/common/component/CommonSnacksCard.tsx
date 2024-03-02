@@ -79,10 +79,31 @@ function CommonSnacksCard(props: IProps) {
             <Select
               value={selectedPrice || ""}
               onChange={handlePriceChange}
-              sx={{ width: "100%" }}
+              sx={{
+                border: "solid 1px #ddd",
+                padding: "8px 17px",
+                borderRadius: "30px",
+                width: "90%",
+                height: "36px",
+                fontSize: "13px",
+              }}
             >
               {product.itemSizeWithPrice.map((priceItem, index) => (
-                <MenuItem key={index} value={priceItem.price}>
+                <MenuItem
+                  key={priceItem._id}
+                  value={priceItem.price}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "13px",
+                    borderRadius: "30px",
+                    alignItems: "center",
+
+                    "&:hover": {
+                      backgroundColor: "#57ccb5",
+                    },
+                  }}
+                >
                   {priceItem.size}lb - ${priceItem.price}
                 </MenuItem>
               ))}
