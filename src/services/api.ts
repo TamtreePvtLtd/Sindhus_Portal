@@ -160,6 +160,7 @@ const getAllSnacksProductsWithSubMenu = async (subMenuId: string) => {
     const response = await httpWithoutCredentials.get<ISnacksPage>(
       `/product/getAllSnacksMenu${subMenuId}`
     );
+    console.log("response",response.data)
     return response.data;
   } catch (error) {
     console.error("Error:", error);

@@ -20,11 +20,16 @@ export interface IProductCardList {
   posterURL: string;
   description?: string;
   netWeight?: number;
-  price: number | null;
+  itemSizeWithPrice: itemSizeWithPrice[] | null;
   dailyMenuSizeWithPrice: DailyMenuSizeWithPrice[] | null;
 }
 
 export interface DailyMenuSizeWithPrice {
+  size: string;
+  price: number;
+  _id: string;
+}
+export interface itemSizeWithPrice {
   size: string;
   price: number;
   _id: string;

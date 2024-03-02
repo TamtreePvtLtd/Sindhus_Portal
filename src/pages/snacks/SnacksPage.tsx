@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
+import CommonSnacksCard from "../../common/component/CommonSnacksCard";
 
 function SnacksPage() {
   const [selectedSubMenuId, setSelectedSubMenuId] = useState<string>("");
@@ -64,7 +65,7 @@ function SnacksPage() {
                   sx={{ display: "flex", justifyContent: "center" }}
                   key={product._id}
                 >
-                  <CommonProductCard product={product} />
+                  <CommonSnacksCard product={product} />
                 </Grid>
               ))}
             </Grid>
