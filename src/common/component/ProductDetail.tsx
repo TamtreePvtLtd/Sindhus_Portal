@@ -82,7 +82,7 @@ function ProductDetail() {
                   .concat(menuDetail.images)
                   .map((image, index) => (
                     <Box>
-                      <Card key={index}>
+                      <Card key={index} sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
                             height: "350px",
@@ -90,7 +90,6 @@ function ProductDetail() {
                             overflow: "hidden",
                             border: "1px solid #ddd",
                             background: "#fff",
-                            shadows: "none",
                           }}
                         >
                           <CardMedia
