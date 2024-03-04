@@ -24,11 +24,12 @@ function SpecialCard(props: Iprops) {
     setSelectedImage(image);
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
     setSelectedImage(null);
   };
-  console.log("Specials:", specials);
+
   return (
     <>
       <Container>
@@ -51,13 +52,14 @@ function SpecialCard(props: Iprops) {
           {specials &&
             specials.length > 0 &&
             specials.map((special, index) => (
-              <Grid item xs={4} key={index}>
+              <Grid item xs={12} key={index}>
                 <Bounce left>
                   <Card
                     sx={{
                       display: "flex",
                       width: "82vw",
-                      height: "60vh",
+                      height: "80vh",
+                      overflow: "hidden",
                       border: "1px solid gray",
                     }}
                     onClick={() => handleClickOpen(special.images[0])}
@@ -67,9 +69,9 @@ function SpecialCard(props: Iprops) {
                         key={imgIndex}
                         component="img"
                         sx={{
-                          maxWidth: "100%", 
-                          maxHeight: "100%", 
-                          objectFit: "cover", 
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
                         image={image}
                         title={`Special Image ${imgIndex}`}
@@ -82,10 +84,36 @@ function SpecialCard(props: Iprops) {
         </Grid>
       </Container>
 
-      {/* <Dialog open={open} onClose={handleClose} sx={{ maxWidth: "100vw" }}>
-        <DialogContent>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullScreen
+        PaperProps={{
+          style: {
+            overflow: "hidden",
+          },
+        }}
+      >
+        <DialogContent
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <img
+            src={selectedImage || ""}
+            alt="Full Size"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "100vw",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
           <IconButton
-            edge="end"
             color="inherit"
             onClick={handleClose}
             aria-label="close"
@@ -93,17 +121,14 @@ function SpecialCard(props: Iprops) {
               position: "absolute",
               top: 5,
               right: 5,
+              overflow: "hidden",
+              marginRight: "10rem",
             }}
           >
             <CloseIcon />
           </IconButton>
-          <img
-            src={selectedImage || ""}
-            alt="Full Size"
-            style={{ width: "100vw", height: "100vh" }}
-          />
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </>
   );
 }
