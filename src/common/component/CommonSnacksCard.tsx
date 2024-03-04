@@ -75,7 +75,7 @@ function CommonSnacksCard(props: IProps) {
           {product.title}
         </Typography>
         <Box>
-          {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0 ? (
+          {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 1 ? (
             <Select
               value={selectedPrice || ""}
               onChange={handlePriceChange}
@@ -109,10 +109,10 @@ function CommonSnacksCard(props: IProps) {
               ))}
             </Select>
           ) : (
-            <Typography
-              sx={{ color: theme.palette.primary.main, fontWeight: 500 }}
-            >
-              {selectedPrice !== null ? `$${selectedPrice}` : ""}
+            <Typography sx={{ color: "black", fontWeight: 350 }}>
+              {selectedPrice !== null && product.itemSizeWithPrice
+                ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
+                : ""}
             </Typography>
           )}
         </Box>
