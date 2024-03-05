@@ -15,6 +15,8 @@ const SpecialsComponent = lazy(() => import("./pages/specials/Specials"));
 
 const SnacksComponent = lazy(() => import("./pages/snacks/SnacksPage"));
 
+const MenusComponent = lazy(() => import("./pages/menus/Menus"));
+
 const CateringComponent = lazy(() => import("./pages/catering/CateringPage"));
 
 const DiningOutComponent = lazy(
@@ -45,6 +47,7 @@ function App() {
                     element={<SpecialsComponent />}
                   />
                   <Route path={paths.SNACKS} element={<SnacksComponent />} />
+                  <Route path={paths.MENUS} element={<MenusComponent />} />
                   <Route
                     path={paths.CATERING}
                     element={<CateringComponent />}

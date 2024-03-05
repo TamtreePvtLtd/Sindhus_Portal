@@ -3,6 +3,7 @@ export enum paths {
   HOME = "/home",
   SPECIALS = "/specials",
   SNACKS = "/snacks",
+   MENUS = "/menus",
   CATERING = "/catering",
   DAILYMENU = "/dailyMenu",
   PRODUCTDETAIL = "/detail/:productId",
