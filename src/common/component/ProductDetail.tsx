@@ -36,6 +36,7 @@ function ProductDetail() {
 
   const isFromCatering = state && state.previousPath === paths.CATERING;
   const isFromDiningOut = state && state.previousPath === paths.DAILYMENU;
+  const isFromSnacks = state && state.previousPath === paths.SNACKS; // Add this line
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -82,7 +83,7 @@ function ProductDetail() {
                   .concat(menuDetail.images)
                   .map((image, index) => (
                     <Box>
-                      <Card key={index}>
+                      <Card key={index} sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
                             height: "350px",
@@ -90,7 +91,6 @@ function ProductDetail() {
                             overflow: "hidden",
                             border: "1px solid #ddd",
                             background: "#fff",
-                            shadows: "none",
                           }}
                         >
                           <CardMedia
@@ -100,7 +100,7 @@ function ProductDetail() {
                             width="100%"
                             src={image}
                             sx={{ objectFit: "contain" }}
-                          ></CardMedia>
+                          />
                         </Box>
                       </Card>
                     </Box>
@@ -206,10 +206,7 @@ function ProductDetail() {
                           </Typography>
                           {menuDetail.dailyMenuSizeWithPrice.map(
                             (sizePrice) => (
-                              <Typography
-                                key={sizePrice._id}
-                                sx={{ color: theme.palette.primary.main }}
-                              >
+                              <Typography key={sizePrice._id}>
                                 <span style={{ color: "black", opacity: 0.8 }}>
                                   {sizePrice.size}-
                                 </span>
@@ -220,20 +217,24 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
-                          <Typography
-                            sx={{
-                              fontSize: "18px",
-                              fontWeight: "500",
-                              margin: "8px 0",
-                            }}
-                          >
-                            Price
-                          </Typography>
-                          <Typography
-                            sx={{ color: theme.palette.primary.main }}
-                          >
-                            &nbsp;${menuDetail.price}
-                          </Typography>
+                          {isFromSnacks && ( // Add this condition
+                            <>
+                              {menuDetail.price !== 0 && (
+                                <>
+                                  <Typography
+                                    sx={{
+                                      fontSize: "18px",
+                                      fontWeight: "500",
+                                      margin: "8px 0",
+                                    }}
+                                  >
+                                    Price
+                                  </Typography>
+                                  <Typography>${menuDetail.price}</Typography>
+                                </>
+                              )}
+                            </>
+                          )}
                         </>
                       )}
                     </>

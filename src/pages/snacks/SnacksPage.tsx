@@ -11,6 +11,8 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
+import CommonSnacksCard from "../../common/component/CommonSnacksCard";
+import PageBanner from "../../common/component/pageBanner";
 
 function SnacksPage() {
   const [selectedSubMenuId, setSelectedSubMenuId] = useState<string>("");
@@ -31,19 +33,34 @@ function SnacksPage() {
 
   return (
     <>
-      <Typography
+      <Box>
+        <PageBanner
+          imageUrl="assets/images/snacks-banner-image.jpg"
+          content="Snacks"
+          description="Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!"
+        />
+      </Box>
+      {/* <Typography
         variant="h4"
         sx={{
           display: "flex",
           justifyContent: "center",
-          color: "#57ccb5",padding:"20px",
+          color: "#57ccb5",
+          padding: "20px",
           fontWeight: 600,
         }}
       >
         Snacks
-      </Typography>
+      </Typography> */}
 
-      <Container sx={{ mb: 2 }}>
+      <Container
+        sx={{
+          marginTop: "20px",
+          border: "1px solid #eeeeee",
+          my: 5,
+          p: 2,
+        }}
+      >
         <SnacksMenuItem
           onSubMenuClick={handleSubMenuClick}
           snacksSubMenus={snacksPageData?.subMenus ?? []}
@@ -64,7 +81,7 @@ function SnacksPage() {
                   sx={{ display: "flex", justifyContent: "center" }}
                   key={product._id}
                 >
-                  <CommonProductCard product={product} />
+                  <CommonSnacksCard product={product} />
                 </Grid>
               ))}
             </Grid>

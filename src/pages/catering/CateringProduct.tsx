@@ -73,7 +73,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
     if (pageNum <= 0 && (selectedMenuId != "" || selectedProductId != "")) {
       refetchProducts();
     }
-  }, [pageNum]);
+  }, [selectedMenuId, selectedProductId]);
 
   const observer: any = useRef();
 
