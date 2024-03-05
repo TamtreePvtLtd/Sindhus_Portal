@@ -29,7 +29,7 @@ const Menus = () => {
         return menus ? [...menus].sort((a, b) => a.title.localeCompare(b.title)) : [];
     };
 
-    useEffect(() => {        
+    useEffect(() => {
         const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(menu => menu.title === 'Appetizers')?._id;
         setSelectedMenuId(appetizersMenuId || null);
     }, [menus]);
@@ -98,7 +98,7 @@ const Menus = () => {
                         <Card sx={{ maxWidth: 700, margin: 'auto', boxShadow: 'none' }}>
                             <CardContent>
                                 <Typography variant="h4" gutterBottom style={{ color: theme.palette.primary.main, fontFamily: '"Lucida Handwriting", cursive', fontWeight: "bold" }}>
-                                {menus?.find((m) => m._id === selectedMenuId)?.title}
+                                    {menus?.find((m) => m._id === selectedMenuId)?.title}
                                 </Typography>
                                 {productsLoading && <p>Loading products...</p>}
                                 {productsError && <p>Error fetching products</p>}
