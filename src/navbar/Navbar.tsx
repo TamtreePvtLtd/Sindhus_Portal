@@ -25,6 +25,7 @@ const navMenus = [
   { name: "Snacks", linkurl: paths.SNACKS },
   { name: "Catering", linkurl: paths.CATERING },
   { name: "Specials", linkurl: paths.SPECIALS },
+  { name: "Menu", linkurl: paths.MENUS,}
 ];
 
 function NavBar() {
@@ -102,7 +103,7 @@ function NavBar() {
         }}
         component="nav"
       >
-        <Container maxWidth={false}>
+        <Container maxWidth={false} >
           <Toolbar sx={{ p: 0, height: "35px" }}>
             <Box
               sx={{
@@ -133,6 +134,7 @@ function NavBar() {
                     fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
                     fontFamily: "Sindhus-Logo-Font",
                     cursor: "pointer",
+                     marginTop: "13px"
                   }}
                   onClick={handleNavigateToHome}
                 >
