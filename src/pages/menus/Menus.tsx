@@ -20,7 +20,6 @@ const Menus = () => {
     };
 
     useEffect(() => {
-        // Fetch products when selectedMenuId changes
         if (selectedMenuId) {
             refetchProducts();
         }
@@ -30,8 +29,7 @@ const Menus = () => {
         return menus ? [...menus].sort((a, b) => a.title.localeCompare(b.title)) : [];
     };
 
-    useEffect(() => {
-        // Find the ID of the "Appetizers" menu and set it as the initial selectedMenuId
+    useEffect(() => {        
         const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(menu => menu.title === 'Appetizers')?._id;
         setSelectedMenuId(appetizersMenuId || null);
     }, [menus]);
@@ -99,11 +97,9 @@ const Menus = () => {
                     {selectedMenuId && (
                         <Card sx={{ maxWidth: 700, margin: 'auto', boxShadow: 'none' }}>
                             <CardContent>
-                                {/* Heading with the selected menu title */}
                                 <Typography variant="h4" gutterBottom style={{ color: theme.palette.primary.main, fontFamily: '"Lucida Handwriting", cursive', fontWeight: "bold" }}>
-                                    {menus?.find((m) => m._id === selectedMenuId)?.title}
+                                {menus?.find((m) => m._id === selectedMenuId)?.title}
                                 </Typography>
-                                {/* Display products for the selected menu */}
                                 {productsLoading && <p>Loading products...</p>}
                                 {productsError && <p>Error fetching products</p>}
 
