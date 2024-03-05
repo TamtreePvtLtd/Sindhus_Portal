@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useGetAllMenus, useGetFetchProductsByMenuId } from '../../customRQHooks/Hooks';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Fade from "react-reveal";
+import PageBanner from "../../common/component/pageBanner";
 
 const Menus = () => {
     const { data: menus, isLoading: menusLoading, isError: menusError } = useGetAllMenus();
@@ -37,6 +38,13 @@ const Menus = () => {
 
     return (
         <div>
+            <Box>
+                <PageBanner
+                    imageUrl="public/assets/sindhu-kitchen.avif"
+                    content="Our Menu"
+                    description="The following is a list of the foods available in our restaurant!"
+                />
+            </Box>
             <Container>
                 <Box sx={{ paddingTop: '60px' }}>
                     {menusLoading && <p>Loading menus...</p>}
