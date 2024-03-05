@@ -11,6 +11,7 @@ import CateringSpecial from "./CateringSpecial";
 
 import { Button } from "@mui/material";
 import { RefObject, useRef } from "react";
+import Menus from "./CateringNavmenu";
 
 function CateringPage() {
   const theme = useTheme();
@@ -21,6 +22,14 @@ function CateringPage() {
     footerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+
+  const handleMenuSelection = (menuId) => {
+    setSelectedMenuId(menuId);
+  };
+
+  const handleNavMenuTitleClick = (menuId) => {
+    setSelectedMenuId(menuId);
+  };
   return (
     <>
       <Box>
@@ -57,8 +66,12 @@ function CateringPage() {
           onSelectProduct={(productId: string) =>
             setSelectedProductId(productId)
           }
-        />
+        />  
       </Container>
+      <Menus 
+        onSelectMenu={handleMenuSelection}
+        onNavMenuTitleClick={handleNavMenuTitleClick}
+      />
       <CateringProduct
         selectedMenuId={selectedMenuId}
         selectedProductId={selectedProductId}
