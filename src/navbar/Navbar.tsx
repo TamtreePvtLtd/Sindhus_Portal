@@ -105,7 +105,7 @@ function NavBar() {
             sx={{
               display: "flex",
               alignItems: "center",
-               flexGrow: 1,
+              flexGrow: 1,
             }}
           >
             <img
@@ -127,7 +127,7 @@ function NavBar() {
               <Typography
                 sx={{
                   fontWeight: 600,
-                  color: "#058265",
+                  color: "#038265",
                   fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
                   fontFamily: "clearface ts bold",
                   cursor: "pointer",

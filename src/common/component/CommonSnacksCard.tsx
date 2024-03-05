@@ -37,8 +37,7 @@ function CommonSnacksCard(props: IProps) {
         width: "200px",
         height: "260px",
         border: "1px solid #ddd",
-        background: "#fff",
-        shadows: "none",
+         boxShadow: "none",
       }}
     >
       <Box sx={{ height: "140px", width: "100%", overflow: "hidden" }}>

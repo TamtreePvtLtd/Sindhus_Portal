@@ -57,8 +57,8 @@ function SnacksMenuItem({
     <Container>
       {snacksSubMenus && snacksSubMenus.length > 0 && (
         <Slider {...settings}>
-          <Box sx={{ height: "50px" }}>
-            <Button
+          <Box sx={{ height: "50px", backgroundColor: "none" }}>
+            {/* <Button
               onClick={() => onSubMenuClick("")}
               sx={{
                 border: "none",
@@ -72,41 +72,42 @@ function SnacksMenuItem({
                   color: "white",
                   border: "none",
                 },
-                boxShadow: 2,
+                // boxShadow: 2,
               }}
               variant={!selectedSubMenuId ? "contained" : "outlined"}
+            > */}
+            <Typography
+              sx={{
+                fontWeight: selectedSubMenuId === "" ? 500 : 300,
+                color: selectedSubMenuId === "" ? "black" : "black",
+                textDecoration: selectedSubMenuId === "" ? "underline" : "none",
+              }}
+              onClick={() => onSubMenuClick("")}
             >
-              <Typography sx={{ fontWeight: 500 }}> All</Typography>
-            </Button>
+              All
+            </Typography>
+            {/* </Button> */}
           </Box>
 
           {snacksSubMenus.length > 0 &&
             snacksSubMenus.map((subMenu, index) => (
-              <Box key={index} sx={{ display: "flex" }}>
-                <Button
-                  onClick={() => onSubMenuClick(subMenu._id)}
+              <Box key={index} sx={{ display: "flex", marginRight: 10 }}>
+                <Typography
                   sx={{
-                    border: "none",
-                    borderRadius: "15px",
-                    width: "140px",
-                    p: 1,
-                    color:
-                      selectedSubMenuId === subMenu._id ? "white" : "black",
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary.main,
-                      color: "white",
-                      border: "none",
-                    },
-                    boxShadow: 2,
+                    fontWeight: selectedSubMenuId === subMenu._id ? 500 : 300,
+                    color: selectedSubMenuId === subMenu._id ? "" : "inherit",
+
+                    textDecoration:
+                      selectedSubMenuId === subMenu._id ? "underline" : "none",
+                    // "&:hover": {
+                    //   color: "white",
+                    //   textDecoration: "underline",
+                    // },
                   }}
-                  variant={
-                    selectedSubMenuId == subMenu._id ? "contained" : "outlined"
-                  }
+                  onClick={() => onSubMenuClick(subMenu._id)}
                 >
-                  <Typography sx={{ fontWeight: 500 }}>
-                    {subMenu.title}
-                  </Typography>
-                </Button>
+                  {subMenu.title}
+                </Typography>
               </Box>
             ))}
         </Slider>
