@@ -37,10 +37,10 @@ function CommonSnacksCard(props: IProps) {
         width: "200px",
         height: "260px",
         border: "1px solid #ddd",
-         boxShadow: "none",
+        boxShadow: "none",
       }}
     >
-      <Box sx={{ height: "140px", width: "100%", overflow: "hidden" }}>
+      <Box sx={{ height: "65%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
           state={{ previousPath: paths.DAILYMENU }}
