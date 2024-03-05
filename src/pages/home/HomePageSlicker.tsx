@@ -288,6 +288,8 @@ function HomePageSlicker() {
                       setSearchTerm("");
                     }
                   }}
+                  {/* We are doing filter in api itself. No needs to filter here. Just display what api returns */}
+                  filterOptions={(options) => options}
                   renderOption={(props, option) => (
                     <Link
                       to={`/detail/${option._id}`}
