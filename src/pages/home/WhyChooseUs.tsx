@@ -48,15 +48,15 @@ function WhyChooseUs(props: Iprops) {
         </Fade>
       </Box>
 
-      <Grid container spacing={6} justifyContent="center" alignItems="center" marginBottom="4">
+      <Grid container spacing={10} justifyContent="center" alignItems="center" marginBottom="4">
         {whyChooseUs.map((whychoose, index) => {
           return (
             <Grid
               item
               key={index}
               xs={12}
-              sm={5}
-              md={3.6}
+              sm={6}
+              md={4}
               className={classes.centerImage}
             >
               <Bounce bottom>
