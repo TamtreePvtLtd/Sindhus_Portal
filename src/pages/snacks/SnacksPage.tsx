@@ -78,7 +78,7 @@ function SnacksPage() {
                   sm={4}
                   md={3}
                   lg={2.4}
-                  sx={{ display: "flex", justifyContent: "center" }}
+                  // sx={{ display: "flex", justifyContent: "center" }}
                   key={product._id}
                 >
                   <CommonSnacksCard product={product} />

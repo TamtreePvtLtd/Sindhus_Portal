@@ -2,14 +2,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
-import Slider from "react-slick";
-import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import { useGetAllDiningOutMenuDatas } from "../../customRQHooks/Hooks";
 import { useEffect, useState } from "react";
 import { ICategory } from "../../interface/types";
 import { useNavigate } from "react-router-dom";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
+import PageBanner from "../../common/component/pageBanner";
 
 function Categories() {
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -27,109 +26,69 @@ function Categories() {
   const theme = useTheme();
   const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const settings = {
-    infinite: false,
-    speed: 500,
-    slidesToShow: 5.7,
-    slidesToScroll: 1,
-
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3.2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1.5,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1.6,
-          slidesToScroll: 1,
-          arrows: !isBelowMediumScreen,
-        },
-      },
-    ],
-  };
-
   const handleClickProduct = (menuId: string) => {
     navigate(`/productsByCategory/${menuId}`);
   };
 
   return (
-    <Container>
-      {categories && categories.length > 0 ? (
-        <>
-          <Typography
+    <>
+      <Box>
+        <PageBanner
+          imageUrl="assets/images/snacks-banner-image.jpg"
+          content="Menu"
+          description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
+        />
+      </Box>
+      <Container>
+        {categories && categories.length > 0 ? (
+          <Box
             sx={{
-              fontWeight: 800,
-              color: "black",
-              lineHeight: 2,
-              mt: 2,
+              display: "flex",
+              justifyContent: "center",
             }}
-            variant="h6"
           >
-            Menus
-          </Typography>
-
-          <Slider {...settings}>
-            {categories?.map((category, index) => (
+            {categories.map((category, index) => (
               <Box
                 key={index}
+                onClick={() => handleClickProduct(category._id)}
                 sx={{
-                  width: "10rem !important",
-                  py: 2,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "black",
+                  fontWeight: 500,
+                  lineHeight: 1.5,
+                  fontSize: "1.5rem",
+                  "&:hover": {
+                    textDecoration: "underline",
+                    color: "#038265",
+                  },
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  width: "10rem",
+                  py: 5,
+                  mx: 1,
                 }}
               >
-                <Card
-                  onClick={() => handleClickProduct(category._id)}
+                <Typography
+                  gutterBottom
+                  component="div"
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    color: "black",
+                    textAlign: "center",
                     fontWeight: 500,
-                    lineHeight: 1.5,
-                    fontSize: "1.5rem",
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary.main,
-                      color: "white",
-                    },
-                    boxShadow: 2,
-                    borderRadius: "10px",
-                    cursor: "pointer",
+                    m: 0,
                   }}
                 >
-                  <Typography
-                    gutterBottom
-                    component="div"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "center",
-                      p: 1,
-                      fontWeight: 500,
-                      m: 0,
-                    }}
-                  >
-                    {category.title}
-                  </Typography>
-                </Card>
+                  {category.title}
+                </Typography>
               </Box>
             ))}
-          </Slider>
-        </>
-      ) : (
-        <NoProductsAvailable />
-      )}
-    </Container>
+          </Box>
+        ) : (
+          <NoProductsAvailable />
+        )}
+      </Container>
+    </>
   );
 }
 

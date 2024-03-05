@@ -78,23 +78,24 @@ function Carousel(props: IProps) {
             justifyContent={"space-between"}
             alignItems={"center"}
             sx={{
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: "white",
             }}
           >
             <Typography
               sx={{
                 margin: "0px 10px 0px 0px",
                 marginLeft: "20px",
-                fontWeight: 500,
-                color: "white",
+                fontWeight: 700,
+                fontSize:"40px",
+                color: "#038265",
                 lineHeight: 1.5,
+                fontFamily: "Dancing Script",
               }}
               variant="h6"
             >
               {category.menuDatas.title}
             </Typography>
             {showViewAllArrowIcon && (
-
               <Box sx={{ color: "white" }}>
                 <Typography
                   onClick={() => handleClickViewAll(category.menuDatas._id)}
