@@ -95,7 +95,7 @@ const Menus = () => {
                             ))}
                         </Grid>
                     )}
-                    <Divider sx={{ marginTop: '20px' }} />
+                    <Divider sx={{ marginTop: '50px' }} />
                     {selectedMenuId && (
                         <Card sx={{ maxWidth: 700, margin: 'auto', boxShadow: 'none' }}>
                             <CardContent>
