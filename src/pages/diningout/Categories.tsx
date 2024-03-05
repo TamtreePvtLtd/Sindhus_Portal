@@ -9,10 +9,12 @@ import { ICategory } from "../../interface/types";
 import { useNavigate } from "react-router-dom";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import PageBanner from "../../common/component/pageBanner";
+import { Grid } from "@mui/material";
 
 function Categories() {
   const [categories, setCategories] = useState<ICategory[]>([]);
-
+  const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
+  const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
   const { data } = useGetAllDiningOutMenuDatas();
 
   const navigate = useNavigate();
@@ -34,56 +36,60 @@ function Categories() {
     <>
       <Box>
         <PageBanner
-          imageUrl="assets/images/snacks-banner-image.jpg"
+          imageUrl="assets/Menuimage.jpg"
           content="Menu"
           description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
         />
       </Box>
       <Container>
         {categories && categories.length > 0 ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
+          <Grid
+            container
+            justifyContent="center"
+            spacing={4}
+            sx={{ marginTop: "20px" }}
           >
             {categories.map((category, index) => (
-              <Box
-                key={index}
-                onClick={() => handleClickProduct(category._id)}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "black",
-                  fontWeight: 500,
-                  lineHeight: 1.5,
-                  fontSize: "1.5rem",
-                  "&:hover": {
-                    textDecoration: "underline",
-                    color: "#038265",
-                  },
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  width: "10rem",
-                  py: 5,
-                  mx: 1,
-                }}
-              >
-                <Typography
-                  gutterBottom
-                  component="div"
+              <Grid item key={index} xs={12} sm={6} md={3} lg="auto">
+                <Box
+                  onClick={() => handleClickProduct(category._id)}
                   sx={{
                     textAlign: "center",
-                    fontWeight: 500,
-                    m: 0,
+                    cursor: "pointer",
+
+                    color:
+                      selectedMenuId === category._id ||
+                      hoveredMenuId === category._id
+                        ? "red"
+                        : "text.disabled",
+                    textDecoration:
+                      selectedMenuId === category._id ||
+                      hoveredMenuId === category._id
+                        ? "underline"
+                        : "none",
+                    "&:hover": {
+                      color: "text.primary",
+                      textDecoration: "underline",
+                    },
                   }}
                 >
-                  {category.title}
-                </Typography>
-              </Box>
+                  <Typography
+                    style={{
+                      margin: 0,
+                      lineHeight: "2",
+                      marginBottom: "10px",
+                      fontFamily: "revert-layer",
+                      fontWeight: 700,
+                      fontSize: "1.2rem",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {category.title}
+                  </Typography>
+                </Box>
+              </Grid>
             ))}
-          </Box>
+          </Grid>
         ) : (
           <NoProductsAvailable />
         )}
