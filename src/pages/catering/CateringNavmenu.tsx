@@ -1,37 +1,33 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGetAllMenus } from '../../customRQHooks/Hooks';
 import Fade from "react-reveal";
 
 interface MenusProps {
     onSelectMenu: (menuId: string) => void;
-    onNavMenuTitleClick: (menuId: string) => void; // Define the prop here
+    onNavMenuTitleClick: (menuId: string) => void;
+    selectedMenuId: string; // Added prop to sync with selected menu in SearchBar
 }
 
-const Menus = ({ onSelectMenu, onNavMenuTitleClick }: MenusProps) => {
+const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps) => {
     const { data: menus, isLoading: menusLoading, isError: menusError } = useGetAllMenus();
-    const [selectedMenuId, setSelectedMenuId] = useState<string | null>("");
     const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
+
+    useEffect(() => {
+        // When the selectedMenuId changes, update hoveredMenuId to reflect the same menu
+        setHoveredMenuId(selectedMenuId);
+    }, [selectedMenuId]);
 
     const getMenuItemsInAlphabeticalOrder = () => {
         return menus ? [...menus].sort((a, b) => a.title.localeCompare(b.title)) : [];
     };
 
-    useEffect(() => {
-        // Find the ID of the "Appetizers" menu and set it as the initial selectedMenuId
-        const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(menu => menu.title === 'Appetizers')?._id;
-        setSelectedMenuId(appetizersMenuId || "");
-        onSelectMenu(appetizersMenuId || "");
-    }, [menus, onSelectMenu]);
-
     const handleMenuClick = (menuId: string) => {
-        setSelectedMenuId(menuId);
         onSelectMenu(menuId);
     };
 
     const handleNavMenuTitleClick = (menuId: string) => {
-        setSelectedMenuId(menuId);
-        onNavMenuTitleClick(menuId); // Invoke the onNavMenuTitleClick function
+        onNavMenuTitleClick(menuId);
     };
 
     return (

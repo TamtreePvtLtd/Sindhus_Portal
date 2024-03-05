@@ -6,7 +6,6 @@ import SearchBar from "./SearchBar";
 import Fade from "react-reveal/Fade";
 import { useState } from "react";
 
-import useTheme from "@mui/material/styles/useTheme";
 import CateringSpecial from "./CateringSpecial";
 
 import { Button } from "@mui/material";
@@ -14,22 +13,22 @@ import { RefObject, useRef } from "react";
 import Menus from "./CateringNavmenu";
 
 function CateringPage() {
-  const theme = useTheme();
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const footerRef: RefObject<HTMLDivElement | null> = useRef(null);
+
   const handleEnquiryButtonClick = () => {
     footerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-
-  const handleMenuSelection = (menuId) => {
+  const handleMenuSelection = (menuId:string) => {
     setSelectedMenuId(menuId);
   };
 
-  const handleNavMenuTitleClick = (menuId) => {
+  const handleNavMenuTitleClick = (menuId:string) => {
     setSelectedMenuId(menuId);
   };
+  
   return (
     <>
       <Box>
@@ -60,22 +59,25 @@ function CateringPage() {
 
       <Container sx={{ mt: 2 }}>
         <SearchBar
-          onSelectMenu={(menuId: string) => {
-            setSelectedMenuId(menuId);
-          }}
+          onSelectMenu={(menuId: string) => setSelectedMenuId(menuId)}
           onSelectProduct={(productId: string) =>
             setSelectedProductId(productId)
           }
+          selectedMenuId={selectedMenuId} // Pass selectedMenuId here
         />  
       </Container>
+      
       <Menus 
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
+        selectedMenuId={selectedMenuId} // Pass selectedMenuId here
       />
+      
       <CateringProduct
         selectedMenuId={selectedMenuId}
         selectedProductId={selectedProductId}
       />
+      
       <Box ref={footerRef}></Box>
     </>
   );

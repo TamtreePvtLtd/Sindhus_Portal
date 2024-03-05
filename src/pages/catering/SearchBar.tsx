@@ -17,15 +17,15 @@ import { Typography } from "@mui/material";
 interface IProps {
   onSelectMenu(menuId: string): void;
   onSelectProduct(productId: string): void;
+  selectedMenuId: string;
 }
 
-function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
+function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
   const [cateringMenus, setCateringMenus] = useState<IMenuList[]>([]);
   const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
     null
   );
   const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
-  const [selectedMenuId, setSelectedMenuId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuClear, setIsMenuClear] = useState(false);
   const [isProductClear, setIsProductClear] = useState(false);
@@ -37,14 +37,14 @@ function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
 
   const clearSearch = async () => {
     setIsClearButtonClick(true);
-    onSelectMenu("");
-    onSelectProduct("");
-    setMenuValue(null);
-    setProductValue(null);
-    setSelectedMenuId("");
-    setSearchTerm("");
+    onSelectMenu(""); // Clear the selected menu
+    onSelectProduct(""); // Clear the selected product
+    setMenuValue(null); // Clear the menu value
+    setProductValue(null); // Clear the product value
+    setSearchTerm(""); // Clear the search term
     setIsMenuClear(false);
     setIsProductClear(false);
+    refetchMenus(); // Refetch the menus
   };
 
   useEffect(() => {
@@ -119,17 +119,11 @@ function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
     setSearchTerm("");
 
     if (selectedMenu) {
-      if (menuValue?._id !== selectedMenu._id) {
-        setProductValue(null);
-        onSelectProduct("");
-      }
-
-      setSelectedMenuId(selectedMenu._id);
-      onSelectMenu(selectedMenu._id);
       setMenuValue(selectedMenu);
+      onSelectMenu(selectedMenu._id);
     } else {
-      setSelectedMenuId("");
-      setProductValue(null);
+      setMenuValue(null);
+      onSelectMenu("");
     }
   };
 
