@@ -82,8 +82,8 @@ function ProductDetail() {
                 [menuDetail.posterURL]
                   .concat(menuDetail.images)
                   .map((image, index) => (
-                    <Box key={index}>
-                      <Card>
+                    <Box>
+                      <Card key={index} sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
                             height: "350px",
@@ -91,7 +91,6 @@ function ProductDetail() {
                             overflow: "hidden",
                             border: "1px solid #ddd",
                             background: "#fff",
-                            shadows: "none",
                           }}
                         >
                           <CardMedia
