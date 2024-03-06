@@ -48,7 +48,7 @@ export const useGetAllDiningOutProducts = () => {
 
 export const useGetFetchProductsByMenuId = (menuId: string) => {
   return useQuery({
-    queryKey: ["fetchProductsByMenuId"],
+    queryKey: ["fetchProductsByMenuId",menuId],
     queryFn: () => getfetchProductsByMenuId(menuId),
     refetchOnWindowFocus: false,
   });
