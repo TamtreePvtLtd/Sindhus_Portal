@@ -85,9 +85,9 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                                     <Fade left>
                                         <Typography style={{
                                             margin: 0,
-                                            lineHeight: 1.2,
+                                            lineHeight: 2,
                                             fontWeight: 700,
-                                            fontSize: "1rem",
+                                            fontSize: "1.2rem",
                                             textTransform: 'uppercase',
                                         }}  onClick={() => {
                                             handleNavMenuTitleClick(menu._id);

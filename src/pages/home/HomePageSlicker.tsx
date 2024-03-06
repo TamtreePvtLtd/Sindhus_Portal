@@ -69,9 +69,9 @@ function HomePageSlicker() {
       if (response && response.data) {
         const products: IProductDropDownData[] = response.data.map(
           (product) => ({
-            _id: product._id,
-            title: product.title,
-            posterURL: product.posterURL,
+            _id: product.item._id,
+            title: product.item.title,
+            posterURL: product.item.posterURL,
           })
         );
 
@@ -101,6 +101,7 @@ function HomePageSlicker() {
 
   useEffect(() => {
     if (!selectedMenuId && !isLoading && !isError) {
+      // console.log(menuData);
       setMenus(menuData);
     }
   }, [menuData, isLoading, isError]);
@@ -289,6 +290,7 @@ function HomePageSlicker() {
                       setSearchTerm("");
                     }
                   }}
+                  filterOptions={(options) => options} // We are doing filter in api itself. No needs to filter here. Just display what api returns
                   renderOption={(props, option) => (
                     <Link
                       to={`/detail/${option._id}`}
