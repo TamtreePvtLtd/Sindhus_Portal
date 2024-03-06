@@ -30,7 +30,7 @@ function Carousel(props: IProps) {
 
   const theme = useTheme();
   const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-   const isTabScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isTabScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const settings = {
     infinite: false,
@@ -67,14 +67,12 @@ function Carousel(props: IProps) {
     navigate(`/productsByCategory/${menuId}`);
   };
 
- const showViewAllArrowIcon =
-   category &&
-   category.menuDatas &&
-   (category.menuDatas.products.length > 5 ||
-     (isBelowMediumScreen && category.menuDatas.products.length > 1) ||
-     (isTabScreen && category.menuDatas.products.length > 3));
-
-
+  const showViewAllArrowIcon =
+    category &&
+    category.menuDatas &&
+    (category.menuDatas.products.length > 5 ||
+      (isBelowMediumScreen && category.menuDatas.products.length > 1) ||
+      (isTabScreen && category.menuDatas.products.length > 3));
 
   return (
     category &&
@@ -96,7 +94,7 @@ function Carousel(props: IProps) {
                 fontWeight: 700,
                 fontSize: "40px",
                 color: "#038265",
-                lineHeight: 1.5,
+                lineHeight:1.5,
                 fontFamily: "Dancing Script",
               }}
               variant="h6"

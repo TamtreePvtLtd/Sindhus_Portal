@@ -144,13 +144,14 @@ const Menus = () => {
             <Card sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}>
               <CardContent>
                 <Typography
-                  variant="h4"
+                  variant="h6"
                   gutterBottom
                   style={{
                     color: theme.palette.primary.main,
                     fontFamily: "Dancing Script, cursive",
 
-                    fontWeight: "bold",
+                    fontWeight: 700,
+                    fontSize: "40px",
                   }}
                 >
                   {menus?.find((m) => m._id === selectedMenuId)?.title}
