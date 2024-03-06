@@ -35,17 +35,43 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
   const { data: cateringProducts, refetch: refetchProductData } =
     useCateringfetchProductData(selectedMenuId, searchTerm);
 
-  const clearSearch = async () => {
-    setIsClearButtonClick(true);
-    onSelectMenu(""); // Clear the selected menu
-    onSelectProduct(""); // Clear the selected product
-    setMenuValue(null); // Clear the menu value
-    setProductValue(null); // Clear the product value
-    setSearchTerm(""); // Clear the search term
-    setIsMenuClear(false);
-    setIsProductClear(false);
-    refetchMenus(); // Refetch the menus
-  };
+    const clearSearch = async () => {
+      setIsClearButtonClick(true);
+      onSelectMenu(""); // Clear the selected menu
+      onSelectProduct(""); // Clear the selected product
+      setMenuValue(null); // Clear the menu value
+      setProductValue(null); // Clear the product value
+      setSearchTerm(""); // Clear the search term
+      setIsMenuClear(false);
+      setIsProductClear(false);
+      refetchMenus(); // Refetch the menus
+    
+      // Manually trigger onInputChange event to reset Autocomplete fields
+      const menuAutocomplete = document.getElementById("category-autocomplete");
+      if (menuAutocomplete) {
+        menuAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    
+      const foodAutocomplete = document.getElementById("food-autocomplete");
+      if (foodAutocomplete) {
+        foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    
+      // Set the selected menu to the "Appetizers" menu
+      const appetizersMenu = cateringMenus.find((menu) => menu.title === "Appetizers");
+      if (appetizersMenu) {
+        onSelectMenu(appetizersMenu._id);
+        setMenuValue({
+          _id: appetizersMenu._id,
+          title: appetizersMenu.title,
+          label: appetizersMenu.title,
+          menuType: appetizersMenu.menuType,
+        });
+      }
+    };
+    
+    
+    
 
   useEffect(() => {
     if (menuList) {

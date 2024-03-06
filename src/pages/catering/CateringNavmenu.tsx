@@ -12,22 +12,34 @@ interface MenusProps {
 const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps) => {
     const { data: menus, isLoading: menusLoading, isError: menusError } = useGetAllMenus();
     const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
+    const [selectedMenuIdState, setSelectedMenuIdState] = useState<string>("");
 
     useEffect(() => {
         // When the selectedMenuId changes, update hoveredMenuId to reflect the same menu
         setHoveredMenuId(selectedMenuId);
+        setSelectedMenuIdState(selectedMenuId); // Ensure the selected menu is active when provided
     }, [selectedMenuId]);
 
     const getMenuItemsInAlphabeticalOrder = () => {
         return menus ? [...menus].sort((a, b) => a.title.localeCompare(b.title)) : [];
     };
 
+    useEffect(() => {
+        // If selectedMenuId is not provided, set the initial selectedMenuIdState to the ID of the "Appetizers" menu
+        if (!selectedMenuId) {
+            const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(menu => menu.title === 'Appetizers')?._id;
+            setSelectedMenuIdState(appetizersMenuId || "");
+        }
+    }, [selectedMenuId]);
+
     const handleMenuClick = (menuId: string) => {
         onSelectMenu(menuId);
+        setSelectedMenuIdState(menuId);
     };
 
     const handleNavMenuTitleClick = (menuId: string) => {
         onNavMenuTitleClick(menuId);
+        setSelectedMenuIdState(menuId);
     };
 
     return (
@@ -50,8 +62,8 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                                         textAlign: 'center',
                                         paddingX: '20px',
                                         cursor: 'pointer',
-                                        color: (selectedMenuId === menu._id || hoveredMenuId === menu._id) ? 'text.primary' : 'text.disabled',
-                                        textDecoration: (selectedMenuId === menu._id || hoveredMenuId === menu._id) ? 'underline' : 'none',
+                                        color: (selectedMenuIdState === menu._id || hoveredMenuId === menu._id) ? 'text.primary' : 'text.disabled',
+                                        textDecoration: (selectedMenuIdState === menu._id || hoveredMenuId === menu._id) ? 'underline' : 'none',
                                         '&:hover': {
                                             color: 'text.primary',
                                             textDecoration: 'underline',
@@ -70,7 +82,10 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                                             fontWeight: 700,
                                             fontSize: "1.2rem",
                                             textTransform: 'uppercase',
-                                        }} onClick={() => handleNavMenuTitleClick(menu._id)}>
+                                        }}  onClick={() => {
+                                            handleNavMenuTitleClick(menu._id);
+                                            onSelectMenu(menu._id); // This line ensures that the selected menu in the dropdown matches the active menu in the nav menu
+                                        }}>
                                             {menu.title}
                                         </Typography>
                                     </Fade>
