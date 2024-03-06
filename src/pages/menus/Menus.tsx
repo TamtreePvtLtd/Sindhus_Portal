@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Card, CardContent, Typography, useTheme, Divider } from '@mui/material';
+import { Box, Container, Grid, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useGetAllMenus, useGetFetchProductsByMenuId } from '../../customRQHooks/Hooks';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
@@ -93,7 +93,6 @@ const Menus = () => {
                             ))}
                         </Grid>
                     )}
-                    <Divider sx={{ marginTop: '50px' }} />
                     {selectedMenuId && (
                         <Card sx={{ maxWidth: 700, margin: 'auto', boxShadow: 'none' }}>
                             <CardContent>
@@ -131,7 +130,6 @@ const Menus = () => {
                                         ))}
                                     </Grid>
                                 )}
-                                <Divider sx={{ marginTop: '20px' }} />
                             </CardContent>
                         </Card>
                     )}

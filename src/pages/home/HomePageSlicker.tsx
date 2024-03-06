@@ -114,7 +114,7 @@ function HomePageSlicker() {
           height="350px"
           width="100%"
           className="home-slicker-image"
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: "cover",opacity:1 }}
         />
         <Container
           sx={{
@@ -132,11 +132,11 @@ function HomePageSlicker() {
             <Typography
               variant="h1"
               sx={{
-                fontWeight: "bolder",
+                fontWeight: "bold",
                 fontSize: isBelowMediumSize ? "30px" : "54px",
                 lineHeight: "1",
                 color: "white",
-                fontFamily: "sindhus-logo-font",
+                fontFamily: "clearface ts bold",
               }}
             >
               {homePageSlicker.heading}
