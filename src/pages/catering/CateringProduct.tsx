@@ -26,7 +26,6 @@ import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import { useGetProductByCateringMenu } from "../../customRQHooks/Hooks";
 import { paths } from "../../routes/path";
 import ScrollToTop from "../../common/component/ScrollToTop";
-import theme from "../../theme/theme";
 
 interface IProps {
   selectedMenuId: string;
@@ -223,14 +222,14 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           cateringData.length > 0 &&
           cateringData.map((data) => (
             <Box key={data._id}>
-              <Typography
+              <Typography alignItems={"center"} justifyContent={"center"}
                 sx={{
                   fontWeight: 500,
-                  color: "white",
-                  backgroundColor: theme.palette.primary.main,
+                  color: "black",
                   my: 1,
+                  fontFamily: ,
                   fontSize: "1.25rem",
-                  paddingLeft: "10px",
+                  paddingLeft: "17px",
                   lineHeight: "1.6",
                 }}
               >

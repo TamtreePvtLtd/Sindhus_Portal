@@ -27,9 +27,12 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
     useEffect(() => {
         // If selectedMenuId is not provided, set the initial selectedMenuIdState to the ID of the "Appetizers" menu
         if (!selectedMenuId) {
-            const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(menu => menu.title === 'Appetizers')?._id;
-            setSelectedMenuIdState(appetizersMenuId || "");
+            const menuItems = getMenuItemsInAlphabeticalOrder();
+        const sortedMenuItems = [...menuItems].sort((a, b) => a.title.localeCompare(b.title));
+        const firstMenuItemId = sortedMenuItems.length > 0 ? sortedMenuItems[0]._id : "";
+        setSelectedMenuIdState(firstMenuItemId)
         }
+        
     }, [selectedMenuId]);
 
     const handleMenuClick = (menuId: string) => {
