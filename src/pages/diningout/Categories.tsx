@@ -56,20 +56,16 @@ function Categories() {
                   sx={{
                     textAlign: "center",
                     cursor: "pointer",
-
-                    color:
+                    color: (theme) =>
                       selectedMenuId === category._id ||
                       hoveredMenuId === category._id
-                        ? "red"
-                        : "text.disabled",
-                    textDecoration:
-                      selectedMenuId === category._id ||
-                      hoveredMenuId === category._id
-                        ? "underline"
-                        : "none",
+                        ? theme.palette.text.primary // Change to black color when hovered
+                        : theme.palette.text.disabled,
+                    textDecoration: "none",
                     "&:hover": {
-                      color: "text.primary",
+                      color: (theme) => theme.palette.text.primary,
                       textDecoration: "underline",
+                      textDecorationColor: "#038265", // Change to green color when hovered
                     },
                   }}
                 >

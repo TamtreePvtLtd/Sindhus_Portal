@@ -86,7 +86,7 @@ function Carousel(props: IProps) {
                 margin: "0px 10px 0px 0px",
                 marginLeft: "20px",
                 fontWeight: 700,
-                fontSize:"40px",
+                fontSize: "40px",
                 color: "#038265",
                 lineHeight: 1.5,
                 fontFamily: "Dancing Script",
@@ -105,6 +105,7 @@ function Carousel(props: IProps) {
                     fontWeight: 500,
                     marginRight: "20px",
                     fontSize: "1.1rem",
+                    color: "#038265",
                   }}
                 >
                   View All
