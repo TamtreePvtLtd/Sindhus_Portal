@@ -29,7 +29,7 @@ function CateringPage() {
             <Typography
               variant="h4"
               sx={{
-                color: "#57ccb5",
+                color: "#038265",
                 textAlign: "center",
                 padding: "10px",
                 fontWeight: 600,
