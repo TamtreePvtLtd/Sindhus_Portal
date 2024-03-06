@@ -87,6 +87,8 @@ function SnacksMenuItem({
                 textDecorationStyle: "solid",
                 paddingBottom: "5px",
                 display: "inline-block",
+                fontFamily:"Dancing Script, cursive"
+
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -106,6 +108,8 @@ function SnacksMenuItem({
                       selectedSubMenuId === subMenu._id ? "1px solid #038265" : "none",
                     paddingBottom: "5px",
                     display: "inline-block",
+                    fontFamily:"Dancing Script, cursive"
+
                   }}
                   onClick={() => onSubMenuClick(subMenu._id)}
                 >

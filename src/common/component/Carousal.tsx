@@ -30,6 +30,7 @@ function Carousel(props: IProps) {
 
   const theme = useTheme();
   const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+   const isTabScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const settings = {
     infinite: false,
@@ -40,21 +41,21 @@ function Carousel(props: IProps) {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3.2,
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2.2,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1.2,
+          slidesToShow: 1,
           slidesToScroll: 1,
           arrows: !isBelowMediumScreen,
         },
@@ -66,7 +67,14 @@ function Carousel(props: IProps) {
     navigate(`/productsByCategory/${menuId}`);
   };
 
-  const showViewAllArrowIcon = category.menuDatas.products.length > 5;
+ const showViewAllArrowIcon =
+   category &&
+   category.menuDatas &&
+   (category.menuDatas.products.length > 5 ||
+     (isBelowMediumScreen && category.menuDatas.products.length > 1) ||
+     (isTabScreen && category.menuDatas.products.length > 3));
+
+
 
   return (
     category &&

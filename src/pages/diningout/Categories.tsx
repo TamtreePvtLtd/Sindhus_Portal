@@ -50,7 +50,7 @@ function Categories() {
             sx={{ marginTop: "20px" }}
           >
             {categories.map((category, index) => (
-              <Grid item key={index} xs={12} sm={6} md={3} lg="auto">
+              <Grid item key={index} xs={6} sm={4} md={3} lg="auto">
                 <Box
                   onClick={() => handleClickProduct(category._id)}
                   sx={{
@@ -64,9 +64,9 @@ function Categories() {
                     textDecoration: "none",
                     "&:hover": {
                       color: (theme) => theme.palette.text.primary,
-                     
+
                       textDecorationColor: "#038265",
-                      borderBottom: "1.5px solid #038265", 
+                      borderBottom: "1.5px solid #038265",
                     },
                   }}
                 >
