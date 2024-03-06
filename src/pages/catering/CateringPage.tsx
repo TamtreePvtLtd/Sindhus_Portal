@@ -63,14 +63,14 @@ function CateringPage() {
           onSelectProduct={(productId: string) =>
             setSelectedProductId(productId)
           }
-          selectedMenuId={selectedMenuId} // Pass selectedMenuId here
+          selectedMenuId={selectedMenuId} 
         />  
       </Container>
       
       <Menus 
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
-        selectedMenuId={selectedMenuId} // Pass selectedMenuId here
+        selectedMenuId={selectedMenuId} 
       />
       
       <CateringProduct

@@ -37,16 +37,16 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
 
     const clearSearch = async () => {
       setIsClearButtonClick(true);
-      onSelectMenu(""); // Clear the selected menu
-      onSelectProduct(""); // Clear the selected product
-      setMenuValue(null); // Clear the menu value
-      setProductValue(null); // Clear the product value
-      setSearchTerm(""); // Clear the search term
+      onSelectMenu("");
+      onSelectProduct(""); 
+      setMenuValue(null); 
+      setProductValue(null); 
+      setSearchTerm(""); 
       setIsMenuClear(false);
       setIsProductClear(false);
-      refetchMenus(); // Refetch the menus
+      refetchMenus(); 
     
-      // Manually trigger onInputChange event to reset Autocomplete fields
+      
       const menuAutocomplete = document.getElementById("category-autocomplete");
       if (menuAutocomplete) {
         menuAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
@@ -57,7 +57,7 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
         foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
       }
     
-      // Set the selected menu to the "Appetizers" menu
+      
       const appetizersMenu = cateringMenus.find((menu) => menu.title === "Appetizers");
       if (appetizersMenu) {
         onSelectMenu(appetizersMenu._id);

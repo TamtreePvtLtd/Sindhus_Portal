@@ -6,7 +6,7 @@ import Fade from "react-reveal";
 interface MenusProps {
     onSelectMenu: (menuId: string) => void;
     onNavMenuTitleClick: (menuId: string) => void;
-    selectedMenuId: string; // Added prop to sync with selected menu in SearchBar
+    selectedMenuId: string; 
 }
 
 const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps) => {
@@ -15,9 +15,8 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
     const [selectedMenuIdState, setSelectedMenuIdState] = useState<string>("");
 
     useEffect(() => {
-        // When the selectedMenuId changes, update hoveredMenuId to reflect the same menu
         setHoveredMenuId(selectedMenuId);
-        setSelectedMenuIdState(selectedMenuId); // Ensure the selected menu is active when provided
+        setSelectedMenuIdState(selectedMenuId); 
     }, [selectedMenuId]);
 
     const getMenuItemsInAlphabeticalOrder = () => {
@@ -25,13 +24,10 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
     };
 
     useEffect(() => {
-        // Fetch all menus when component mounts
         refetch();
     }, [refetch]);
 
     useEffect(() => {
-        // If selectedMenuId is not provided or doesn't exist in the fetched menus,
-        // set the initial selectedMenuIdState to the ID of the "Appetizers" menu
         if (!selectedMenuId || (menus && !menus.find(menu => menu._id === selectedMenuId))) {
             const menuItems = getMenuItemsInAlphabeticalOrder();
             const sortedMenuItems = [...menuItems].sort((a, b) => a.title.localeCompare(b.title));
