@@ -3,7 +3,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -20,7 +19,7 @@ import React from "react";
 import CallIcon from "@mui/icons-material/Call";
 
 const navMenus = [
-  { name: "Home", linkurl: paths.HOME },
+  { name: "Home", linkurl: location.pathname === paths.ROOT ? paths.HOME : paths.ROOT},
   { name: "Menu", linkurl: paths.MENUS },
   { name: "Daily Menu", linkurl: paths.DAILYMENU },
   { name: "Snacks", linkurl: paths.SNACKS },
@@ -33,6 +32,10 @@ function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const matches = useMediaQuery("(max-width: 1024px)");
+
+  const isActive = (link: string) => {
+    return location.pathname === link || (location.pathname === "/" && link === paths.HOME);
+  };
 
   const theme = useTheme();
   const isBelowSMScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -220,14 +223,8 @@ function NavBar() {
                         alignItems: "center",
                         fontSize: "large",
                         textTransform: "none",
-                        backgroundColor:
-                          location.pathname === menu.linkurl
-                            ? theme.palette.primary.main
-                            : "none",
-                        color:
-                          location.pathname === menu.linkurl
-                            ? "white"
-                            : "black",
+                        backgroundColor: isActive(menu.linkurl) ? theme.palette.primary.main : "none",
+                      color: isActive(menu.linkurl) ? "white" : "black",
                         "&:hover": {
                           backgroundColor: theme.palette.primary.main,
                           color: "white",
