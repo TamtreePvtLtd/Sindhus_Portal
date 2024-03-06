@@ -15,6 +15,7 @@ export interface IOurServices {
 }
 
 export interface IProductCardList {
+  categoryId: any;
   _id: string;
   title: string;
   posterURL: string;

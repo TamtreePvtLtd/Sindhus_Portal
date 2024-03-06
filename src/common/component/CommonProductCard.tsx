@@ -31,6 +31,7 @@ function CommonProductCard(props: IProps) {
         border: "1px solid #ddd",
         background: "#fff",
         boxShadow: "none",
+        margin: "auto",
       }}
     >
       <Box

@@ -1,11 +1,22 @@
-import { Box, Container, Grid, Card, CardContent, Typography, useTheme, Divider } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useGetAllMenus, useGetFetchProductsByMenuId } from '../../customRQHooks/Hooks';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import Fade from 'react-reveal';
-import PageBanner from '../../common/component/pageBanner';
+import {
+  Box,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  useTheme,
+  Divider,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import {
+  useGetAllMenus,
+  useGetFetchProductsByMenuId,
+} from "../../customRQHooks/Hooks";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Fade from "react-reveal";
+import PageBanner from "../../common/component/pageBanner";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
-
 
 const Menus = () => {
   const [selectedMenuId, setSelectedMenuId] = useState<string>();
@@ -18,11 +29,9 @@ const Menus = () => {
     isError: menusError,
   } = useGetAllMenus();
 
-    
-
-    const handleMenuClick = (menuId: string) => {
-        setSelectedMenuId(menuId);
-    };
+  const handleMenuClick = (menuId: string) => {
+    setSelectedMenuId(menuId);
+  };
 
   const getMenuItemsInAlphabeticalOrder = () => {
     return menus

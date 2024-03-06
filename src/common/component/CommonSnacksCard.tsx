@@ -38,9 +38,10 @@ function CommonSnacksCard(props: IProps) {
         height: "260px",
         border: "1px solid #ddd",
         boxShadow: "none",
+         margin:"auto"
       }}
     >
-      <Box sx={{ height: "65%", width: "100%", overflow: "hidden" }}>
+      <Box sx={{ height: "70%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
           state={{ previousPath: paths.DAILYMENU }}
@@ -52,7 +53,7 @@ function CommonSnacksCard(props: IProps) {
             sx={{
               width: "100%",
               height: "100%",
-              objectFit: "contain",
+              // objectFit: "contain",
               transition: "transform 400ms",
             }}
             loading="lazy"
@@ -68,6 +69,7 @@ function CommonSnacksCard(props: IProps) {
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 2,
+            marginTop:"-5px"
           }}
           component="div"
         >
