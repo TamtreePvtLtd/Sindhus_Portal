@@ -54,12 +54,12 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
 
     return (
         <>
-            <Box sx={{ paddingTop: '10px' }}>
+            <Box sx={{ paddingTop: '30px' }}>
                 {menusLoading && <p>Loading menus...</p>}
                 {menusError && <p>Error fetching menus</p>}
 
                 {menus && (
-                    <Grid container spacing={1} sx={{
+                    <Grid container rowGap={2} spacing={2} sx={{
                             display: 'flex',
                             flexWrap:"wrap",
                             justifyContent: 'center',
@@ -69,7 +69,7 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                     }}>
 
                         {getMenuItemsInAlphabeticalOrder().map((menu,) => (
-                            <Grid item key={menu._id} spacing={2} xs={12} sm={12} md={6} lg={"auto"} >
+                            <Grid item key={menu._id} spacing={2} xs={6} sm={4} md={3} lg={"auto"} >
                                 <Box
                                     sx={{
                                         textAlign: 'center',
@@ -90,7 +90,6 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                                         <Typography style={{
                                             margin: 0,
                                             lineHeight: 1.2,
-                                            fontFamily: 'revert-layer',
                                             fontWeight: 700,
                                             fontSize: "1rem",
                                             textTransform: 'uppercase',
