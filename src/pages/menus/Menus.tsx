@@ -94,9 +94,7 @@ const Menus = () => {
                             ))}
                         </Grid>
                     )}
-
                     <Divider sx={{ marginTop: '50px' }} />
-
 
                     {selectedMenuId && (
                         <Grid container spacing={2}>
@@ -134,7 +132,7 @@ const Menus = () => {
                                                 ))}
                                             </Grid>
                                         )}
-                                        {/* <Divider sx={{ marginTop: '20px' }} /> */}
+                                        
                                     </CardContent>
                                 </Card>
                             </Grid>
@@ -148,8 +146,7 @@ const Menus = () => {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         marginTop: 8,
-                                        // borderRadius: '70px 70px 70px 70px',
-                                    }}>
+                                        }}>
                                         <img
                                             src='public\assets\SINDHU-KITCHEN-samosa.webp'
                                             alt={`Image`}
