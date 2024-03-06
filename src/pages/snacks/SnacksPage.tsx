@@ -56,7 +56,6 @@ function SnacksPage() {
       <Container
         sx={{
           marginTop: "20px",
-          border: "1px solid #eeeeee",
           my: 5,
           p: 2,
         }}
@@ -70,7 +69,7 @@ function SnacksPage() {
           {snacksPageData &&
           snacksPageData.products &&
           snacksPageData.products.length > 0 ? (
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
               {snacksPageData.products.map((product) => (
                 <Grid
                   item
