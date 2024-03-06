@@ -59,13 +59,14 @@ function Categories() {
                     color: (theme) =>
                       selectedMenuId === category._id ||
                       hoveredMenuId === category._id
-                        ? theme.palette.text.primary // Change to black color when hovered
+                        ? theme.palette.text.primary
                         : theme.palette.text.disabled,
                     textDecoration: "none",
                     "&:hover": {
                       color: (theme) => theme.palette.text.primary,
-                      textDecoration: "underline",
-                      textDecorationColor: "#038265", // Change to green color when hovered
+                     
+                      textDecorationColor: "#038265",
+                      borderBottom: "1.5px solid #038265", 
                     },
                   }}
                 >
