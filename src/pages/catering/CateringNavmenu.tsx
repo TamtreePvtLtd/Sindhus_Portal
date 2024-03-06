@@ -10,7 +10,7 @@ interface MenusProps {
 }
 
 const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps) => {
-    const { data: menus, isLoading: menusLoading, isError: menusError } = useGetAllMenus();
+    const { data: menus, isLoading: menusLoading, isError: menusError,refetch } = useGetAllMenus();
     const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
     const [selectedMenuIdState, setSelectedMenuIdState] = useState<string>("");
 
@@ -25,15 +25,22 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
     };
 
     useEffect(() => {
-        // If selectedMenuId is not provided, set the initial selectedMenuIdState to the ID of the "Appetizers" menu
-        if (!selectedMenuId) {
+        // Fetch all menus when component mounts
+        refetch();
+    }, [refetch]);
+
+    useEffect(() => {
+        // If selectedMenuId is not provided or doesn't exist in the fetched menus,
+        // set the initial selectedMenuIdState to the ID of the "Appetizers" menu
+        if (!selectedMenuId || (menus && !menus.find(menu => menu._id === selectedMenuId))) {
             const menuItems = getMenuItemsInAlphabeticalOrder();
-        const sortedMenuItems = [...menuItems].sort((a, b) => a.title.localeCompare(b.title));
-        const firstMenuItemId = sortedMenuItems.length > 0 ? sortedMenuItems[0]._id : "";
-        setSelectedMenuIdState(firstMenuItemId)
+            const sortedMenuItems = [...menuItems].sort((a, b) => a.title.localeCompare(b.title));
+            const firstMenuItemId = sortedMenuItems.length > 0 ? sortedMenuItems[0]._id : "";
+            setSelectedMenuIdState(firstMenuItemId);
+        } else {
+            setSelectedMenuIdState(selectedMenuId);
         }
-        
-    }, [selectedMenuId]);
+    }, [selectedMenuId, menus])
 
     const handleMenuClick = (menuId: string) => {
         onSelectMenu(menuId);
@@ -53,15 +60,18 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
 
                 {menus && (
                     <Grid container spacing={1} sx={{
-                        display: 'flex', justifyContent: 'center', alignItems: 'flex-start'
+                            display: 'flex',
+                            flexWrap:"wrap",
+                            justifyContent: 'center',
+                            alignItems: 'space-around', 
+                            margin: 'auto', 
+                            maxWidth: '70%'
                     }}>
 
                         {getMenuItemsInAlphabeticalOrder().map((menu,) => (
-                            <Grid item key={menu._id} columnGap={4} xs={12} sm={6} md={3} lg={'auto'} >
+                            <Grid item key={menu._id} spacing={2} xs={12} sm={12} md={6} lg={"auto"} >
                                 <Box
                                     sx={{
-                                        gap: 4,
-                                        marginTop: '5px',
                                         textAlign: 'center',
                                         paddingX: '20px',
                                         cursor: 'pointer',
@@ -79,15 +89,14 @@ const Menus = ({ onSelectMenu, onNavMenuTitleClick, selectedMenuId }: MenusProps
                                     <Fade left>
                                         <Typography style={{
                                             margin: 0,
-                                            lineHeight: '2',
-                                            marginBottom: '10px',
+                                            lineHeight: 1.2,
                                             fontFamily: 'revert-layer',
                                             fontWeight: 700,
-                                            fontSize: "1.2rem",
+                                            fontSize: "1rem",
                                             textTransform: 'uppercase',
                                         }}  onClick={() => {
                                             handleNavMenuTitleClick(menu._id);
-                                            onSelectMenu(menu._id); // This line ensures that the selected menu in the dropdown matches the active menu in the nav menu
+                                            onSelectMenu(menu._id); 
                                         }}>
                                             {menu.title}
                                         </Typography>

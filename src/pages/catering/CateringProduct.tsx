@@ -222,12 +222,11 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           cateringData.length > 0 &&
           cateringData.map((data) => (
             <Box key={data._id}>
-              <Typography alignItems={"center"} justifyContent={"center"}
+              <Typography alignItems={"center"} justifyContent={"center"} fontFamily={"revert-layer"}
                 sx={{
                   fontWeight: 500,
                   color: "black",
                   my: 1,
-                  fontFamily: ,
                   fontSize: "1.25rem",
                   paddingLeft: "17px",
                   lineHeight: "1.6",
