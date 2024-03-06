@@ -132,7 +132,7 @@ const Menus = () => {
                                                 ))}
                                             </Grid>
                                         )}
-                                        
+
                                     </CardContent>
                                 </Card>
                             </Grid>
@@ -146,7 +146,7 @@ const Menus = () => {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         marginTop: 8,
-                                        }}>
+                                    }}>
                                         <img
                                             src='public\assets\SINDHU-KITCHEN-samosa.webp'
                                             alt={`Image`}
