@@ -26,7 +26,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         outlined: {
-          color: "#57ccb5",
+          color: "#038265",
         },
         contained: {
           color: "white",

@@ -89,7 +89,7 @@ function NavBar() {
   };
 
   return (
-    <Box>
+    <Box sx={{display: "flex",flexWrap:"wrap", alignItems: "center", justifyContent: "center"}}>
       <CssBaseline />
       <AppBar
         sx={{
@@ -118,8 +118,8 @@ function NavBar() {
                 width: isBelowSMScreen ? "3.5rem" : "4rem",
                 marginRight: "10px",
 
-                paddingTop: "10px",
-                paddingBottom: "5px",
+                paddingTop:isBelowSMScreen ? "10px":"6px",
+                paddingLeft:isBelowSMScreen?"10px":"0px",
                 cursor: "pointer",
               }}
               loading="lazy"
@@ -133,6 +133,9 @@ function NavBar() {
                   fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
                   fontFamily: "clearface ts bold",
                   cursor: "pointer",
+                  marginTop: "3px",
+                  paddingTop: isBelowSMScreen ? "15px":"5px",
+                 
                 }}
                 onClick={handleNavigateToHome}
               >
@@ -142,17 +145,21 @@ function NavBar() {
                 <Box
                   sx={{
                     display: "flex",
+                    flexWrap:"wrap",
                     justifyContent: "center",
                   }}
                 >
                   <CallIcon />
                   <Typography
                     sx={{
-                      fontSize: "16px",
+                      fontSize: "12px",
                       fontWeight: 500,
+                      color: 'black',
+                      marginLeft: "-25px",
+                     marginBottom:"3px"
                     }}
                   >
-                    &nbsp; Call us:+1 940-279-2536
+                    Call us:+1 940-279-2536
                   </Typography>
                 </Box>
               )}
@@ -162,7 +169,9 @@ function NavBar() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  marginLeft: "80px",
+                  marginLeft: "30px",
+                  marginTop:"6px",
+                  color:'black'
                 }}
               >
                 <CallIcon />
@@ -170,9 +179,10 @@ function NavBar() {
                   sx={{
                     fontSize: "16px",
                     fontWeight: 500,
+                  
                   }}
                 >
-                  &nbsp; Call us : +1 940-279-2536
+                &nbsp;Call us : +1 940-279-2536
                 </Typography>
               </Box>
             )}
@@ -183,7 +193,7 @@ function NavBar() {
               aria-label={drawerOpen ? "close drawer" : "open drawer"}
               edge="end"
               onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, mr:3,marginTop:'10px' }}
             >
               {drawerOpen ? (
                 <CloseIcon sx={{ color: "black", fontSize: "30px" }} />

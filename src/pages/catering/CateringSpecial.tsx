@@ -15,7 +15,7 @@ function CateringSpecial() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#e8f8f7",
+          backgroundColor: "#0382657",
           boxShadow: 2,
           borderRadius: "10px",
         }}

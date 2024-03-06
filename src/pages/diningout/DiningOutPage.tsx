@@ -8,7 +8,8 @@ function DiningOutPage() {
   const categoryWithProducts = useGetAllDiningOutProducts();
 
   return (
-    <Container>
+   
+    <>
       <Categories />
       {categoryWithProducts.isSuccess &&
         categoryWithProducts.data.map((category, index) => (
@@ -16,7 +17,8 @@ function DiningOutPage() {
             <Carousel category={category} />
           </Box>
         ))}
-    </Container>
+      
+    </>
   );
 }
 
