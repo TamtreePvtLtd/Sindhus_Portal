@@ -507,7 +507,6 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           removeCateringProduct={removeCateringProduct}
           resetQuantityState={resetQuantityState}
         />
-        {/* Include ScrollToBottom component here */}
       </>
       {/* <ScrollToBottom/> */}
     </>
