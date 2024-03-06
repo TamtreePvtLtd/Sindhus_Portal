@@ -22,7 +22,6 @@ import Fade from "react-reveal/Fade";
 import { getProductsByMenuIdWithSearchTerm } from "../../services/api";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
-import Popper from '@mui/material/Popper';
 
 function HomePageSlicker() {
   const theme = useTheme();
@@ -133,11 +132,11 @@ function HomePageSlicker() {
             <Typography
               variant="h1"
               sx={{
-                fontWeight: "bold",
+                fontWeight: "bolder",
                 fontSize: isBelowMediumSize ? "30px" : "54px",
                 lineHeight: "1",
                 color: "white",
-                fontFamily: "clearface ts bold",
+                fontFamily: "sindhus-logo-font",
               }}
             >
               {homePageSlicker.heading}
@@ -152,7 +151,6 @@ function HomePageSlicker() {
             </Typography>
             <Typography
               sx={{
-                fontFamily:"sanskrit",
                 fontSize: isBelowMediumSize ? "16px" : "18px",
                 fontWeight: "300",
               }}
@@ -274,13 +272,13 @@ function HomePageSlicker() {
                   <SearchIcon color="secondary" />
                 </IconButton>
                 <Autocomplete
-                 sx={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems:"center",
-                  justifyContent:"center",
-                  "& .MuiSvgIcon-root": { color: "#038265" },
-                }}
+                  sx={{
+                    width: "100%",
+                    display:"flex",
+                    "& .MuiSvgIcon-root": { color: "#038265" },
+                    marginRight:"10px"
+
+                  }}
                   onChange={handleProductSearch}
                   options={products.map((item) => ({
                     ...item,
@@ -304,9 +302,10 @@ function HomePageSlicker() {
                       <li
                         {...props}
                         style={{
+                          margin: "5px 0",
+                          padding:"10px",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent:"flex-start"
                         }}
                       >
                         <img
@@ -315,6 +314,7 @@ function HomePageSlicker() {
                             width: "4rem",
                             height: "4rem",
                             borderRadius: "50%",
+                            marginRight: "10px",
                           }}
                         />
                         <Typography
@@ -343,11 +343,6 @@ function HomePageSlicker() {
                       fullWidth
                       variant="standard"
                     />
-                  )}
-                  PopperComponent={({ children, ...popperProps }) => (
-                    <Popper {...popperProps} style={{ width: '80%',display:"flex" , flexDirection:"row",overflowX:"auto"}}>
-                      {children}
-                    </Popper>
                   )}
                 />
               </Grid>
