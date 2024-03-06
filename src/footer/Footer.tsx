@@ -143,7 +143,7 @@ function Footer() {
                       sx={{ color: theme.palette.secondary.main }}
                     ></ChatBubbleIcon>
                     <Typography variant="h6">General Enquiries</Typography>
-                    <Typography variant="body2" my={1}>
+                    <Typography variant="body2" marginBottom={1}>
                       skvbalaji@gmail.com
                     </Typography>
                     <Box
