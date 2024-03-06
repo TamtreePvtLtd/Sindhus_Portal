@@ -22,7 +22,6 @@ import Fade from "react-reveal/Fade";
 import { getProductsByMenuIdWithSearchTerm } from "../../services/api";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
-import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 
 function HomePageSlicker() {
   const theme = useTheme();
@@ -137,7 +136,7 @@ function HomePageSlicker() {
                 fontWeight: "bolder",
                 fontSize: isBelowMediumSize ? "30px" : "54px",
                 lineHeight: "1",
-                color: "#57ccb5",
+                color: "white",
                 fontFamily: "sindhus-logo-font",
               }}
             >
@@ -199,7 +198,8 @@ function HomePageSlicker() {
                   disablePortal
                   sx={{
                     width: "90%",
-                    "& .MuiSvgIcon-root": { color: "#57ccb5" },
+                    marginRight:"10px",
+                    "& .MuiSvgIcon-root": { color: "#038265" },
                   }}
                   options={menus.map((item) => ({
                     ...item,
@@ -275,7 +275,8 @@ function HomePageSlicker() {
                 <Autocomplete
                   sx={{
                     width: "90%",
-                    "& .MuiSvgIcon-root": { color: "#57ccb5" },
+                    "& .MuiSvgIcon-root": { color: "#038265" },
+                    marginRight:"10px"
 
                   }}
                   onChange={handleProductSearch}

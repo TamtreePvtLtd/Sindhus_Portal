@@ -113,14 +113,20 @@ function Footer() {
                       href={import.meta.env.VITE_ADDRESS_LOCATION}
                       target="_blank"
                     >
-                      <Button
-                        startIcon={<DirectionsIcon />}
-                        variant="contained"
-                        size="small"
-                        sx={{ m: 1 }}
-                      >
-                        Get Direction
-                      </Button>
+                    <Button
+    startIcon={<DirectionsIcon />}
+    variant="contained"
+    size="small"
+    sx={{
+        m: 1,
+        "&:hover": {
+            backgroundColor: "#038265", 
+            
+        },
+    }}
+>
+    Get Direction
+</Button>
                     </a>
                   </Box>
                 </Fade>
@@ -158,6 +164,7 @@ function Footer() {
                           // fullWidth
                           sx={{
                             lineHeight: 0,
+                            backgroundColor: "#0489c9",
                             "&:hover": {
                               backgroundColor: "#0489c9",
                             },

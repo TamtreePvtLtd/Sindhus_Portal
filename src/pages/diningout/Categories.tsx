@@ -2,18 +2,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
-import Slider from "react-slick";
-import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import { useGetAllDiningOutMenuDatas } from "../../customRQHooks/Hooks";
 import { useEffect, useState } from "react";
 import { ICategory } from "../../interface/types";
 import { useNavigate } from "react-router-dom";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
+import PageBanner from "../../common/component/pageBanner";
+import { Grid } from "@mui/material";
 
 function Categories() {
   const [categories, setCategories] = useState<ICategory[]>([]);
-
+  const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
+  const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
   const { data } = useGetAllDiningOutMenuDatas();
 
   const navigate = useNavigate();
@@ -27,109 +28,70 @@ function Categories() {
   const theme = useTheme();
   const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const settings = {
-    infinite: false,
-    speed: 500,
-    slidesToShow: 5.7,
-    slidesToScroll: 1,
-
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3.2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1.5,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1.6,
-          slidesToScroll: 1,
-          arrows: !isBelowMediumScreen,
-        },
-      },
-    ],
-  };
-
   const handleClickProduct = (menuId: string) => {
     navigate(`/productsByCategory/${menuId}`);
   };
 
   return (
-    <Container>
-      {categories && categories.length > 0 ? (
-        <>
-          <Typography
-            sx={{
-              fontWeight: 800,
-              color: "black",
-              lineHeight: 2,
-              mt: 2,
-            }}
-            variant="h6"
+    <>
+      <Box>
+        <PageBanner
+          imageUrl="assets/Menuimage.jpg"
+          content="Daily Menu"
+          description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
+        />
+      </Box>
+      <Container>
+        {categories && categories.length > 0 ? (
+          <Grid
+            container
+            justifyContent="center"
+            spacing={4}
+            sx={{ marginTop: "20px" }}
           >
-            Menus
-          </Typography>
-
-          <Slider {...settings}>
-            {categories?.map((category, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: "10rem !important",
-                  py: 2,
-                }}
-              >
-                <Card
+            {categories.map((category, index) => (
+              <Grid item key={index} xs={12} sm={6} md={3} lg="auto">
+                <Box
                   onClick={() => handleClickProduct(category._id)}
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    color: "black",
-                    fontWeight: 500,
-                    lineHeight: 1.5,
-                    fontSize: "1.5rem",
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary.main,
-                      color: "white",
-                    },
-                    boxShadow: 2,
-                    borderRadius: "10px",
+                    textAlign: "center",
                     cursor: "pointer",
+                    color: (theme) =>
+                      selectedMenuId === category._id ||
+                      hoveredMenuId === category._id
+                        ? theme.palette.text.primary
+                        : theme.palette.text.disabled,
+                    textDecoration: "none",
+                    "&:hover": {
+                      color: (theme) => theme.palette.text.primary,
+                     
+                      textDecorationColor: "#038265",
+                      borderBottom: "1.5px solid #038265", 
+                    },
                   }}
                 >
                   <Typography
-                    gutterBottom
-                    component="div"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "center",
-                      p: 1,
-                      fontWeight: 500,
-                      m: 0,
+                    style={{
+                      margin: 0,
+                      lineHeight: "2",
+                      marginBottom: "10px",
+                      fontFamily: "revert-layer",
+                      fontWeight: 700,
+                      fontSize: "1.2rem",
+                      textTransform: "uppercase",
                     }}
                   >
                     {category.title}
                   </Typography>
-                </Card>
-              </Box>
+                </Box>
+              </Grid>
             ))}
-          </Slider>
-        </>
-      ) : (
-        <NoProductsAvailable />
-      )}
-    </Container>
+          </Grid>
+        ) : (
+          <NoProductsAvailable />
+        )}
+      </Container>
+    </>
   );
 }
 

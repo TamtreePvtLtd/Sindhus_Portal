@@ -80,7 +80,13 @@ function SnacksMenuItem({
               sx={{
                 fontWeight: selectedSubMenuId === "" ? 500 : 300,
                 color: selectedSubMenuId === "" ? "black" : "black",
-                textDecoration: selectedSubMenuId === "" ? "underline" : "none",
+                borderBottom: selectedSubMenuId === "" ? "1px solid #038265" : "none",
+                textDecorationColor:
+                  selectedSubMenuId === "" ? "#038265" : "none",
+                textDecorationThickness: "1.5px",
+                textDecorationStyle: "solid",
+                paddingBottom: "5px",
+                display: "inline-block",
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -96,13 +102,10 @@ function SnacksMenuItem({
                   sx={{
                     fontWeight: selectedSubMenuId === subMenu._id ? 500 : 300,
                     color: selectedSubMenuId === subMenu._id ? "" : "inherit",
-
-                    textDecoration:
-                      selectedSubMenuId === subMenu._id ? "underline" : "none",
-                    // "&:hover": {
-                    //   color: "white",
-                    //   textDecoration: "underline",
-                    // },
+                    borderBottom:
+                      selectedSubMenuId === subMenu._id ? "1px solid #038265" : "none",
+                    paddingBottom: "5px",
+                    display: "inline-block",
                   }}
                   onClick={() => onSubMenuClick(subMenu._id)}
                 >
