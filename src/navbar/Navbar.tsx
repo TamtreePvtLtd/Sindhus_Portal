@@ -21,10 +21,12 @@ import CallIcon from "@mui/icons-material/Call";
 
 const navMenus = [
   { name: "Home", linkurl: paths.HOME },
+  { name: "Menu", linkurl: paths.MENUS },
   { name: "Daily Menu", linkurl: paths.DAILYMENU },
   { name: "Snacks", linkurl: paths.SNACKS },
   { name: "Catering", linkurl: paths.CATERING },
   { name: "Specials", linkurl: paths.SPECIALS },
+
 ];
 
 function NavBar() {
