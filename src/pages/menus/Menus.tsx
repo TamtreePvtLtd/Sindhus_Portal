@@ -16,33 +16,22 @@ import {
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Fade from "react-reveal";
 import PageBanner from "../../common/component/pageBanner";
+import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 
 const Menus = () => {
+  const [selectedMenuId, setSelectedMenuId] = useState<string>();
+  const theme = useTheme();
+  const [hoveredMenuId, setHoveredMenuId] = useState<null | string>(null);
+
   const {
     data: menus,
     isLoading: menusLoading,
     isError: menusError,
   } = useGetAllMenus();
-  const [selectedMenuId, setSelectedMenuId] = useState<null | string>(null);
-  const theme = useTheme();
-  const [hoveredMenuId, setHoveredMenuId] = useState<null | string>(null);
-
-  const {
-    data: productsData,
-    isLoading: productsLoading,
-    isError: productsError,
-    refetch: refetchProducts,
-  } = useGetFetchProductsByMenuId(selectedMenuId || "");
 
   const handleMenuClick = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
-
-  useEffect(() => {
-    if (selectedMenuId) {
-      refetchProducts();
-    }
-  }, [selectedMenuId, refetchProducts]);
 
   const getMenuItemsInAlphabeticalOrder = () => {
     return menus
@@ -51,16 +40,13 @@ const Menus = () => {
   };
 
   useEffect(() => {
-    const appetizersMenuId = getMenuItemsInAlphabeticalOrder().find(
-      (menu) => menu.title === "Appetizers"
-    )?._id;
-    setSelectedMenuId(appetizersMenuId || null);
-  }, [menus]);
+    if (!selectedMenuId && menus && menus.length > 0) {
+      const firstMenuItemId = getMenuItemsInAlphabeticalOrder();
+      setSelectedMenuId(firstMenuItemId[0]._id);
+    }
+  }, [menus, selectedMenuId]);
 
-  useEffect(() => {
-    const firstMenuId = getMenuItemsInAlphabeticalOrder()[0]?._id;
-    setSelectedMenuId(firstMenuId || null);
-  }, [menus]);
+  const { data: productsData } = useGetFetchProductsByMenuId(selectedMenuId!);
 
   return (
     <div>
@@ -73,8 +59,8 @@ const Menus = () => {
       </Box>
       <Container>
         <Box sx={{ paddingTop: "60px" }}>
-          {/* {menusLoading && <p>Loading menus...</p>}
-                    {menusError && <p>Error fetching menus</p>} */}
+          {menusLoading && <p>Loading menus...</p>}
+          {menusError && <p>Error fetching menus</p>}
 
           {menus && (
             <Grid
@@ -91,8 +77,8 @@ const Menus = () => {
                   item
                   key={menu._id}
                   columnGap={4}
-                  xs={12}
-                  sm={6}
+                  xs={"auto"}
+                  sm={3}
                   md={3}
                   lg={"auto"}
                 >
@@ -108,14 +94,8 @@ const Menus = () => {
                         hoveredMenuId === menu._id
                           ? "text.primary"
                           : "text.disabled",
-                      textDecoration:
-                        selectedMenuId === menu._id ||
-                        hoveredMenuId === menu._id
-                          ? "underline"
-                          : "none",
                       "&:hover": {
-                        color: "text.primary",
-                        textDecoration: "underline",
+                        borderBottom: "1.5px solid #038265",
                       },
                     }}
                     onClick={() => handleMenuClick(menu._id)}
@@ -126,7 +106,6 @@ const Menus = () => {
                       <Fade left>
                         <Typography
                           style={{
-                            margin: 0,
                             lineHeight: "2",
                             marginBottom: "10px",
                             fontFamily: "revert-layer",
@@ -145,74 +124,133 @@ const Menus = () => {
             </Grid>
           )}
           <Divider sx={{ marginTop: "50px" }} />
-          {selectedMenuId && (
-            <Card sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}>
-              <CardContent>
-                <Typography
-                  variant="h4"
-                  gutterBottom
-                  style={{
-                    color: theme.palette.primary.main,
-                    fontFamily: '"Lucida Handwriting", cursive',
-                    fontWeight: "bold",
-                  }}
-                >
-                  {menus?.find((m) => m._id === selectedMenuId)?.title}
-                </Typography>
-                {/* {productsLoading && <p>Loading products...</p>}
-                                {productsError && <p>Error fetching products</p>} */}
 
-                {productsData && productsData.products && (
-                  <Grid container spacing={2}>
-                    {productsData.products.map((product) => (
+          {selectedMenuId && (
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <Card sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}>
+                  <CardContent>
+                    <Typography
+                      variant="h4"
+                      gutterBottom
+                      style={{
+                        color: theme.palette.primary.main,
+                        fontFamily: '"Lucida Handwriting", cursive',
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {menus?.find((m) => m._id === selectedMenuId)?.title}
+                    </Typography>
+                    {productsData &&
+                    productsData.products &&
+                    productsData.products.length > 0 ? (
+                      <Grid container spacing={2}>
+                        {productsData.products.map((product) => (
+                          <Grid
+                            item
+                            key={product._id}
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={12}
+                          >
+                            <Fade left>
+                              <Grid
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "space-evenly",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Grid item xs={8}>
+                                  <Box>
+                                    <Typography variant="h6">
+                                      {product.title}
+                                    </Typography>
+                                    <Typography>
+                                      {product.description}
+                                    </Typography>
+                                  </Box>
+                                </Grid>
+                                <Grid item xs={1} sx={{ textAlign: "center" }}>
+                                  <ArrowRightIcon
+                                    sx={{ color: theme.palette.primary.main }}
+                                  />
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={3}
+                                  style={{ textAlign: "center" }}
+                                >
+                                  <Typography variant="h6">
+                                    {product.dailyMenuSizeWithPrice &&
+                                    product.dailyMenuSizeWithPrice.length > 0
+                                      ? `$${product.dailyMenuSizeWithPrice[0].price.toFixed(
+                                          2
+                                        )}`
+                                      : ""}
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            </Fade>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    ) : (
                       <Grid
                         item
-                        key={product._id}
                         xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          height: "40vh",
+                        }}
                       >
-                        <Fade left>
-                          <Grid
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-evenly",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Grid item xs={8}>
-                              <Box>
-                                <Typography variant="h6">
-                                  {product.title}
-                                </Typography>
-                                <Typography>{product.description}</Typography>
-                              </Box>
-                            </Grid>
-                            <Grid item xs={1} sx={{ textAlign: "center" }}>
-                              <ArrowRightIcon
-                                sx={{ color: theme.palette.primary.main }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} style={{ textAlign: "center" }}>
-                              <Typography variant="h6">
-                                {product.dailyMenuSizeWithPrice &&
-                                product.dailyMenuSizeWithPrice.length > 0
-                                  ? `$${product.dailyMenuSizeWithPrice[0].price.toFixed(
-                                      2
-                                    )}`
-                                  : ""}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Fade>
+                        <Box
+                          sx={{
+                            maxWidth: 400,
+                            textAlign: "center",
+                            padding: 2,
+                          }}
+                        >
+                          <NoProductsAvailable />
+                        </Box>
                       </Grid>
-                    ))}
-                  </Grid>
-                )}
-                <Divider sx={{ marginTop: "20px" }} />
-              </CardContent>
-            </Card>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={4}>
+                {productsData &&
+                  productsData.products &&
+                  productsData.products.length > 0 && (
+                    <Fade right>
+                      <Box
+                        sx={{
+                          position: "relative",
+                          height: "100%",
+                          textAlign: "center",
+                          overflow: "hidden",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          marginTop: 6,
+                        }}
+                      >
+                        {productsData.products && (
+                          <img
+                            src={productsData.products[0].posterURL}
+                            width={"100%"}
+                            height={"100%"}
+                            alt={productsData.products[0].title}
+                            loading="lazy"
+                          />
+                        )}
+                      </Box>
+                    </Fade>
+                  )}
+              </Grid>
+            </Grid>
           )}
         </Box>
       </Container>
