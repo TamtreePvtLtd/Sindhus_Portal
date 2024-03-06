@@ -17,15 +17,15 @@ import { Typography } from "@mui/material";
 interface IProps {
   onSelectMenu(menuId: string): void;
   onSelectProduct(productId: string): void;
+  selectedMenuId: string;
 }
 
-function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
+function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
   const [cateringMenus, setCateringMenus] = useState<IMenuList[]>([]);
   const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
     null
   );
   const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
-  const [selectedMenuId, setSelectedMenuId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuClear, setIsMenuClear] = useState(false);
   const [isProductClear, setIsProductClear] = useState(false);
@@ -35,17 +35,43 @@ function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
   const { data: cateringProducts, refetch: refetchProductData } =
     useCateringfetchProductData(selectedMenuId, searchTerm);
 
-  const clearSearch = async () => {
-    setIsClearButtonClick(true);
-    onSelectMenu("");
-    onSelectProduct("");
-    setMenuValue(null);
-    setProductValue(null);
-    setSelectedMenuId("");
-    setSearchTerm("");
-    setIsMenuClear(false);
-    setIsProductClear(false);
-  };
+    const clearSearch = async () => {
+      setIsClearButtonClick(true);
+      onSelectMenu("");
+      onSelectProduct(""); 
+      setMenuValue(null); 
+      setProductValue(null); 
+      setSearchTerm(""); 
+      setIsMenuClear(false);
+      setIsProductClear(false);
+      refetchMenus(); 
+    
+      
+      const menuAutocomplete = document.getElementById("category-autocomplete");
+      if (menuAutocomplete) {
+        menuAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    
+      const foodAutocomplete = document.getElementById("food-autocomplete");
+      if (foodAutocomplete) {
+        foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    
+      
+      const appetizersMenu = cateringMenus.find((menu) => menu.title === "Appetizers");
+      if (appetizersMenu) {
+        onSelectMenu(appetizersMenu._id);
+        setMenuValue({
+          _id: appetizersMenu._id,
+          title: appetizersMenu.title,
+          label: appetizersMenu.title,
+          menuType: appetizersMenu.menuType,
+        });
+      }
+    };
+    
+    
+    
 
   useEffect(() => {
     if (menuList) {
@@ -119,17 +145,11 @@ function SearchBar({ onSelectMenu, onSelectProduct }: IProps) {
     setSearchTerm("");
 
     if (selectedMenu) {
-      if (menuValue?._id !== selectedMenu._id) {
-        setProductValue(null);
-        onSelectProduct("");
-      }
-
-      setSelectedMenuId(selectedMenu._id);
-      onSelectMenu(selectedMenu._id);
       setMenuValue(selectedMenu);
+      onSelectMenu(selectedMenu._id);
     } else {
-      setSelectedMenuId("");
-      setProductValue(null);
+      setMenuValue(null);
+      onSelectMenu("");
     }
   };
 

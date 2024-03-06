@@ -26,7 +26,7 @@ import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import { useGetProductByCateringMenu } from "../../customRQHooks/Hooks";
 import { paths } from "../../routes/path";
 import ScrollToTop from "../../common/component/ScrollToTop";
-import theme from "../../theme/theme";
+import useTheme from "@mui/material/styles/useTheme";
 
 interface IProps {
   selectedMenuId: string;
@@ -45,6 +45,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
   const [badgeContent, setBadgeContent] = useState(0);
   const [pageNum, setPageNum] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+  const theme = useTheme();
 
   const { data: cateringResponse, refetch: refetchProducts } =
     useGetProductByCateringMenu(selectedMenuId, selectedProductId, pageNum);
@@ -139,13 +140,13 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
             0
           );
 
-          // Remove size if the quantity becomes 0
+          
           if (existingSizes[sizeIndex].qty === 0) {
             existingSizes.splice(sizeIndex, 1);
           }
         }
 
-        // Remove product if all sizes have quantity 0
+        
         if (existingSizes.length === 0) {
           updatedQuantities.splice(productIndex, 1);
         }
@@ -223,14 +224,13 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           cateringData.length > 0 &&
           cateringData.map((data) => (
             <Box key={data._id}>
-              <Typography
+              <Typography alignItems={"center"} justifyContent={"center"} fontFamily={"Dancing Script, cursive"}
                 sx={{
-                  fontWeight: 500,
-                  color: "white",
-                  backgroundColor: theme.palette.primary.main,
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
                   my: 1,
-                  fontSize: "1.25rem",
-                  paddingLeft: "10px",
+                  fontSize: "2rem",
+                  paddingLeft: "17px",
                   lineHeight: "1.6",
                 }}
               >
@@ -507,7 +507,6 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           removeCateringProduct={removeCateringProduct}
           resetQuantityState={resetQuantityState}
         />
-        {/* Include ScrollToBottom component here */}
       </>
       {/* <ScrollToBottom/> */}
     </>

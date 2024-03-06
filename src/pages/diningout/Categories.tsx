@@ -37,7 +37,7 @@ function Categories() {
       <Box>
         <PageBanner
           imageUrl="assets/Menuimage.jpg"
-          content="Menu"
+          content="Daily Menu"
           description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
         />
       </Box>
