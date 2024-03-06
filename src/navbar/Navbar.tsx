@@ -89,7 +89,7 @@ function NavBar() {
   };
 
   return (
-    <Box sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+    <Box sx={{display: "flex",flexWrap:"wrap", alignItems: "center", justifyContent: "center"}}>
       <CssBaseline />
       <AppBar
         sx={{
@@ -145,6 +145,7 @@ function NavBar() {
                 <Box
                   sx={{
                     display: "flex",
+                    flexWrap:"wrap",
                     justifyContent: "center",
                   }}
                 >
@@ -168,7 +169,7 @@ function NavBar() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  marginLeft: "80px",
+                  marginLeft: "30px",
                   marginTop:"6px",
                   color:'black'
                 }}

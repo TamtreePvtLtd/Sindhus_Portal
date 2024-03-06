@@ -135,7 +135,7 @@ function HomePageSlicker() {
                 fontWeight: "bolder",
                 fontSize: isBelowMediumSize ? "30px" : "54px",
                 lineHeight: "1",
-                color: "#038265",
+                color: "white",
                 fontFamily: "sindhus-logo-font",
               }}
             >
