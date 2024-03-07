@@ -49,7 +49,7 @@ const schema = yup.object().shape({
   eventDate: yup.string().required("Event date is required"),
 });
 
-function CateringEnquiryForm() {
+function CateringEnquiryForm({ isOpen, onClose }) {
   const { updateSnackBarState } = useSnackBar();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<ICateringEnquiry | null>(null);
@@ -73,18 +73,19 @@ function CateringEnquiryForm() {
   const handleCloseDialog = () => {
     reset();
     setIsDialogOpen(false);
+    onClose();
   };
 
   const onSubmitCateringEnquiry = async (data: ICateringEnquiry) => {
-    handleOpenDialog(); // Open dialog when form is submitted
-    setFormData(data); // Store form data in state
+    handleOpenDialog();
+    setFormData(data);
     handleConfirmSubmit();
   };
 
   const handleConfirmSubmit = async () => {
     try {
       if (formData) {
-        await createCateringEnquiry(formData); // Submit form data
+        await createCateringEnquiry(formData);
         handleOpenDialog();
         updateSnackBarState(
           true,
@@ -92,7 +93,7 @@ function CateringEnquiryForm() {
           SnackbarSeverityEnum.SUCCESS
         );
         reset();
-        setFormData(null); // Reset form data after submission
+        setFormData(null);
         handleCloseDialog(); // Close dialog after form submission
       }
     } catch (error) {
@@ -105,7 +106,7 @@ function CateringEnquiryForm() {
   };
 
   return (
-    <Zoom>
+    <Dialog open={isOpen} onClose={onClose}>
       <Box
         sx={{
           zIndex: 2,
@@ -119,17 +120,18 @@ function CateringEnquiryForm() {
             sx={{
               backgroundColor: "white",
               borderRadius: 5,
-              p: 2,
+              // p: 2,
             }}
           >
             <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                fontWeight={600}
-                sx={{ textAlign: "center", color: "black" }}
-              >
-                Catering Enquiry Form
-              </Typography>
+              <Box display={"flex"} justifyContent={"space-between"}>
+                <Typography variant="h5" fontWeight={600}>
+                  Catering Enquiry Form
+                </Typography>
+                <IconButton onClick={onClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Grid>
             <Grid item lg={6} xs={12}>
               <TextField
@@ -172,7 +174,7 @@ function CateringEnquiryForm() {
               />
             </Grid>
 
-            <Grid item lg={3} xs={12}>
+            <Grid item lg={6} xs={12}>
               <FormControl fullWidth>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Controller
@@ -202,7 +204,7 @@ function CateringEnquiryForm() {
               </FormControl>
             </Grid>
 
-            <Grid item lg={3} xs={12}>
+            <Grid item lg={6} xs={12}>
               <TextField
                 label="Guest Count"
                 fullWidth
@@ -227,7 +229,7 @@ function CateringEnquiryForm() {
               item
               xs={12}
               sx={{
-                marginBottom: 1,
+                marginBottom: -2,
                 display: "flex",
                 justifyContent: "center",
               }}
@@ -267,7 +269,7 @@ function CateringEnquiryForm() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Zoom>
+    </Dialog>
   );
 }
 

@@ -99,16 +99,16 @@ function CommonSnacksCard(props: IProps) {
                     fontSize: "13px",
                     alignItems: "center",
 
-                    "&:hover": {
-                      backgroundColor: "#57ccb5",
-                    },
-                  }}
-                >
-                  {priceItem.size}lb - ${priceItem.price}
-                </MenuItem>
-              ))}
+                      "&:hover": {
+                        backgroundColor: "#57ccb5",
+                      },
+                    }}
+                  >
+                    {priceItem.size}lb - ${priceItem.price}
+                  </MenuItem>
+                ))}
             </Select>
-          ) : (
+            ) : (
             <Typography sx={{ color: "black", fontWeight: 350 }}>
               {selectedPrice !== null && product.itemSizeWithPrice
                 ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
