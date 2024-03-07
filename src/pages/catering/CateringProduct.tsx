@@ -224,12 +224,16 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
           cateringData.length > 0 &&
           cateringData.map((data) => (
             <Box key={data._id}>
-              <Typography alignItems={"center"} justifyContent={"center"} fontFamily={"Dancing Script, cursive"}
+              <Typography
+                variant="h6"
+                alignItems={"center"}
+                justifyContent={"center"}
+                fontFamily={"Dancing Script, cursive"}
                 sx={{
-                  fontWeight: 600,
                   color: theme.palette.primary.main,
                   my: 1,
-                  fontSize: "2rem",
+                  fontWeight: 700,
+                  fontSize: "40px",
                   paddingLeft: "17px",
                   lineHeight: "1.6",
                 }}

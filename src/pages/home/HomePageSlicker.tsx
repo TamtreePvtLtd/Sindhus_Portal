@@ -22,7 +22,6 @@ import Fade from "react-reveal/Fade";
 import { getProductsByMenuIdWithSearchTerm } from "../../services/api";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
-import Popper from '@mui/material/Popper';
 
 function HomePageSlicker() {
   const theme = useTheme();
@@ -70,9 +69,9 @@ function HomePageSlicker() {
       if (response && response.data) {
         const products: IProductDropDownData[] = response.data.map(
           (product) => ({
-            _id: product._id,
-            title: product.title,
-            posterURL: product.posterURL,
+            _id: product.item._id,
+            title: product.item.title,
+            posterURL: product.item.posterURL,
           })
         );
 
@@ -102,6 +101,7 @@ function HomePageSlicker() {
 
   useEffect(() => {
     if (!selectedMenuId && !isLoading && !isError) {
+      // console.log(menuData);
       setMenus(menuData);
     }
   }, [menuData, isLoading, isError]);
@@ -115,7 +115,7 @@ function HomePageSlicker() {
           height="350px"
           width="100%"
           className="home-slicker-image"
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: "cover",opacity:1 }}
         />
         <Container
           sx={{
@@ -152,7 +152,6 @@ function HomePageSlicker() {
             </Typography>
             <Typography
               sx={{
-                fontFamily:"sanskrit",
                 fontSize: isBelowMediumSize ? "16px" : "18px",
                 fontWeight: "300",
               }}
@@ -274,13 +273,13 @@ function HomePageSlicker() {
                   <SearchIcon color="secondary" />
                 </IconButton>
                 <Autocomplete
-                 sx={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems:"center",
-                  justifyContent:"center",
-                  "& .MuiSvgIcon-root": { color: "#038265" },
-                }}
+                  sx={{
+                    width: "100%",
+                    display:"flex",
+                    "& .MuiSvgIcon-root": { color: "#038265" },
+                    marginRight:"10px"
+
+                  }}
                   onChange={handleProductSearch}
                   options={products.map((item) => ({
                     ...item,
@@ -291,6 +290,7 @@ function HomePageSlicker() {
                       setSearchTerm("");
                     }
                   }}
+                  filterOptions={(options) => options} // We are doing filter in api itself. No needs to filter here. Just display what api returns
                   renderOption={(props, option) => (
                     <Link
                       to={`/detail/${option._id}`}
@@ -304,9 +304,10 @@ function HomePageSlicker() {
                       <li
                         {...props}
                         style={{
+                          margin: "5px 0",
+                          padding:"10px",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent:"flex-start"
                         }}
                       >
                         <img
@@ -315,6 +316,7 @@ function HomePageSlicker() {
                             width: "4rem",
                             height: "4rem",
                             borderRadius: "50%",
+                            marginRight: "10px",
                           }}
                         />
                         <Typography
@@ -343,11 +345,6 @@ function HomePageSlicker() {
                       fullWidth
                       variant="standard"
                     />
-                  )}
-                  PopperComponent={({ children, ...popperProps }) => (
-                    <Popper {...popperProps} style={{ width: '80%',display:"flex" , flexDirection:"row",overflowX:"auto"}}>
-                      {children}
-                    </Popper>
                   )}
                 />
               </Grid>
