@@ -76,22 +76,24 @@ function CommonProductCard(props: IProps) {
 
         <Box>
           {product.dailyMenuSizeWithPrice &&
-            product.dailyMenuSizeWithPrice.length > 0 &&
-            product.dailyMenuSizeWithPrice.map((sizePrice) => (
-              <div
-                key={sizePrice.size}
-                onClick={() => handleSizeClick(sizePrice.size)}
+            product.dailyMenuSizeWithPrice.length > 0 && (
+              <select
+                value={selectedSize}
+                onChange={(e) => handleSizeClick(e.target.value)}
                 style={{
-                  padding: "3px",
-                  marginRight: "10px",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  borderRadius: "9px",
+                  padding: "5px",
+                  marginTop: "5px",
+                  borderRadius: "30px",
+                  
                 }}
               >
-                {sizePrice.size} - ${sizePrice.price}
-              </div>
-            ))}
+                {product.dailyMenuSizeWithPrice.map((sizePrice) => (
+                  <option key={sizePrice.size} value={sizePrice.size}>
+                    {sizePrice.size} - ${sizePrice.price}
+                  </option>
+                ))}
+              </select>
+            )}
         </Box>
       </CardContent>
     </Card>
