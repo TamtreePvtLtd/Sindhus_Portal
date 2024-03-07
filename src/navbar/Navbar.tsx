@@ -19,13 +19,15 @@ import React from "react";
 import CallIcon from "@mui/icons-material/Call";
 
 const navMenus = [
-  { name: "Home", linkurl: location.pathname === paths.ROOT ? paths.HOME : paths.ROOT},
+  {
+    name: "Home",
+    linkurl: location.pathname === paths.ROOT ? paths.HOME : paths.ROOT,
+  },
   { name: "Menu", linkurl: paths.MENUS },
   { name: "Daily Menu", linkurl: paths.DAILYMENU },
   { name: "Snacks", linkurl: paths.SNACKS },
   { name: "Catering", linkurl: paths.CATERING },
   { name: "Specials", linkurl: paths.SPECIALS },
-
 ];
 
 function NavBar() {
@@ -34,7 +36,10 @@ function NavBar() {
   const matches = useMediaQuery("(max-width: 1024px)");
 
   const isActive = (link: string) => {
-    return location.pathname === link || (location.pathname === "/" && link === paths.HOME);
+    return (
+      location.pathname === link ||
+      (location.pathname === "/" && link === paths.HOME)
+    );
   };
 
   const theme = useTheme();
@@ -92,7 +97,14 @@ function NavBar() {
   };
 
   return (
-    <Box sx={{display: "flex",flexWrap:"wrap", alignItems: "center", justifyContent: "center"}}>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <CssBaseline />
       <AppBar
         sx={{
@@ -102,6 +114,7 @@ function NavBar() {
           height: "70px",
           backgroundColor: "white",
           position: isBelowSMScreen ? "fixed" : appBarPosition,
+          boxShadow: "none",
         }}
         component="nav"
       >
@@ -121,8 +134,8 @@ function NavBar() {
                 width: isBelowSMScreen ? "3.5rem" : "4rem",
                 marginRight: "10px",
 
-                paddingTop:isBelowSMScreen ? "10px":"6px",
-                paddingLeft:isBelowSMScreen?"10px":"0px",
+                paddingTop: isBelowSMScreen ? "10px" : "6px",
+                paddingLeft: isBelowSMScreen ? "10px" : "0px",
                 cursor: "pointer",
               }}
               loading="lazy"
@@ -137,8 +150,7 @@ function NavBar() {
                   fontFamily: "clearface ts bold",
                   cursor: "pointer",
                   marginTop: "3px",
-                  paddingTop: isBelowSMScreen ? "15px":"5px",
-                 
+                  paddingTop: isBelowSMScreen ? "15px" : "5px",
                 }}
                 onClick={handleNavigateToHome}
               >
@@ -148,7 +160,7 @@ function NavBar() {
                 <Box
                   sx={{
                     display: "flex",
-                    flexWrap:"wrap",
+                    flexWrap: "wrap",
                     justifyContent: "center",
                   }}
                 >
@@ -157,9 +169,9 @@ function NavBar() {
                     sx={{
                       fontSize: "12px",
                       fontWeight: 500,
-                      color: 'black',
+                      color: "black",
                       marginLeft: "-25px",
-                     marginBottom:"3px"
+                      marginBottom: "3px",
                     }}
                   >
                     Call us:+1 940-279-2536
@@ -173,8 +185,8 @@ function NavBar() {
                   display: "flex",
                   justifyContent: "center",
                   marginLeft: "30px",
-                  marginTop:"6px",
-                  color:'black'
+                  marginTop: "6px",
+                  color: "black",
                 }}
               >
                 <CallIcon />
@@ -182,10 +194,9 @@ function NavBar() {
                   sx={{
                     fontSize: "16px",
                     fontWeight: 500,
-                  
                   }}
                 >
-                &nbsp;Call us : +1 940-279-2536
+                  &nbsp;Call us : +1 940-279-2536
                 </Typography>
               </Box>
             )}
@@ -196,7 +207,7 @@ function NavBar() {
               aria-label={drawerOpen ? "close drawer" : "open drawer"}
               edge="end"
               onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}
-              sx={{ ml: 2, mr:3,marginTop:'10px' }}
+              sx={{ ml: 2, mr: 3, marginTop: "10px" }}
             >
               {drawerOpen ? (
                 <CloseIcon sx={{ color: "black", fontSize: "30px" }} />
@@ -223,8 +234,11 @@ function NavBar() {
                         alignItems: "center",
                         fontSize: "large",
                         textTransform: "none",
-                        backgroundColor: isActive(menu.linkurl) ? theme.palette.primary.main : "none",
-                      color: isActive(menu.linkurl) ? "white" : "black",
+                        padding: "1px",
+                        backgroundColor: isActive(menu.linkurl)
+                          ? theme.palette.primary.main
+                          : "none",
+                        color: isActive(menu.linkurl) ? "white" : "black",
                         "&:hover": {
                           backgroundColor: theme.palette.primary.main,
                           color: "white",
@@ -268,6 +282,7 @@ function NavBar() {
                     index < navMenus.length - 1
                       ? "1px solid lightgrey"
                       : "none",
+                  padding: "2.5px",
                 }}
               >
                 <Link
@@ -281,7 +296,7 @@ function NavBar() {
                       fontSize: "medium",
                       fontWeight: "500",
                       textTransform: "none",
-                      padding: 0,
+                      padding: "0px",
                     }}
                   >
                     <Box
