@@ -23,7 +23,7 @@ const navMenus = [
     name: "Home",
     linkurl: location.pathname === paths.ROOT ? paths.HOME : paths.ROOT,
   },
-  { name: "Menu", linkurl: paths.MENUS },
+  { name: "Menu Card", linkurl: paths.MENUS },
   { name: "Daily Menu", linkurl: paths.DAILYMENU },
   { name: "Snacks", linkurl: paths.SNACKS },
   { name: "Catering", linkurl: paths.CATERING },
@@ -118,7 +118,7 @@ function NavBar() {
         }}
         component="nav"
       >
-        <Toolbar sx={{ p: 0, height: "35px" }}>
+        <Toolbar sx={{ p: 0 }}>
           <Box
             sx={{
               display: "flex",

@@ -82,7 +82,7 @@ const Menus = ({
               justifyContent: "center",
               alignItems: "space-around",
                 margin: "auto",
-              maxWidth: "85%",
+              maxWidth: "90%",
             }}
           >
             {getMenuItemsInAlphabeticalOrder().map((menu) => (

@@ -256,7 +256,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                         paddingTop: "0 !important",
                       }}
                     >
-                      <Grid item xs={12} lg={3} sx={{ paddingTop: 0 }}>
+                      <Grid item xs={12} lg={2} sx={{ paddingTop: 0 }}>
                         <Link
                           to={`/detail/${product._id}`}
                           state={{ previousPath: paths.CATERING }}
@@ -269,6 +269,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                               height: "150px",
                               width: "150px",
                               marginBottom: "20px",
+                              marginLeft: "10px",
                             }}
                           >
                             <img
@@ -285,11 +286,11 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                       <Grid
                         item
                         xs={12}
-                        lg={5}
+                        lg={6}
                         sx={{
                           paddingLeft: "20px",
                           paddingTop: 0,
-                          mt: { xs: -2, md: 0 },
+                          mt: { xs: -2, md: -1 },
                         }}
                       >
                         <Typography
@@ -317,7 +318,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                           </Typography>
                         )}
                       </Grid>
-                      <Grid item xs={12} lg={4} sx={{ paddingTop: 0 }}>
+                      <Grid item xs={12} lg={3} sx={{ paddingTop: 0 }}>
                         {product.cateringMenuSizeWithPrice &&
                           product.cateringMenuSizeWithPrice.length > 0 && (
                             <TableContainer>
