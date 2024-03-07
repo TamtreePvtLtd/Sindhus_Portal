@@ -38,7 +38,7 @@ function CommonSnacksCard(props: IProps) {
         height: "260px",
         border: "1px solid #ddd",
         boxShadow: "none",
-         margin:"auto"
+        margin: "auto",
       }}
     >
       <Box sx={{ height: "70%", width: "100%", overflow: "hidden" }}>
@@ -69,7 +69,7 @@ function CommonSnacksCard(props: IProps) {
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 2,
-            marginTop:"-5px"
+            marginTop: "-5px",
           }}
           component="div"
         >
@@ -81,8 +81,7 @@ function CommonSnacksCard(props: IProps) {
               value={selectedPrice || ""}
               onChange={handlePriceChange}
               sx={{
-                border: "solid 1px #ddd",
-                padding: "8px 17px",
+                padding: "8px 3px",
                 borderRadius: "30px",
                 width: "90%",
                 height: "36px",
@@ -95,9 +94,9 @@ function CommonSnacksCard(props: IProps) {
                   value={priceItem.price}
                   sx={{
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
+
                     fontSize: "13px",
-                    borderRadius: "30px",
                     alignItems: "center",
 
                     "&:hover": {

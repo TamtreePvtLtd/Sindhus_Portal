@@ -21,32 +21,18 @@ function CateringPage() {
     footerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleMenuSelection = (menuId:string) => {
+  const handleMenuSelection = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
 
-  const handleNavMenuTitleClick = (menuId:string) => {
+  const handleNavMenuTitleClick = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
-  
+
   return (
     <>
       <Box>
         <Box>
-          <Fade top>
-            <Typography
-              variant="h4"
-              sx={{
-                color: "#038265",
-                textAlign: "center",
-                padding: "10px",
-                fontWeight: 600,
-              }}
-            >
-              Catering Menu
-            </Typography>
-          </Fade>
-
           <Box sx={{ textAlign: "center", fontWeight: "400", py: 2 }}>
             <Button variant="contained" onClick={handleEnquiryButtonClick}>
               Enquiry Now
@@ -63,21 +49,21 @@ function CateringPage() {
           onSelectProduct={(productId: string) =>
             setSelectedProductId(productId)
           }
-          selectedMenuId={selectedMenuId} 
-        />  
+          selectedMenuId={selectedMenuId}
+        />
       </Container>
-      
-      <Menus 
+
+      <Menus
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
-        selectedMenuId={selectedMenuId} 
+        selectedMenuId={selectedMenuId}
       />
-      
+
       <CateringProduct
         selectedMenuId={selectedMenuId}
         selectedProductId={selectedProductId}
       />
-      
+
       <Box ref={footerRef}></Box>
     </>
   );

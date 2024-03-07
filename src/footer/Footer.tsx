@@ -113,20 +113,19 @@ function Footer() {
                       href={import.meta.env.VITE_ADDRESS_LOCATION}
                       target="_blank"
                     >
-                    <Button
-    startIcon={<DirectionsIcon />}
-    variant="contained"
-    size="small"
-    sx={{
-        m: 1,
-        "&:hover": {
-            backgroundColor: "#038265", 
-            
-        },
-    }}
->
-    Get Direction
-</Button>
+                      <Button
+                        startIcon={<DirectionsIcon />}
+                        variant="contained"
+                        size="small"
+                        sx={{
+                          m: 1,
+                          "&:hover": {
+                            backgroundColor: "#038265",
+                          },
+                        }}
+                      >
+                        Get Direction
+                      </Button>
                     </a>
                   </Box>
                 </Fade>
@@ -317,7 +316,9 @@ function Footer() {
                               <TableCell sx={ourTimingStyles}>
                                 {item.day}
                               </TableCell>
-                              <TableCell sx={ourTimingStyles}>
+                              <TableCell
+                                sx={{ ...ourTimingStyles, paddingLeft: "15px" }}
+                              >
                                 {item.timing}
                               </TableCell>
                             </TableRow>

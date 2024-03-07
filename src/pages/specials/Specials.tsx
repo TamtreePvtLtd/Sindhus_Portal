@@ -7,7 +7,7 @@ function Specials() {
 
   return (
     <Box>
-      <Container maxWidth={false} sx={{ py: 5 }}>
+      <Container maxWidth={false}>
         <SpecialCard specials={specials}></SpecialCard>
       </Container>
     </Box>

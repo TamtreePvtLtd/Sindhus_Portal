@@ -47,7 +47,7 @@ function Categories() {
             container
             justifyContent="center"
             spacing={4}
-            sx={{ marginTop: "20px" }}
+            sx={{ marginTop: "10px" }}
           >
             {categories.map((category, index) => (
               <Grid item key={index} xs={6} sm={4} md={3} lg="auto">
@@ -64,7 +64,6 @@ function Categories() {
                     textDecoration: "none",
                     "&:hover": {
                       color: (theme) => theme.palette.text.primary,
-
                       textDecorationColor: "#038265",
                       borderBottom: "1.5px solid #038265",
                     },
@@ -73,8 +72,8 @@ function Categories() {
                   <Typography
                     style={{
                       margin: 0,
-                      lineHeight: "2",
-                      marginBottom: "10px",
+                      lineHeight: "0.8",
+                      marginBottom: "5px",
                       fontFamily: "revert-layer",
                       fontWeight: 700,
                       fontSize: "1.2rem",
