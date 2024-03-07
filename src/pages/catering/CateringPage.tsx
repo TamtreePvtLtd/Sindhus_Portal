@@ -11,24 +11,31 @@ import CateringSpecial from "./CateringSpecial";
 import { Button } from "@mui/material";
 import { RefObject, useRef } from "react";
 import Menus from "./CateringNavmenu";
+import { useHref } from "react-router-dom";
+import CateringEnquiryForm from "../../common/component/CateringEnquiryForm";
 
 function CateringPage() {
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const footerRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const [isEnquiryFormOpen, setIsEnquiryFormOpen] = useState(false);
 
-  const handleEnquiryButtonClick = () => {
+  const handleEnquiryButtonOpenClick = () => {
+    setIsEnquiryFormOpen(true);
+
     footerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const handleMenuSelection = (menuId:string) => {
+  const handleEnquiryButtonCloseClick = () => {
+    setIsEnquiryFormOpen(false);
+  };
+  const handleMenuSelection = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
 
-  const handleNavMenuTitleClick = (menuId:string) => {
+  const handleNavMenuTitleClick = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
-  
+
   return (
     <>
       <Box>
@@ -47,38 +54,45 @@ function CateringPage() {
             </Typography>
           </Fade>
 
-          <Box sx={{ textAlign: "center", fontWeight: "400", py: 2 }}>
-            <Button variant="contained" onClick={handleEnquiryButtonClick}>
-              Enquiry Now
+          <Box
+            sx={{
+              position: "fixed",
+              top: "70px",
+              right: 0,
+              p: 2, // padding for spacing
+            }}
+          >
+            <Button variant="contained" onClick={handleEnquiryButtonOpenClick}>
+              Enquire Now
             </Button>
           </Box>
         </Box>
       </Box>
-
       <CateringSpecial></CateringSpecial>
-
       <Container sx={{ mt: 2 }}>
         <SearchBar
           onSelectMenu={(menuId: string) => setSelectedMenuId(menuId)}
           onSelectProduct={(productId: string) =>
             setSelectedProductId(productId)
           }
-          selectedMenuId={selectedMenuId} 
-        />  
+          selectedMenuId={selectedMenuId}
+        />
       </Container>
-      
-      <Menus 
+      <Menus
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
-        selectedMenuId={selectedMenuId} 
+        selectedMenuId={selectedMenuId}
       />
-      
       <CateringProduct
         selectedMenuId={selectedMenuId}
         selectedProductId={selectedProductId}
       />
-      
-      <Box ref={footerRef}></Box>
+      {isEnquiryFormOpen && (
+        <CateringEnquiryForm
+          onClose={handleEnquiryButtonCloseClick}
+          isOpen={isEnquiryFormOpen}
+        />
+      )}{" "}
     </>
   );
 }

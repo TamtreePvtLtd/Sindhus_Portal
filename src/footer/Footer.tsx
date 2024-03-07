@@ -66,18 +66,7 @@ function Footer() {
       >
         <Box className={classes.overlay}></Box>
         <Container sx={{ paddingBottom: 2, pt: 2 }}>
-          {isCateringMenuPage && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 2,
-              }}
-            >
-              <CateringEnquiryForm />
-            </Box>
-          )}
+      
           <Fade top>
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
               <Typography variant="h4" fontWeight={400}>
@@ -113,20 +102,19 @@ function Footer() {
                       href={import.meta.env.VITE_ADDRESS_LOCATION}
                       target="_blank"
                     >
-                    <Button
-    startIcon={<DirectionsIcon />}
-    variant="contained"
-    size="small"
-    sx={{
-        m: 1,
-        "&:hover": {
-            backgroundColor: "#038265", 
-            
-        },
-    }}
->
-    Get Direction
-</Button>
+                      <Button
+                        startIcon={<DirectionsIcon />}
+                        variant="contained"
+                        size="small"
+                        sx={{
+                          m: 1,
+                          "&:hover": {
+                            backgroundColor: "#038265",
+                          },
+                        }}
+                      >
+                        Get Direction
+                      </Button>
                     </a>
                   </Box>
                 </Fade>
@@ -181,7 +169,6 @@ function Footer() {
                         <Button
                           startIcon={<WhatsAppIcon />}
                           variant="contained"
-                          // fullWidth
                           sx={{
                             lineHeight: 0,
                             backgroundColor: "#4caf50",
@@ -233,7 +220,6 @@ function Footer() {
                               d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
                             ></path>
                           </svg>
-                            
                         </IconButton>
                       </Link>
                       <Link

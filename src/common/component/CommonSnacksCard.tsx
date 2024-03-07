@@ -76,46 +76,38 @@ function CommonSnacksCard(props: IProps) {
           {product.title}
         </Typography>
         <Box>
-          {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 1 ? (
-            <Select
-              value={selectedPrice || ""}
-              onChange={handlePriceChange}
-              sx={{
-                border: "solid 1px #ddd",
-                padding: "8px 17px",
-                borderRadius: "30px",
-                width: "90%",
-                height: "36px",
-                fontSize: "13px",
-              }}
-            >
-              {product.itemSizeWithPrice.map((priceItem, index) => (
-                <MenuItem
-                  key={priceItem._id}
-                  value={priceItem.price}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    fontSize: "13px",
-                    borderRadius: "30px",
-                    alignItems: "center",
+          {product.itemSizeWithPrice &&
+            product.itemSizeWithPrice.length > 0 && (
+              <Select
+                value={selectedPrice || ""}
+                onChange={() => handlePriceChange}
+                sx={{
+                  border: "solid 1px #ddd",
+                  padding: "8px 17px",
+                  borderRadius: "30px",
+                  width: "90%",
+                  height: "36px",
+                  fontSize: "13px",
+                }}
+              >
+                {product.itemSizeWithPrice.map((priceItem) => (
+                  <MenuItem
+                    key={priceItem._id}
+                    value={priceItem.price}
+                    sx={{
+                      fontSize: "13px",
+                      borderRadius: "30px",
 
-                    "&:hover": {
-                      backgroundColor: "#57ccb5",
-                    },
-                  }}
-                >
-                  {priceItem.size}lb - ${priceItem.price}
-                </MenuItem>
-              ))}
-            </Select>
-          ) : (
-            <Typography sx={{ color: "black", fontWeight: 350 }}>
-              {selectedPrice !== null && product.itemSizeWithPrice
-                ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
-                : ""}
-            </Typography>
-          )}
+                      "&:hover": {
+                        backgroundColor: "#57ccb5",
+                      },
+                    }}
+                  >
+                    {priceItem.size}lb - ${priceItem.price}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
         </Box>
       </CardContent>
     </Card>
