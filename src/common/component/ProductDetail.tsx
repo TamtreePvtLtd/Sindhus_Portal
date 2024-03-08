@@ -40,9 +40,6 @@ function ProductDetail() {
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
 
-  console.log("isFromSnacks:", isFromSnacks);
-  console.log("itemPrice:", menuDetail?.itemSizeWithPrice);
-
   const fetchProductDetail = async () => {
     try {
       const response = await fetchProductById(productId);
@@ -220,7 +217,7 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
-                          {isFromSnacks && menuDetail && (
+                          {isFromSnacks && (
                             <>
                               {console.log(
                                 "itemSizeWithPrice:",
@@ -262,6 +259,34 @@ function ProductDetail() {
                           )}
                         </>
                       )}
+                    </>
+                  )}
+                  {isFromSnacks && (
+                    <>
+                      {console.log(
+                        "itemSizeWithPrice:",
+                        menuDetail?.itemSizeWithPrice
+                      )}
+                      {menuDetail.itemSizeWithPrice &&
+                        menuDetail.itemSizeWithPrice.length > 0 && (
+                          <>
+                            <Typography variant="h6">
+                              Sizes with Prices:
+                            </Typography>
+                            {menuDetail.itemSizeWithPrice.map((item, index) => (
+                              <div key={index}>
+                                <Typography key={item._id}>
+                                  <span
+                                    style={{ color: "black", opacity: 0.8 }}
+                                  >
+                                    {item.size}-
+                                  </span>
+                                  &nbsp;${item.price}
+                                </Typography>
+                              </div>
+                            ))}
+                          </>
+                        )}
                     </>
                   )}
                 </>
