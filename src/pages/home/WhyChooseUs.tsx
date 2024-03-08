@@ -29,7 +29,12 @@ function WhyChooseUs(props: Iprops) {
         }}
       >
         <Fade right>
-          <Typography variant="h4" fontWeight={"500"} color={"primary"}>
+          <Typography
+            variant="h4"
+            fontWeight={"500"}
+            color={"primary"}
+            fontFamily={"clearface ts bold"}
+          >
             WHY SINDHU'S?
           </Typography>
         </Fade>
@@ -49,7 +54,13 @@ function WhyChooseUs(props: Iprops) {
         </Fade>
       </Box>
 
-      <Grid container spacing={10} justifyContent="center" alignItems="center" marginBottom="4">
+      <Grid
+        container
+        spacing={10}
+        justifyContent="center"
+        alignItems="center"
+        marginBottom="4"
+      >
         {whyChooseUs.map((whychoose, index) => {
           return (
             <Grid

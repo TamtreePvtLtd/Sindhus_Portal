@@ -303,7 +303,9 @@ function Footer() {
                               <TableCell sx={ourTimingStyles}>
                                 {item.day}
                               </TableCell>
-                              <TableCell sx={ourTimingStyles}>
+                              <TableCell
+                                sx={{ ...ourTimingStyles, paddingLeft: "15px" }}
+                              >
                                 {item.timing}
                               </TableCell>
                             </TableRow>

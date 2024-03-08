@@ -34,10 +34,10 @@ const ScrollToTop = () => {
           onClick={goToTop}
           style={{
             position: "fixed",
-            bottom: "20px",
-            right: isMobile ? "20px" : "110px",
-            height: "30px",
-            width: "30px",
+            bottom: "10px",
+            right: "30px",
+            height: "40px",
+            width: "40px",
             cursor: "pointer",
             backgroundColor: "#038265",
             // boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",

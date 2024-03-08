@@ -140,13 +140,11 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
             0
           );
 
-          
           if (existingSizes[sizeIndex].qty === 0) {
             existingSizes.splice(sizeIndex, 1);
           }
         }
 
-        
         if (existingSizes.length === 0) {
           updatedQuantities.splice(productIndex, 1);
         }
@@ -236,6 +234,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                   fontSize: "40px",
                   paddingLeft: "17px",
                   lineHeight: "1.6",
+                  marginBottom: "20px",
                 }}
               >
                 {data.menuTitle}
@@ -254,9 +253,10 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                         borderBottomStyle: "solid",
                         borderBottomColor: "lightgray",
                         mt: 2,
+                        paddingTop: "0 !important",
                       }}
                     >
-                      <Grid item xs={12} lg={3}>
+                      <Grid item xs={12} lg={2} sx={{ paddingTop: 0 }}>
                         <Link
                           to={`/detail/${product._id}`}
                           state={{ previousPath: paths.CATERING }}
@@ -269,6 +269,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                               height: "150px",
                               width: "150px",
                               marginBottom: "20px",
+                              marginLeft: "10px",
                             }}
                           >
                             <img
@@ -285,10 +286,11 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                       <Grid
                         item
                         xs={12}
-                        lg={5}
+                        lg={6}
                         sx={{
                           paddingLeft: "20px",
-                          mt: { xs: -2, md: 0 },
+                          paddingTop: 0,
+                          mt: { xs: -2, md: -1 },
                         }}
                       >
                         <Typography
@@ -316,7 +318,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                           </Typography>
                         )}
                       </Grid>
-                      <Grid item xs={12} lg={4}>
+                      <Grid item xs={12} lg={3} sx={{ paddingTop: 0 }}>
                         {product.cateringMenuSizeWithPrice &&
                           product.cateringMenuSizeWithPrice.length > 0 && (
                             <TableContainer>
@@ -325,13 +327,19 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                                   <TableRow>
                                     <TableCell
                                       align="center"
-                                      sx={{ fontSize: "16px" }}
+                                      sx={{
+                                        fontSize: "16px",
+                                        padding: "0 !important",
+                                      }}
                                     >
                                       <strong>Serving Size(s)</strong>
                                     </TableCell>
                                     <TableCell
                                       align="center"
-                                      sx={{ fontSize: "16px" }}
+                                      sx={{
+                                        fontSize: "16px",
+                                        padding: "0 !important",
+                                      }}
                                     >
                                       <strong>Quantity</strong>
                                     </TableCell>
@@ -354,13 +362,14 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                                           align="center"
                                           sx={{
                                             whiteSpace: "pre-line",
+                                            padding: "8px",
                                           }}
                                         >
                                           {trayItem.size}&nbsp;
                                           <b>[${trayItem.price}]</b>
                                         </TableCell>
 
-                                        <TableCell>
+                                        <TableCell sx={{ padding: "8px" }}>
                                           <Box
                                             sx={{
                                               display: "flex",
@@ -472,13 +481,13 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
         <Box
           sx={{
             zIndex: 1,
-            bottom: 20,
+            bottom: 70,
             left: "20px",
             position: "sticky",
             display: "flex",
             justifyContent: "flex-end",
             mx: 4,
-            my: 5,
+            my: 10,
             transform: "all 0.2s",
           }}
         >

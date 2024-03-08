@@ -56,7 +56,7 @@ function SnacksMenuItem({
   return (
     <>
       {snacksSubMenus && snacksSubMenus.length > 0 && (
-          <Grid display={"flex"} flexDirection={"row"}  justifyContent={"flex-start"} alignItems={"center"} columnGap={4}>  
+          <Grid display={"flex"} flexDirection={"row"}  justifyContent={"center"} alignItems={"center"} columnGap={4}>  
           
           <Box>
             <Typography

@@ -38,7 +38,7 @@ function CommonSnacksCard(props: IProps) {
         height: "260px",
         border: "1px solid #ddd",
         boxShadow: "none",
-         margin:"auto"
+        margin: "auto",
       }}
     >
       <Box sx={{ height: "70%", width: "100%", overflow: "hidden" }}>
@@ -69,34 +69,35 @@ function CommonSnacksCard(props: IProps) {
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 2,
-            marginTop:"-5px"
+            marginTop: "-5px",
           }}
           component="div"
         >
           {product.title}
         </Typography>
         <Box>
-          {product.itemSizeWithPrice &&
-            product.itemSizeWithPrice.length > 0 && (
-              <Select
-                value={selectedPrice || ""}
-                onChange={() => handlePriceChange}
-                sx={{
-                  border: "solid 1px #ddd",
-                  padding: "8px 17px",
-                  borderRadius: "30px",
-                  width: "90%",
-                  height: "36px",
-                  fontSize: "13px",
-                }}
-              >
-                {product.itemSizeWithPrice.map((priceItem) => (
-                  <MenuItem
-                    key={priceItem._id}
-                    value={priceItem.price}
-                    sx={{
-                      fontSize: "13px",
-                      borderRadius: "30px",
+          {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 1 ? (
+            <Select
+              value={selectedPrice || ""}
+              onChange={handlePriceChange}
+              sx={{
+                padding: "8px 3px",
+                borderRadius: "30px",
+                width: "90%",
+                height: "36px",
+                fontSize: "13px",
+              }}
+            >
+              {product.itemSizeWithPrice.map((priceItem, index) => (
+                <MenuItem
+                  key={priceItem._id}
+                  value={priceItem.price}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+
+                    fontSize: "13px",
+                    alignItems: "center",
 
                       "&:hover": {
                         backgroundColor: "#57ccb5",
@@ -106,8 +107,14 @@ function CommonSnacksCard(props: IProps) {
                     {priceItem.size}lb - ${priceItem.price}
                   </MenuItem>
                 ))}
-              </Select>
-            )}
+            </Select>
+            ) : (
+            <Typography sx={{ color: "black", fontWeight: 350 }}>
+              {selectedPrice !== null && product.itemSizeWithPrice
+                ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
+                : ""}
+            </Typography>
+          )}
         </Box>
       </CardContent>
     </Card>

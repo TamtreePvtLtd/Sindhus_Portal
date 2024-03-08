@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -7,6 +7,8 @@ import CardMedia from "@mui/material/CardMedia";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
 import { IProductCardList } from "../../interface/types";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { MenuItem } from "@mui/material";
 
 interface IProps {
   product: IProductCardList;
@@ -18,10 +20,18 @@ function CommonProductCard(props: IProps) {
     product.dailyMenuSizeWithPrice?.[0]?.size || ""
   );
 
-  const handleSizeClick = (size: string) => {
-    setSelectedSize(size);
-  };
+  useEffect(() => {
+    if (
+      product.dailyMenuSizeWithPrice &&
+      product.dailyMenuSizeWithPrice.length > 0
+    ) {
+      setSelectedSize(String(product.dailyMenuSizeWithPrice[0]?.price) || "");
+    }
+  }, [product.dailyMenuSizeWithPrice]);
 
+  const handlePriceChange = (event: SelectChangeEvent<string>) => {
+    setSelectedSize(event.target.value);
+  };
   return (
     <Card
       sx={{
@@ -77,24 +87,48 @@ function CommonProductCard(props: IProps) {
 
         <Box>
           {product.dailyMenuSizeWithPrice &&
-            product.dailyMenuSizeWithPrice.length > 0 && (
-              <select
-                value={selectedSize}
-                onChange={(e) => handleSizeClick(e.target.value)}
-                style={{
-                  padding: "5px",
-                  marginTop: "5px",
-                  borderRadius: "30px",
-                  
-                }}
-              >
-                {product.dailyMenuSizeWithPrice.map((sizePrice) => (
-                  <option key={sizePrice.size} value={sizePrice.size}>
-                    {sizePrice.size} - ${sizePrice.price}
-                  </option>
-                ))}
-              </select>
-            )}
+          product.dailyMenuSizeWithPrice.length > 1 ? (
+            <Select
+              value={selectedSize || ""}
+              onChange={handlePriceChange}
+              sx={{
+                padding: "8px 3px",
+                borderRadius: "30px",
+                width: "90%",
+                height: "36px",
+                fontSize: "13px",
+              }}
+            >
+              {product.dailyMenuSizeWithPrice.map((priceItem, index) => (
+                <MenuItem
+                  key={priceItem._id}
+                  value={priceItem.price}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+
+                    fontSize: "13px",
+
+                    alignItems: "center",
+
+                    "&:hover": {
+                      backgroundColor: "#57ccb5",
+                    },
+                  }}
+                >
+                  {priceItem.size} - ${priceItem.price}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <Typography sx={{ color: "black", fontWeight: 350 }}>
+              {selectedSize !== null &&
+              product.dailyMenuSizeWithPrice &&
+              product.dailyMenuSizeWithPrice.length > 0
+                ? `${product.dailyMenuSizeWithPrice[0]?.size} - $${selectedSize}`
+                : ""}
+            </Typography>
+          )}
         </Box>
       </CardContent>
     </Card>

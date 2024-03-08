@@ -56,7 +56,7 @@ function CateringSpecial() {
   ];
 
   return (
-    <Container>
+    <Container >
       <Grid container spacing={1}>
         <Grid item lg={4} xs={12}>
           {cateringSpecialData.slice(0, 2).map((special) => (

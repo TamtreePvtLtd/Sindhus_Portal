@@ -49,9 +49,7 @@ function CateringPage() {
                 padding: "10px",
                 fontWeight: 600,
               }}
-            >
-              Catering Menu
-            </Typography>
+            ></Typography>
           </Fade>
 
           <Box
@@ -59,7 +57,10 @@ function CateringPage() {
               position: "fixed",
               top: "70px",
               right: 0,
-              p: 2, // padding for spacing
+              backgroundColor: "white",
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
             }}
           >
             <Button variant="contained" onClick={handleEnquiryButtonOpenClick}>
@@ -68,7 +69,9 @@ function CateringPage() {
           </Box>
         </Box>
       </Box>
-      <CateringSpecial></CateringSpecial>
+      <Box sx={{ mt: 2 }}>
+        <CateringSpecial></CateringSpecial>
+      </Box>
       <Container sx={{ mt: 2 }}>
         <SearchBar
           onSelectMenu={(menuId: string) => setSelectedMenuId(menuId)}
