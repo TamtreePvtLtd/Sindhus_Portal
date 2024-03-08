@@ -65,16 +65,25 @@ function HomePageSlicker() {
     try {
       let response: AxiosResponse<IProductDropDownData[]>;
       
-      if (menuId && !searchTerm.trim()) {
+      if (searchTerm.length < 3 && !menuId) {
         // Fetch products by menu ID only if menu is selected and search term is empty
-        response = await getProductsByMenuIdWithSearchTerm(menuId, "");
+        response = await getProductsByMenuIdWithSearchTerm("", "");
       } else {
         // Fetch products by search term if provided, otherwise fetch all products
         response = await getProductsByMenuIdWithSearchTerm(menuId, searchTerm);
       }
       
       if (response && response.data) {
-        setProducts(response.data);
+        const products: IProductDropDownData[] = response.data.map(
+          (product) => ({
+            _id: product._id,
+            title: product.title,
+            posterURL: product.posterURL,
+          })
+        );
+
+        setProducts(products);
+        setSearchTerm("");
       } else {
         setProducts([]);
       }
@@ -292,7 +301,7 @@ function HomePageSlicker() {
                       setSearchTerm("");
                     }
                   }}
-                  filterOptions={(options) => options} // We are doing filter in api itself. No needs to filter here. Just display what api returns
+                  // filterOptions={(options) => options} // We are doing filter in api itself. No needs to filter here. Just display what api returns
                   renderOption={(props, option) => (
                     <Link
                       to={`/detail/${option._id}`}
@@ -301,6 +310,7 @@ function HomePageSlicker() {
                         textDecoration: "none",
                         color: "black",
                       }}
+                      key={option._id}
                     >
                       <li
                         {...props}
