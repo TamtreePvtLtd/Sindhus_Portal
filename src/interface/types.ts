@@ -44,9 +44,10 @@ export interface IMenuList {
 
 export interface IWhyChooseUs {
   id: number;
-  imageicon: string;
+  // imageicon: string;
   title: string;
   description: string;
+  image: string;
 }
 
 export interface IProductDropDownData {

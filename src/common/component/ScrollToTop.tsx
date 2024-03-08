@@ -35,7 +35,7 @@ const ScrollToTop = () => {
           style={{
             position: "fixed",
             bottom: "10px",
-            right: "30px",
+            right: "65px",
             height: "40px",
             width: "40px",
             cursor: "pointer",

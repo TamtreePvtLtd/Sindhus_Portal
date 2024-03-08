@@ -85,12 +85,12 @@ function Carousel(props: IProps) {
             alignItems={"center"}
             sx={{
               backgroundColor: "white",
-              marginTop: "10px",
+              marginTop: "5px",
             }}
           >
             <Typography
               sx={{
-                margin: "0px 10px 0px 0px",
+                margin: "0px 5px 0px 0px",
                 marginLeft: "20px",
                 fontWeight: 700,
                 fontSize: "40px",
@@ -109,15 +109,15 @@ function Carousel(props: IProps) {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    fontWeight: 500,
+                    fontWeight: 700,
                     marginRight: "20px",
-                    fontSize: "1.1rem",
-                    fontFamily: "revert-layer",
+                    fontSize: "30px",
+                    fontFamily: "Dancing Script",
                     color: "#038265",
                   }}
                 >
                   View All
-                  <KeyboardArrowRightIcon />
+                  <KeyboardArrowRightIcon style={{ fontSize: 35 }} />
                 </Typography>
               </Box>
             )}
