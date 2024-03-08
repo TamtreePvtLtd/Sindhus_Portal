@@ -84,6 +84,10 @@ function CommonSnacksCard(props: IProps) {
                 padding: "8px 3px",
                 borderRadius: "30px",
                 width: "90%",
+                borderColor: "#038265",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                color: "#038265",
                 height: "36px",
                 fontSize: "13px",
               }}
@@ -99,17 +103,17 @@ function CommonSnacksCard(props: IProps) {
                     fontSize: "13px",
                     alignItems: "center",
 
-                      "&:hover": {
-                        backgroundColor: "#57ccb5",
-                      },
-                    }}
-                  >
-                    {priceItem.size}lb - ${priceItem.price}
-                  </MenuItem>
-                ))}
+                    "&:hover": {
+                      backgroundColor: "#57ccb5",
+                    },
+                  }}
+                >
+                  {priceItem.size}lb - ${priceItem.price}
+                </MenuItem>
+              ))}
             </Select>
-            ) : (
-            <Typography sx={{ color: "black", fontWeight: 350 }}>
+          ) : (
+            <Typography sx={{ color: "#038265", fontWeight: 350 }}>
               {selectedPrice !== null && product.itemSizeWithPrice
                 ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
                 : ""}

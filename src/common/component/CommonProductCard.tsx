@@ -95,6 +95,10 @@ function CommonProductCard(props: IProps) {
                 padding: "8px 3px",
                 borderRadius: "30px",
                 width: "90%",
+                borderColor: "#038265",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                color: "#038265",
                 height: "36px",
                 fontSize: "13px",
               }}
@@ -111,9 +115,9 @@ function CommonProductCard(props: IProps) {
 
                     alignItems: "center",
 
-                    "&:hover": {
-                      backgroundColor: "#57ccb5",
-                    },
+                    // "&:hover": {
+                    //   backgroundColor: "#57ccb5",
+                    // },
                   }}
                 >
                   {priceItem.size} - ${priceItem.price}
@@ -121,7 +125,7 @@ function CommonProductCard(props: IProps) {
               ))}
             </Select>
           ) : (
-            <Typography sx={{ color: "black", fontWeight: 350 }}>
+            <Typography sx={{ color: "#038265", fontWeight: 350 }}>
               {selectedSize !== null &&
               product.dailyMenuSizeWithPrice &&
               product.dailyMenuSizeWithPrice.length > 0
