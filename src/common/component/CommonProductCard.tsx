@@ -94,7 +94,9 @@ function CommonProductCard(props: IProps) {
               sx={{
                 padding: "8px 3px",
                 borderRadius: "30px",
-                width: "90%",
+                borderColor: "#038265",
+                borderWidth: "2px",
+                borderStyle: "solid",
                 height: "36px",
                 fontSize: "13px",
               }}
@@ -121,7 +123,7 @@ function CommonProductCard(props: IProps) {
               ))}
             </Select>
           ) : (
-            <Typography sx={{ color: "black", fontWeight: 350 }}>
+            <Typography sx={{ color: "#038265", fontWeight: 350 }}>
               {selectedSize !== null &&
               product.dailyMenuSizeWithPrice &&
               product.dailyMenuSizeWithPrice.length > 0
