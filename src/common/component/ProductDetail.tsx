@@ -40,6 +40,7 @@ function ProductDetail() {
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
 
+  console.log("isFromSnacks:", isFromSnacks);
   console.log("itemPrice:", menuDetail?.itemSizeWithPrice);
 
   const fetchProductDetail = async () => {
@@ -219,11 +220,18 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
-                          {isFromSnacks && (
+                          {isFromSnacks && menuDetail && (
                             <>
+                              {console.log(
+                                "itemSizeWithPrice:",
+                                menuDetail?.itemSizeWithPrice
+                              )}
                               {menuDetail.itemSizeWithPrice &&
-                                menuDetail.itemSizeWithPrice.length > 1 && (
+                                menuDetail.itemSizeWithPrice.length > 0 && (
                                   <>
+                                    <Typography variant="h6">
+                                      Sizes with Prices:
+                                    </Typography>
                                     {menuDetail.itemSizeWithPrice.map(
                                       (item, index) => (
                                         <div key={index}>
@@ -234,9 +242,17 @@ function ProductDetail() {
                                               margin: "8px 0",
                                             }}
                                           >
-                                            Price
+                                            Size: {item.size}
                                           </Typography>
-                                          <Typography>${item.price}</Typography>
+                                          <Typography
+                                            sx={{
+                                              fontSize: "18px",
+                                              fontWeight: "500",
+                                              margin: "8px 0",
+                                            }}
+                                          >
+                                            Price: ${item.price}
+                                          </Typography>
                                         </div>
                                       )
                                     )}
