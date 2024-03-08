@@ -22,6 +22,8 @@ import Fade from "react-reveal/Fade";
 import { getProductsByMenuIdWithSearchTerm } from "../../services/api";
 import { Link } from "react-router-dom";
 import { paths } from "../../routes/path";
+import { AxiosResponse } from "axios";
+
 
 function HomePageSlicker() {
   const theme = useTheme();
@@ -53,37 +55,37 @@ function HomePageSlicker() {
     return () => clearTimeout(timeoutId);
   }, [selectedMenuId, searchTerm]);
 
-  const fetchProducts = async (
-    menuId: string = "",
-    searchTerm: string = ""
-  ) => {
-    try {
-      let response;
+  useEffect(() => {
+    if (selectedMenuId && !searchTerm) {
+      fetchProducts(selectedMenuId, '');
+    }
+  }, [selectedMenuId]);
 
-      if (searchTerm.length < 3 && !menuId) {
-        response = await getProductsByMenuIdWithSearchTerm("", "");
+  const fetchProducts = async (menuId: string = "", searchTerm: string = "") => {
+    try {
+      let response: AxiosResponse<IProductDropDownData[]>;
+      
+      if (menuId && !searchTerm.trim()) {
+        // Fetch products by menu ID only if menu is selected and search term is empty
+        response = await getProductsByMenuIdWithSearchTerm(menuId, "");
       } else {
+        // Fetch products by search term if provided, otherwise fetch all products
         response = await getProductsByMenuIdWithSearchTerm(menuId, searchTerm);
       }
-
+      
       if (response && response.data) {
-        const products: IProductDropDownData[] = response.data.map(
-          (product) => ({
-            _id: product.item._id,
-            title: product.item.title,
-            posterURL: product.item.posterURL,
-          })
-        );
-
-        setProducts(products);
+        setProducts(response.data);
       } else {
         setProducts([]);
-        setSearchTerm("");
       }
     } catch (error) {
       console.error("Error fetching products:", error);
+      setProducts([]);
     }
   };
+  
+  
+  
 
   const handleProductSearch = (_event) => {
     const newSearchTerm = _event.target.value;
@@ -299,7 +301,6 @@ function HomePageSlicker() {
                         textDecoration: "none",
                         color: "black",
                       }}
-                      key={option._id}
                     >
                       <li
                         {...props}
@@ -311,7 +312,7 @@ function HomePageSlicker() {
                         }}
                       >
                         <img
-                          src={option.posterURL ?? ""}
+                          src={option.posterURL ?? "" }
                           style={{
                             width: "4rem",
                             height: "4rem",
