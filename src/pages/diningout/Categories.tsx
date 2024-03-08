@@ -47,10 +47,11 @@ function Categories() {
             container
             justifyContent="center"
             spacing={4}
-            sx={{ marginTop: "10px" }}
+            
+            sx={{ marginTop: "5px" }}
           >
             {categories.map((category, index) => (
-              <Grid item key={index} xs={6} sm={4} md={3} lg="auto">
+              <Grid item key={index} xs={6} sm={4} md={3} lg="auto" sx={{ paddingTop:"25px !important"}}>
                 <Box
                   onClick={() => handleClickProduct(category._id)}
                   sx={{

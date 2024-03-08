@@ -33,7 +33,7 @@ function WhyChooseUs(props: Iprops) {
             variant="h4"
             fontWeight={"500"}
             color={"primary"}
-            fontFamily={"clearface ts bold"}
+            fontFamily={"revert-layer"}
           >
             WHY SINDHU'S?
           </Typography>
@@ -76,21 +76,21 @@ function WhyChooseUs(props: Iprops) {
                   <Box className={classes.flipCardInner}>
                     <Box
                       className={classes.flipCardFront}
-                      // style={{
-                      //   backgroundImage: `url(${whychoose.image})`,
-                      // }}
+                      style={{
+                        backgroundImage: `url(${whychoose.image})`,
+                      }}
                     >
                       <Box
                         className={`${classes.overlay} ${classes.centerImage}`}
                       >
-                        <Box
+                        {/* <Box
                           sx={{
                             fontSize: "6rem",
                           }}
                           className={classes.imageWithBorder}
                         >
                           {whychoose.imageicon}
-                        </Box>
+                        </Box> */}
 
                         <Typography gutterBottom variant="h5" fontWeight={400}>
                           {whychoose.title}

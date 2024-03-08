@@ -55,8 +55,7 @@ function SnacksPage() {
 
       <Container
         sx={{
-          marginTop: "20px",
-          my: 5,
+          marginTop: "10px",
           p: 2,
         }}
       >

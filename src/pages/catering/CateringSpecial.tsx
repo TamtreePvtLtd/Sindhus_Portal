@@ -15,7 +15,9 @@ function CateringSpecial() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#0382657",
+          // backgroundColor: "#0382657",
+          backgroundColor: "#f5c03d ", // Add background color here
+
           boxShadow: 2,
           borderRadius: "10px",
         }}
@@ -33,6 +35,8 @@ function CateringSpecial() {
   const iconStyles = {
     color: theme.palette.primary.main,
     fontSize: "8rem",
+    backgroundColor: "#f5c03d ", // Add background color here
+
     p: 4,
   };
 
