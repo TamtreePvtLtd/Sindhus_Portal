@@ -142,7 +142,7 @@ function Footer() {
                       }}
                     >
                       <a
-                        href="mailto:skvbalaji@gmail.com"
+                        href="mailto:Sindhuskitchenusa@gmail.com"
                         style={{ textDecoration: "none", color: "white" }}
                       >
                         <Button
