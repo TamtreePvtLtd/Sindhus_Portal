@@ -124,6 +124,18 @@ export interface IMenuDatas {
   menuType: number;
   products: IProductDinnigOut[];
 }
+export interface IMenuDatastype {
+  menus: IMenuDatastype1[];
+  _id: string;
+  title: string;
+  image: string;
+  menuType: number;
+  products: IProductDinnigOut[];
+}
+export interface IMenuDatastype1 {
+  _id: string;
+  title: string;
+}
 
 export interface IProductDinnigOut {
   _id: string;

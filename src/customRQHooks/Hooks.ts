@@ -9,7 +9,9 @@ import {
   fetchProductByCateringMenu,
   getAllDailyMenus,
   getAllSpecials,
+  getMenuType3,
 } from "../services/api";
+import { IMenuDatas } from "../interface/types";
 
 export const useGetAllMenus = () => {
   return useQuery({
@@ -48,7 +50,7 @@ export const useGetAllDiningOutProducts = () => {
 
 export const useGetFetchProductsByMenuId = (menuId: string) => {
   return useQuery({
-    queryKey: ["fetchProductsByMenuId",menuId],
+    queryKey: ["fetchProductsByMenuId", menuId],
     queryFn: () => getfetchProductsByMenuId(menuId),
     refetchOnWindowFocus: false,
   });
@@ -89,5 +91,10 @@ export const usegetAllSpecials = () => {
     queryFn: getAllSpecials,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+  });
+};
+export const useGetAllMenuType3 = (menuId: string) => {
+  return useQuery(["products", menuId], () => getMenuType3(menuId), {
+    refetchOnWindowFocus: false,
   });
 };
