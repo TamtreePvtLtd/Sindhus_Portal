@@ -1,20 +1,32 @@
-import Container from "@mui/material/Container";
 import Categories from "./Categories";
 import Carousel from "../../common/component/Carousal";
 import { useGetAllDiningOutProducts } from "../../customRQHooks/Hooks";
 import Box from "@mui/material/Box";
-import { navigate, useHref } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ICategory } from "../../interface/types";
+import CommonProductCard from "../../common/component/CommonProductCard";
+import { Container, Grid } from "@mui/material";
 
 function DiningOutPage() {
   const categoryWithProducts = useGetAllDiningOutProducts();
-  const [selectedMenuId, setSelectedMenuId] = useState<string>();
+  const [selectedMenuId, setSelectedMenuId] = useState<string>("");
+  const [selectedCategory, setselectedCategory] = useState<ICategory | []>([]);
 
-  const onSubMenuClick = (submenuId: string) => {
-    setSelectedMenuId(submenuId);
+  const onSubMenuClick = (subMenuId: string) => {
+    setSelectedMenuId(subMenuId);
+    console.log(subMenuId);
   };
-  console.log(selectedMenuId);
 
+  useEffect(() => {
+    if (selectedMenuId) {
+      const selectedCategory = categoryWithProducts.data?.find(
+        (category) => category.menuDatas._id === selectedMenuId
+      );
+
+      setselectedCategory(selectedCategory);
+    }
+  }, [selectedMenuId]);
+  console.log(selectedCategory);
   return (
     <>
       <Categories
@@ -22,15 +34,35 @@ function DiningOutPage() {
           _id: category.menuDatas._id,
           title: category.menuDatas.title,
         }))}
-        onCategoryClick={onSubMenuClick}
+        onSubMenuClick={onSubMenuClick}
+        selectedSubMenuId={selectedMenuId}
       />
 
-      {categoryWithProducts.isSuccess &&
+      {selectedMenuId === "" ? (
+        categoryWithProducts.isSuccess &&
         categoryWithProducts.data.map((category, index) => (
           <Box key={index}>
-            <Carousel category={category} />
+            <Carousel category={category} onSubMenuClick={onSubMenuClick} />
           </Box>
-        ))}
+        ))
+      ) : (
+        <Container>
+          {selectedCategory && selectedCategory.menuDatas && (
+            <Box sx={{ padding: "25px" }}>
+              <Grid container spacing={2}>
+                {selectedCategory.menuDatas.products.map((product, index) => (
+                  <Grid item xs={12} sm={6} md={4} lg={2.4} key={index}>
+                    <CommonProductCard
+                      product={product}
+                      menuType={selectedCategory.menuDatas.menuType}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          )}
+        </Container>
+      )}
     </>
   );
 }
