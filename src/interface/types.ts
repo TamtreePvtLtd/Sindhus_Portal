@@ -63,7 +63,7 @@ export interface IProductDetail {
 export interface IProduct {
   _id: string;
   title: string;
-  price: number;
+  itemSizeWithPrice: IPrice[];
   images: string[];
   servingSizeDescription: string;
   posterURL: string;
@@ -141,7 +141,6 @@ export interface DailyMenuSizeWithPrice {
   price: number;
   _id: string;
 }
-
 export interface ICommonResponse<T> {
   data: T;
   statusCode: number;
