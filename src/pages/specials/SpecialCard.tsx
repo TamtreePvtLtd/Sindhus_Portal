@@ -58,10 +58,11 @@ function SpecialCard(props: Iprops) {
                     <Card
                       sx={{
                         width: "100%",
-                        height: "80vh",
+                        height: { xs: "auto", sm: "80vh" },
                         overflow: "hidden",
-                        // border: "1px solid gray",
+
                         boxShadow: "none",
+                        margin: 0,
                       }}
                       onClick={() => handleClickOpen(special.images[0])}
                     >
