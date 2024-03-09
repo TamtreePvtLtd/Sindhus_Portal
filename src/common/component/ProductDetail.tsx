@@ -17,6 +17,8 @@ import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+
 
 function ProductDetail() {
   const settings = {
@@ -62,10 +64,12 @@ function ProductDetail() {
         sx={{
           float: "left",
           pl: 0,
+          color: theme.palette.primary.main,
         }}
         onClick={() => navigate(-1)}
       >
-        <ArrowBackIcon fontSize="large" />
+        {/* <ArrowBackIcon fontSize="large" /> */}
+        <ArrowCircleLeftIcon fontSize="large" />
       </IconButton>
       <Box sx={{ my: 2 }}>
         <Grid
@@ -120,12 +124,7 @@ function ProductDetail() {
                     {menuDetail.title}
                   </Typography>
 
-                  <Typography sx={{ mt: 2 }}>
-                    By &nbsp;
-                    <span style={{ textDecoration: "underline" }}>
-                      SINDHU'S
-                    </span>
-                  </Typography>
+                  <Typography sx={{ mt: 1 }}>By SINDHU'S&nbsp;</Typography>
                   <Divider sx={{ margin: "10px 0" }} />
                   <Typography
                     sx={{
@@ -198,16 +197,24 @@ function ProductDetail() {
                           <Typography
                             sx={{
                               fontSize: "18px",
-                              fontWeight: "500",
-                              margin: "8px 0",
+                              fontWeight: "600",
+                              // fontSize: "18px",
+                              // fontWeight: "500",
+                              // margin: "8px 0",
+                              marginTop: "8px",
                             }}
                           >
-                            DailyMenu Sizes
+                            Daily Menu size(s)
                           </Typography>
                           {menuDetail.dailyMenuSizeWithPrice.map(
                             (sizePrice) => (
-                              <Typography key={sizePrice._id}>
-                                <span style={{ color: "black", opacity: 0.8 }}>
+                              <Typography
+                                key={sizePrice._id}
+                                sx={{ color: "#038265", fontWeight: 500 }}
+                              >
+                                <span
+                                  style={{ color: "#038265", fontWeight: 500 }}
+                                >
                                   {sizePrice.size}-
                                 </span>
                                 &nbsp;${sizePrice.price}
