@@ -237,12 +237,26 @@ const Menus = () => {
 
   const { data: menus, refetch } = useGetAllMenuType3(selectedMenuId!);
   console.log(menus);
+  console.log(
+    menus?.MenusWithProduct.map((menu) => {
+      return {
+        title: menu.title,
+        products: menu.products.map((product) => {
+          return {
+            _id: product._id,
+            title: product.title,
+          };
+        }),
+      };
+    })
+  );
 
   useEffect(() => {
     if (!selectedMenuId && menus) {
       setSelectedMenuId("");
     }
   }, [menus, selectedMenuId]);
+  console.log();
 
   return (
     <div>
@@ -337,7 +351,7 @@ const Menus = () => {
           </Grid>
           <Divider sx={{ marginTop: "50px" }} />
 
-          {selectedMenuId && Array.isArray(menus) && (
+          {
             <Grid container spacing={2}>
               <Grid item xs={8}>
                 <Card sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}>
@@ -353,57 +367,58 @@ const Menus = () => {
                     >
                       {/* {menus?.find((m) => m._id === selectedMenuId)?.title} */}
                     </Typography>
-                    {menus
-                      .find((m) => m._id === selectedMenuId)
-                      ?.products?.map((product) => (
-                        <Grid
-                          item
-                          key={product._id}
-                          xs={12}
-                          sm={12}
-                          md={12}
-                          lg={12}
-                        >
-                          <Fade left>
-                            <Grid
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-evenly",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Grid item xs={8}>
-                                <Box>
+                    {menus?.MenusWithProduct.map((menu) => (
+                      <div key={menu.title}>
+                        <Typography>{menu.title}</Typography>
+                        {menu.products.map((product) => (
+                          <Grid
+                            item
+                            key={product._id}
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={12}
+                          >
+                            <Fade left>
+                              <Grid
+                                container
+                                justifyContent="space-evenly"
+                                alignItems="center"
+                              >
+                                <Grid item xs={8}>
+                                  <Box>
+                                    <Typography variant="h6">
+                                      {product.title}
+                                    </Typography>
+                                  </Box>
+                                </Grid>
+                                <Grid item xs={1} textAlign="center">
+                                  <ArrowRightIcon
+                                    sx={{ color: theme.palette.primary.main }}
+                                  />
+                                </Grid>
+                                <Grid item xs={3} textAlign="center">
                                   <Typography variant="h6">
-                                    {product.title}
+                                    {product.dailyMenuSizeWithPrice &&
+                                    product.dailyMenuSizeWithPrice.length > 0
+                                      ? `$${product.dailyMenuSizeWithPrice[0].price.toFixed(
+                                          2
+                                        )}`
+                                      : ""}
                                   </Typography>
-                                </Box>
+                                </Grid>
                               </Grid>
-                              <Grid item xs={1} sx={{ textAlign: "center" }}>
-                                <ArrowRightIcon
-                                  sx={{ color: theme.palette.primary.main }}
-                                />
-                              </Grid>
-                              <Grid item xs={3} style={{ textAlign: "center" }}>
-                                <Typography variant="h6">
-                                  {product.dailyMenuSizeWithPrice &&
-                                  product.dailyMenuSizeWithPrice.length > 0
-                                    ? `$${product.dailyMenuSizeWithPrice[0].price.toFixed(
-                                        2
-                                      )}`
-                                    : ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Fade>
-                        </Grid>
-                      ))}
+                            </Fade>
+                          </Grid>
+                        ))}
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
               </Grid>
               <Grid item xs={4}></Grid>
             </Grid>
-          )}
+          }
         </Box>
       </Container>
     </div>
