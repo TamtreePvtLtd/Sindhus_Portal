@@ -486,8 +486,8 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
             position: "sticky",
             display: "flex",
             justifyContent: "flex-end",
-            mx: 8,
-            my: 10,
+            mx: 5,
+            my: 8,
             transform: "all 0.2s",
           }}
         >

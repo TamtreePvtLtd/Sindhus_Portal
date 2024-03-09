@@ -184,8 +184,17 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
               option.title == value.title
             }
             renderInput={(params) => (
-              <TextField {...params} label="Select Menu" variant="outlined" />
+              <TextField
+                {...params}
+                label="Select Menu"
+                variant="outlined"
+                sx={{
+                  justifyContent: "center",
+                  height: "55px",
+                }}
+              />
             )}
+            sx={{ "& .MuiAutocomplete-inputRoot": { height: "45px" } }}
             renderOption={(props, option) => (
               <li {...props}>
                 <Typography style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
@@ -252,6 +261,11 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
                 {...params}
                 label="Select Food"
                 variant="outlined"
+                sx={{
+                  justifyContent: "center",
+                  height: "55px",
+                  "& .MuiAutocomplete-inputRoot": { height: "45px" },
+                }}
                 InputProps={{
                   ...params.InputProps,
                 }}

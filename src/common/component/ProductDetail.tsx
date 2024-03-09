@@ -19,7 +19,6 @@ import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
-
 function ProductDetail() {
   const settings = {
     infinite: true,
@@ -38,7 +37,7 @@ function ProductDetail() {
 
   const isFromCatering = state && state.previousPath === paths.CATERING;
   const isFromDiningOut = state && state.previousPath === paths.DAILYMENU;
-  const isFromSnacks = state && state.previousPath === paths.SNACKS; // Add this line
+  const isFromSnacks = state && state.previousPath === paths.SNACKS;
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -64,6 +63,7 @@ function ProductDetail() {
         sx={{
           float: "left",
           pl: 0,
+          my: 1,
           color: theme.palette.primary.main,
         }}
         onClick={() => navigate(-1)}
@@ -71,7 +71,7 @@ function ProductDetail() {
         {/* <ArrowBackIcon fontSize="large" /> */}
         <ArrowCircleLeftIcon fontSize="large" />
       </IconButton>
-      <Box sx={{ my: 2 }}>
+      <Box sx={{ my: 1 }}>
         <Grid
           container
           spacing={isBelowMediumSize ? 0 : 6}
@@ -80,14 +80,14 @@ function ProductDetail() {
             justifyContent: "center",
           }}
         >
-          <Grid item md={6} xs={9}>
+          <Grid item md={6} xs={9} sx={{ paddingTop: "10px !important" }}>
             <Slider {...settings}>
               {menuDetail?.posterURL &&
                 [menuDetail.posterURL]
                   .concat(menuDetail.images)
                   .map((image, index) => (
-                    <Box>
-                      <Card key={index} sx={{ boxShadow: "none" }}>
+                    <Box key={index}>
+                      <Card sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
                             height: "350px",
@@ -111,7 +111,7 @@ function ProductDetail() {
                   ))}
             </Slider>
           </Grid>
-          <Grid item md={5} xs={12}>
+          <Grid item md={5} xs={12} sx={{ paddingTop: "10px !important" }}>
             <>
               {menuDetail && (
                 <>
@@ -123,8 +123,17 @@ function ProductDetail() {
                   >
                     {menuDetail.title}
                   </Typography>
-
-                  <Typography sx={{ mt: 1 }}>By SINDHU'S&nbsp;</Typography>
+                  <Typography sx={{ mt: 1, display: "flex" }}>
+                    <Typography>By&nbsp;&nbsp; </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "clearface ts bold",
+                        color: theme.palette.primary.main,
+                      }}
+                    >
+                      SINDHU'S&nbsp;
+                    </Typography>
+                  </Typography>
                   <Divider sx={{ margin: "10px 0" }} />
                   <Typography
                     sx={{
@@ -137,7 +146,6 @@ function ProductDetail() {
                       {menuDetail.description}
                     </Typography>
                   </Typography>
-
                   {menuDetail.servingSizeDescription && (
                     <Typography
                       sx={{
@@ -156,7 +164,6 @@ function ProductDetail() {
                       </Typography>
                     </Typography>
                   )}
-
                   {isFromCatering &&
                     menuDetail.cateringMenuSizeWithPrice &&
                     menuDetail.cateringMenuSizeWithPrice.length > 0 && (
@@ -164,8 +171,9 @@ function ProductDetail() {
                         <Typography
                           sx={{
                             fontSize: "18px",
-                            fontWeight: "500",
-                            margin: "8px 0",
+                            fontWeight: "600",
+                            // margin: "8px 0",
+                            marginTop: "8px",
                           }}
                         >
                           Catering Sizes
@@ -176,10 +184,16 @@ function ProductDetail() {
                               sx={{
                                 display: "flex",
                                 color: theme.palette.primary.main,
+                                fontWeight: 500,
                               }}
                               key={index}
                             >
-                              <span style={{ color: "black", opacity: 0.8 }}>
+                              <span
+                                style={{
+                                  color: theme.palette.primary.main,
+                                  fontWeight: 500,
+                                }}
+                              >
                                 {size.size}-
                               </span>
                               &nbsp; [${size.price}]
@@ -188,7 +202,6 @@ function ProductDetail() {
                         )}
                       </>
                     )}
-
                   {isFromDiningOut && (
                     <>
                       {menuDetail.dailyMenuSizeWithPrice &&
@@ -224,26 +237,85 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
-                          {isFromSnacks && ( // Add this condition
+                          {isFromSnacks && (
                             <>
-                              {menuDetail.price !== 0 && (
-                                <>
-                                  <Typography
-                                    sx={{
-                                      fontSize: "18px",
-                                      fontWeight: "500",
-                                      margin: "8px 0",
-                                    }}
-                                  >
-                                    Price
-                                  </Typography>
-                                  <Typography>${menuDetail.price}</Typography>
-                                </>
-                              )}
+                              {menuDetail.itemSizeWithPrice &&
+                                menuDetail.itemSizeWithPrice.length > 0 && (
+                                  <>
+                                    <Typography variant="h6">
+                                      Size(s) with Prices:
+                                    </Typography>
+                                    {menuDetail.itemSizeWithPrice.map(
+                                      (item, index) => (
+                                        <div key={index}>
+                                          <Typography
+                                            sx={{
+                                              fontSize: "18px",
+                                              fontWeight: "500",
+                                              margin: "8px 0",
+                                            }}
+                                          >
+                                            Size: {item.size}
+                                          </Typography>
+                                          <Typography
+                                            sx={{
+                                              fontSize: "18px",
+                                              fontWeight: "500",
+                                              margin: "8px 0",
+                                            }}
+                                          >
+                                            Price: ${item.price}
+                                          </Typography>
+                                        </div>
+                                      )
+                                    )}
+                                  </>
+                                )}
                             </>
                           )}
                         </>
                       )}
+                    </>
+                  )}
+                  {isFromSnacks && (
+                    <>
+                      {console.log(
+                        "itemSizeWithPrice:",
+                        menuDetail?.itemSizeWithPrice
+                      )}
+                      {menuDetail.itemSizeWithPrice &&
+                        menuDetail.itemSizeWithPrice.length > 0 && (
+                          <>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                fontSize: "18px",
+                                fontWeight: "600",
+                                marginTop: "8px",
+                              }}
+                            >
+                              Size(s) with Prices:
+                            </Typography>
+                            {menuDetail.itemSizeWithPrice.map((item, index) => (
+                              <div key={index}>
+                                <Typography
+                                  key={item._id}
+                                  sx={{ color: "#038265", fontWeight: 500 }}
+                                >
+                                  <span
+                                    style={{
+                                      color: "#038265",
+                                      fontWeight: 500,
+                                    }}
+                                  >
+                                    {item.size}-
+                                  </span>
+                                  &nbsp;${item.price}
+                                </Typography>
+                              </div>
+                            ))}
+                          </>
+                        )}
                     </>
                   )}
                 </>
