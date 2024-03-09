@@ -48,7 +48,7 @@ function SpecialCard(props: Iprops) {
             </Typography>
           </Fade>
         </Box>
-        <Box sx={{marginBottom:3 }}>
+        <Box sx={{ marginBottom: 3 }}>
           <Grid container spacing={2}>
             {specials &&
               specials.length > 0 &&
@@ -60,7 +60,8 @@ function SpecialCard(props: Iprops) {
                         width: "100%",
                         height: "80vh",
                         overflow: "hidden",
-                        border: "1px solid gray",
+                        // border: "1px solid gray",
+                        boxShadow: "none",
                       }}
                       onClick={() => handleClickOpen(special.images[0])}
                     >
@@ -69,9 +70,11 @@ function SpecialCard(props: Iprops) {
                           key={imgIndex}
                           component="img"
                           sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            width: "100vw",
+                            height: "auto",
+                            objectFit: "contain",
                           }}
                           image={image}
                           title={`Special Image ${imgIndex}`}
