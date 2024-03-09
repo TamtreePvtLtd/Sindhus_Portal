@@ -12,6 +12,8 @@ import {
   IProductDropDownData,
   PaginationInfo,
   ISpecials,
+  IMenuDatastype,
+  menuWithProduct,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -237,6 +239,19 @@ const getAllDailyMenus = async () => {
     throw error;
   }
 };
+const getMenuType3 = async (menuId?: string) => {
+  try {
+    const response = await httpWithoutCredentials.get<menuWithProduct>(
+      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ''}`
+    );
+
+    console.log(response.data);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   getAllMenus,
@@ -253,5 +268,6 @@ export {
   sendCateringRequest,
   getAllDailyMenus,
   getAllSpecials,
+  getMenuType3,
   getAllMenusInCatering,
 };
