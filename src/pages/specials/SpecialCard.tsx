@@ -60,7 +60,6 @@ function SpecialCard(props: Iprops) {
                         width: "100%",
                         height: { xs: "auto", sm: "80vh" },
                         overflow: "hidden",
-
                         boxShadow: "none",
                         margin: 0,
                       }}

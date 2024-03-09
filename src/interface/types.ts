@@ -63,16 +63,17 @@ export interface IProductDetail {
 export interface IProduct {
   _id: string;
   title: string;
-  price: number;
+  price?: number;
+  itemSizeWithPrice: IPrice[];
   images: string[];
   servingSizeDescription: string;
-  posterURL: string;
+  posterURL?: string;
   cateringMenuSizeWithPrice: IPrice[];
   dailyMenuSizeWithPrice: IPrice[];
-  description: string;
-  netWeight: number;
-  createdAt: Date;
-  updatedAt: Date;
+  description?: string;
+  netWeight?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IPrice {
@@ -121,9 +122,26 @@ export interface ICategoryWithProducts {
 export interface IMenuDatas {
   _id: string;
   title: string;
+  image?: string;
+  menuType?: number;
+  products?: IProductDinnigOut[];
+}
+export interface menuWithProduct {
+  menus: IMenuDatas[],
+  MenusWithProduct: { title: string; products: IProduct[] }[];
+}
+
+export interface IMenuDatastype {
+  menus: IMenuDatastype1[];
+  _id: string;
+  title: string;
   image: string;
   menuType: number;
   products: IProductDinnigOut[];
+}
+export interface IMenuDatastype1 {
+  _id: string;
+  title: string;
 }
 
 export interface IProductDinnigOut {
@@ -141,7 +159,6 @@ export interface DailyMenuSizeWithPrice {
   price: number;
   _id: string;
 }
-
 export interface ICommonResponse<T> {
   data: T;
   statusCode: number;

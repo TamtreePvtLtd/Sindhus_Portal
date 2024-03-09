@@ -12,6 +12,8 @@ import {
   IProductDropDownData,
   PaginationInfo,
   ISpecials,
+  IMenuDatastype,
+  menuWithProduct,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -26,12 +28,24 @@ const getAllMenus = async () => {
   }
 };
 
+const getAllMenusInCatering = async () => {
+  console.log("hi");
+  try {
+    const response = await httpWithoutCredentials.get<IMenuList[]>(
+      "/menu/getAllMenusInCatering"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getAllSpecials = async () => {
   try {
     const response = await httpWithoutCredentials.get<ISpecials>(
       "/specials/getAllSpecials"
     );
-// console.log("response",response.data.data)
+    // console.log("response",response.data.data)
     return response.data.data;
   } catch (error) {
     throw error;
@@ -160,7 +174,7 @@ const getAllSnacksProductsWithSubMenu = async (subMenuId: string) => {
     const response = await httpWithoutCredentials.get<ISnacksPage>(
       `/product/getAllSnacksMenu${subMenuId}`
     );
-    console.log("response",response.data)
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error("Error:", error);
@@ -225,6 +239,19 @@ const getAllDailyMenus = async () => {
     throw error;
   }
 };
+const getMenuType3 = async (menuId?: string) => {
+  try {
+    const response = await httpWithoutCredentials.get<menuWithProduct>(
+      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ''}`
+    );
+
+    console.log(response.data);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   getAllMenus,
@@ -241,4 +268,6 @@ export {
   sendCateringRequest,
   getAllDailyMenus,
   getAllSpecials,
+  getMenuType3,
+  getAllMenusInCatering,
 };

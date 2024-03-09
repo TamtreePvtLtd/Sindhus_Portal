@@ -85,7 +85,7 @@ function Carousel(props: IProps) {
             alignItems={"center"}
             sx={{
               backgroundColor: "white",
-              marginTop: "5px",
+              marginTop: "8px",
             }}
           >
             <Typography
@@ -93,7 +93,7 @@ function Carousel(props: IProps) {
                 margin: "0px 5px 0px 0px",
                 marginLeft: "20px",
                 fontWeight: 700,
-                fontSize: "40px",
+                fontSize: "35px",
                 color: "#038265",
                 lineHeight: 1,
                 fontFamily: "Dancing Script",
@@ -111,7 +111,7 @@ function Carousel(props: IProps) {
                     alignItems: "center",
                     fontWeight: 700,
                     marginRight: "20px",
-                    fontSize: "30px",
+                    fontSize: "28px",
                     fontFamily: "Dancing Script",
                     color: "#038265",
                   }}
