@@ -38,7 +38,7 @@ function ProductDetail() {
 
   const isFromCatering = state && state.previousPath === paths.CATERING;
   const isFromDiningOut = state && state.previousPath === paths.DAILYMENU;
-  const isFromSnacks = state && state.previousPath === paths.SNACKS; // Add this line
+  const isFromSnacks = state && state.previousPath === paths.SNACKS;
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -86,8 +86,8 @@ function ProductDetail() {
                 [menuDetail.posterURL]
                   .concat(menuDetail.images)
                   .map((image, index) => (
-                    <Box>
-                      <Card key={index} sx={{ boxShadow: "none" }}>
+                    <Box key={index}>
+                      <Card sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
                             height: "350px",
@@ -224,26 +224,76 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
-                          {isFromSnacks && ( // Add this condition
+                          {isFromSnacks && (
                             <>
-                              {menuDetail.price !== 0 && (
-                                <>
-                                  <Typography
-                                    sx={{
-                                      fontSize: "18px",
-                                      fontWeight: "500",
-                                      margin: "8px 0",
-                                    }}
-                                  >
-                                    Price
-                                  </Typography>
-                                  <Typography>${menuDetail.price}</Typography>
-                                </>
+                              {console.log(
+                                "itemSizeWithPrice:",
+                                menuDetail?.itemSizeWithPrice
                               )}
+                              {menuDetail.itemSizeWithPrice &&
+                                menuDetail.itemSizeWithPrice.length > 0 && (
+                                  <>
+                                    <Typography variant="h6">
+                                      Sizes with Prices:
+                                    </Typography>
+                                    {menuDetail.itemSizeWithPrice.map(
+                                      (item, index) => (
+                                        <div key={index}>
+                                          <Typography
+                                            sx={{
+                                              fontSize: "18px",
+                                              fontWeight: "500",
+                                              margin: "8px 0",
+                                            }}
+                                          >
+                                            Size: {item.size}
+                                          </Typography>
+                                          <Typography
+                                            sx={{
+                                              fontSize: "18px",
+                                              fontWeight: "500",
+                                              margin: "8px 0",
+                                            }}
+                                          >
+                                            Price: ${item.price}
+                                          </Typography>
+                                        </div>
+                                      )
+                                    )}
+                                  </>
+                                )}
                             </>
                           )}
                         </>
                       )}
+                    </>
+                  )}
+                  {isFromSnacks && (
+                    <>
+                      {console.log(
+                        "itemSizeWithPrice:",
+                        menuDetail?.itemSizeWithPrice
+                      )}
+                      {menuDetail.itemSizeWithPrice &&
+                        menuDetail.itemSizeWithPrice.length > 0 && (
+                          <>
+                            <Typography variant="h6">
+                              Sizes with Prices:
+                            </Typography>
+                            {menuDetail.itemSizeWithPrice.map((item, index) => (
+                              <div key={index}>
+                                <Typography key={item._id}>
+                                  <span
+                                    style={{ color: "black", opacity: 0.8 }}
+                                  >
+                                    {item.size}-
+                                  </span>
+                                  &nbsp;${item.price}
+                                </Typography>
+                              </div>
+                            ))}
+                          </>
+                        )}
                     </>
                   )}
                 </>

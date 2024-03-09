@@ -44,7 +44,7 @@ function CommonSnacksCard(props: IProps) {
       <Box sx={{ height: "70%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
-          state={{ previousPath: paths.DAILYMENU }}
+          state={{ previousPath: paths.SNACKS }}
           style={{ textDecoration: "none" }}
         >
           <CardMedia
