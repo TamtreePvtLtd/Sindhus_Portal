@@ -68,14 +68,14 @@ function CommonSnacksCard(props: IProps) {
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 1,
             marginTop: "-5px",
           }}
           component="div"
         >
           {product.title}
         </Typography>
-        <Box>
+        <Box sx={{ mt: "5px" }}>
           {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 1 ? (
             <Select
               value={selectedPrice || ""}
@@ -83,13 +83,13 @@ function CommonSnacksCard(props: IProps) {
               sx={{
                 padding: "8px 3px",
                 borderRadius: "30px",
-                width: "90%",
+                width: "96%",
                 borderColor: "#038265",
                 borderWidth: "1px",
                 borderStyle: "solid",
                 color: "#038265",
-                height: "36px",
-                fontSize: "13px",
+                height: "30px",
+                fontWeight: 500,
               }}
             >
               {product.itemSizeWithPrice.map((priceItem, index) => (
@@ -113,9 +113,9 @@ function CommonSnacksCard(props: IProps) {
               ))}
             </Select>
           ) : (
-            <Typography sx={{ color: "#038265", fontWeight: 350 }}>
+            <Typography sx={{ color: "#038265", fontWeight: 500 }}>
               {selectedPrice !== null && product.itemSizeWithPrice
-                ? `${product.itemSizeWithPrice[0].size}lb - $${selectedPrice}`
+                ? `${product.itemSizeWithPrice[0].size} - $${selectedPrice}`
                 : ""}
             </Typography>
           )}
