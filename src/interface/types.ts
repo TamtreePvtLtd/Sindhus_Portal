@@ -112,9 +112,12 @@ export interface ICateringEnquiry {
 export interface ICategory {
   _id: string;
   title: string;
-  image: string;
+  image?: string;
+  products?: IProduct[];
 }
-
+export interface ICategoryTitleDispay {
+  menuDatas: ICategory;
+}
 export interface ICategoryWithProducts {
   menuDatas: IMenuDatas;
 }

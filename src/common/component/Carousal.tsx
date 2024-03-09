@@ -11,6 +11,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface IProps {
   category: ICategoryWithProducts;
+  onSubMenuClick(submenuId: string): void;
 }
 
 export const ProductsSliderSettings = {
@@ -24,13 +25,18 @@ export const ProductsSliderSettings = {
 };
 
 function Carousel(props: IProps) {
-  const { category } = props;
+  const { category, onSubMenuClick } = props;
 
   const navigate = useNavigate();
 
   const theme = useTheme();
   const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   const isTabScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleClickViewAll = () => {
+    // Scroll to the top of the page
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const settings = {
     infinite: false,
@@ -61,10 +67,6 @@ function Carousel(props: IProps) {
         },
       },
     ],
-  };
-
-  const handleClickViewAll = (menuId: string) => {
-    navigate(`/productsByCategory/${menuId}`);
   };
 
   const showViewAllArrowIcon =
@@ -105,7 +107,10 @@ function Carousel(props: IProps) {
             {showViewAllArrowIcon && (
               <Box sx={{ color: "white" }}>
                 <Typography
-                  onClick={() => handleClickViewAll(category.menuDatas._id)}
+                  onClick={() => {
+                    onSubMenuClick(category.menuDatas._id);
+                    handleClickViewAll(); // Call handleClickViewAll when "View All" is clicked
+                  }}
                   sx={{
                     display: "flex",
                     alignItems: "center",

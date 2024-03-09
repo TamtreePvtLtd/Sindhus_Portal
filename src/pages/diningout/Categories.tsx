@@ -1,36 +1,22 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import useTheme from "@mui/material/styles/useTheme";
-import Container from "@mui/material/Container";
-import { useGetAllDiningOutMenuDatas } from "../../customRQHooks/Hooks";
+import { Grid, Typography } from "@mui/material";
+import { ICategory, ICategoryTitleDispay } from "../../interface/types";
 import { useEffect, useState } from "react";
-import { ICategory } from "../../interface/types";
-import { useNavigate } from "react-router-dom";
-import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import PageBanner from "../../common/component/pageBanner";
-import { Grid } from "@mui/material";
 
-function Categories() {
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
-  const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
-  const { data } = useGetAllDiningOutMenuDatas();
+interface IProps {
+  onSubMenuClick(submenuId: string): void;
+  categories: ICategory[];
+  selectedSubMenuId?: string;
+}
 
-  const navigate = useNavigate();
+function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
+  const [loadedCategories, setLoadedCategories] =
+    useState<ICategory[]>(categories);
 
   useEffect(() => {
-    if (data) {
-      setCategories([...data]);
-    }
-  }, [data]);
-
-  const theme = useTheme();
-  const isBelowMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleClickProduct = (menuId: string) => {
-    navigate(`/productsByCategory/${menuId}`);
-  };
+    setLoadedCategories(categories);
+  }, [categories]);
 
   return (
     <>
@@ -40,57 +26,77 @@ function Categories() {
           content="Daily Menu"
           description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
         />
+              
       </Box>
-      <Container>
-        {categories && categories.length > 0 ? (
-          <Grid
-            container
-            justifyContent="center"
-            spacing={4}
-            
-            sx={{ marginTop: "15px" }}
-          >
-            {categories.map((category, index) => (
-              <Grid item key={index} xs={6} sm={4} md={3} lg="auto" sx={{ paddingTop:"15px !important"}}>
-                <Box
-                  onClick={() => handleClickProduct(category._id)}
-                  sx={{
-                    textAlign: "center",
-                    cursor: "pointer",
-                    color: (theme) =>
-                      selectedMenuId === category._id ||
-                      hoveredMenuId === category._id
-                        ? theme.palette.text.primary
-                        : theme.palette.text.disabled,
-                    textDecoration: "none",
-                    "&:hover": {
-                      color: (theme) => theme.palette.text.primary,
-                      textDecorationColor: "#038265",
-                      borderBottom: "1.5px solid #038265",
-                    },
-                  }}
-                >
-                  <Typography
-                    style={{
-                      margin: 0,
-                      lineHeight: "0.8",
-                      marginBottom: "5px",
-                      fontFamily: "revert-layer",
-                      fontWeight: 700,
-                      fontSize: "1.2rem",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {category.title}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <NoProductsAvailable />
-        )}
-      </Container>
+      {loadedCategories && loadedCategories.length > 0 && (
+        <Grid
+          display={"flex"}
+          flexDirection={"row"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          columnGap={4}
+          marginTop="15px"
+        >
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: selectedSubMenuId === "" ? 700 : 500,
+                color:
+                  selectedSubMenuId === "" ? "text.primary" : "text.disabled",
+                borderBottom:
+                  selectedSubMenuId === "" ? "1px solid #038265" : "none",
+                textDecorationColor:
+                  selectedSubMenuId === "" ? "#038265" : "none",
+                textDecorationThickness: "1.5px",
+                textDecorationStyle: "solid",
+                display: "inline-block",
+                fontFamily: "revert-layer",
+                fontSize: "1.2rem",
+                textTransform: "uppercase",
+                margin: 0,
+                lineHeight: "2",
+                "&:hover": {
+                  color: "black",
+                },
+              }}
+              onClick={() => onSubMenuClick("")}
+            >
+              All
+            </Typography>
+          </Box>
+
+          {loadedCategories.map((category) => (
+            <Box key={category._id}>
+              <Typography
+                sx={{
+                  fontWeight: selectedSubMenuId === category._id ? 700 : 500,
+                  color:
+                    selectedSubMenuId === category._id
+                      ? "text.primary"
+                      : "text.disabled",
+                  borderBottom:
+                    selectedSubMenuId === category._id
+                      ? "1px solid #038265"
+                      : "none",
+                  margin: 0,
+                  lineHeight: "2",
+                  fontFamily: "revert-layer",
+                  fontSize: "1.2rem",
+                  textTransform: "uppercase",
+                  display: "inline-block",
+                  textDecoration: "none",
+                  "&:hover": {
+                    color: "black",
+                  },
+                }}
+                onClick={() => onSubMenuClick(category._id)}
+              >
+                {category.title}
+              </Typography>
+            </Box>
+          ))}
+        </Grid>
+      )}
     </>
   );
 }
