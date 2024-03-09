@@ -55,8 +55,7 @@ function SnacksPage() {
 
       <Container
         sx={{
-          marginTop: "20px",
-          my: 5,
+          marginTop: "10px",
           p: 2,
         }}
       >
@@ -65,7 +64,7 @@ function SnacksPage() {
           snacksSubMenus={snacksPageData?.subMenus ?? []}
           selectedSubMenuId={selectedSubMenuId}
         ></SnacksMenuItem>
-        <Box sx={{ mt: 5 }}>
+        <Box sx={{ mt: 3 }}>
           {snacksPageData &&
           snacksPageData.products &&
           snacksPageData.products.length > 0 ? (

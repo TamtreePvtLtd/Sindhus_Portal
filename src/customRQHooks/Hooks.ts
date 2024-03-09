@@ -10,6 +10,7 @@ import {
   getAllDailyMenus,
   getAllSpecials,
   getMenuType3,
+  getAllMenusInCatering,
 } from "../services/api";
 import { IMenuDatas } from "../interface/types";
 
@@ -17,6 +18,15 @@ export const useGetAllMenus = () => {
   return useQuery({
     queryKey: ["menus"],
     queryFn: getAllMenus,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+};
+
+export const useGetAllMenusInCatering = () => {
+  return useQuery({
+    queryKey: ["menu"],
+    queryFn: getAllMenusInCatering,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });

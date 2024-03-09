@@ -29,14 +29,25 @@ function WhyChooseUs(props: Iprops) {
         }}
       >
         <Fade right>
-          <Typography
-            variant="h4"
-            fontWeight={"500"}
-            color={"primary"}
-            fontFamily={"clearface ts bold"}
-          >
-            WHY SINDHU'S?
-          </Typography>
+          <Box sx={{display:"flex",justifyContent:"center"}}>
+            <Typography
+              variant="h4"
+              fontWeight={"600"}
+              color={"primary"}
+              fontFamily={"Dancing Script"}
+            >
+              Why
+            </Typography>
+            <Typography
+              variant="h4"
+              fontWeight={"500"}
+              color={"primary"}
+              fontFamily={"revert-layer"}
+              sx={{ml:1}}
+            >
+              SINDHU'S?
+            </Typography>
+          </Box>
         </Fade>
         <Fade left>
           <Typography
@@ -76,21 +87,21 @@ function WhyChooseUs(props: Iprops) {
                   <Box className={classes.flipCardInner}>
                     <Box
                       className={classes.flipCardFront}
-                      // style={{
-                      //   backgroundImage: `url(${whychoose.image})`,
-                      // }}
+                      style={{
+                        backgroundImage: `url(${whychoose.image})`,
+                      }}
                     >
                       <Box
                         className={`${classes.overlay} ${classes.centerImage}`}
                       >
-                        <Box
+                        {/* <Box
                           sx={{
                             fontSize: "6rem",
                           }}
                           className={classes.imageWithBorder}
                         >
                           {whychoose.imageicon}
-                        </Box>
+                        </Box> */}
 
                         <Typography gutterBottom variant="h5" fontWeight={400}>
                           {whychoose.title}

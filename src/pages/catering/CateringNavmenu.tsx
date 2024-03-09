@@ -1,7 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useGetAllMenus } from "../../customRQHooks/Hooks";
+import {
+  useGetAllMenus,
+  useGetAllMenusInCatering,
+} from "../../customRQHooks/Hooks";
 import Fade from "react-reveal";
+import theme from "../../theme/theme";
 
 interface MenusProps {
   onSelectMenu: (menuId: string) => void;
@@ -19,7 +23,7 @@ const Menus = ({
     isLoading: menusLoading,
     isError: menusError,
     refetch,
-  } = useGetAllMenus();
+  } = useGetAllMenusInCatering();
   const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
   const [selectedMenuIdState, setSelectedMenuIdState] = useState<string>("");
 
@@ -67,33 +71,33 @@ const Menus = ({
 
   return (
     <>
-      <Box sx={{ paddingTop: "16px" }}>
+      <Box>
         {menusLoading && <p>Loading menus...</p>}
         {menusError && <p>Error fetching menus</p>}
 
         {menus && (
           <Grid
             container
-            rowGap={1}
-            spacing={2}
+            spacing={4}
             sx={{
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
               alignItems: "space-around",
-                margin: "auto",
-              maxWidth: "90%",
+              margin: "auto",
+              maxWidth: "88%",
+              marginTop: "15px",
             }}
           >
             {getMenuItemsInAlphabeticalOrder().map((menu) => (
               <Grid
                 item
                 key={menu._id}
-                spacing={2}
                 xs={6}
                 sm={4}
-                md={2}
-                lg={"auto"}
+                md={3}
+                lg="auto"
+                sx={{ paddingTop: "15px !important" }}
               >
                 <Box
                   sx={{
@@ -103,17 +107,18 @@ const Menus = ({
                     color:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
-                        ? "text.primary"
+                        ? theme.palette.primary.main
                         : "text.disabled",
                     textDecoration:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
                         ? "underline"
                         : "none",
-                    "&:hover": {
-                      color: "text.primary",
-                      textDecoration: "underline",
-                    },
+                    textDecorationColor:
+                      selectedMenuIdState === menu._id ||
+                      hoveredMenuId === menu._id
+                        ? theme.palette.primary.main
+                        : "none",
                   }}
                   onClick={() => handleMenuClick(menu._id)}
                   onMouseEnter={() => setHoveredMenuId(menu._id)}

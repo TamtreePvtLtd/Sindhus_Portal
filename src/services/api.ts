@@ -28,6 +28,18 @@ const getAllMenus = async () => {
   }
 };
 
+const getAllMenusInCatering = async () => {
+  console.log("hi");
+  try {
+    const response = await httpWithoutCredentials.get<IMenuList[]>(
+      "/menu/getAllMenusInCatering"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getAllSpecials = async () => {
   try {
     const response = await httpWithoutCredentials.get<ISpecials>(
@@ -257,4 +269,5 @@ export {
   getAllDailyMenus,
   getAllSpecials,
   getMenuType3,
+  getAllMenusInCatering,
 };

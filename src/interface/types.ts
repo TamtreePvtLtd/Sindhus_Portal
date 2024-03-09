@@ -44,9 +44,10 @@ export interface IMenuList {
 
 export interface IWhyChooseUs {
   id: number;
-  imageicon: string;
+  // imageicon: string;
   title: string;
   description: string;
+  image: string;
 }
 
 export interface IProductDropDownData {
@@ -63,7 +64,8 @@ export interface IProduct {
   _id: string;
   title: string;
   price?: number;
-  images?: string[];
+  itemSizeWithPrice: IPrice[];
+  images: string[];
   servingSizeDescription: string;
   posterURL?: string;
   cateringMenuSizeWithPrice: IPrice[];
@@ -157,7 +159,6 @@ export interface DailyMenuSizeWithPrice {
   price: number;
   _id: string;
 }
-
 export interface ICommonResponse<T> {
   data: T;
   statusCode: number;

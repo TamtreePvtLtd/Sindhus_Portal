@@ -48,48 +48,48 @@ export const WhyChooseUsData: IWhyChooseUs[] = [
     title: "Pure Beginnings",
     description:
       "Our culinary creations start with the purest water in all our food and snacks preparation.",
-    imageicon: "🌊",
-    // image: "/assets/images/water.webp",
+    // imageicon: "🌊",
+    image: "/assets/images/water.webp",
   },
   {
     id: 2,
     title: "Premium Oils",
     description:
       "Exclusively cold-pressed Sesame and Peanut oils enhance our dishes.",
-    imageicon: "🥜",
-    // image: "/assets/images/premiumOils.webp",
+    // imageicon: "🥜",
+    image: "/assets/images/premiumOils.webp",
   },
   {
     id: 3,
     title: "Sourced with Care",
     description:
       "We curate our dishes with premium ingredients, some specially sourced from the heart of Tamil Nadu, India.",
-    imageicon: "🌾",
-    // image: "/assets/images/1source.webp",
+    // imageicon: "🌾",
+    image: "/assets/images/1source.webp",
   },
   {
     id: 4,
     title: "Unmatched Freshness",
     description:
       "Enjoy meals prepared on the very same day, using our own freshly made masalas and freshly cut vegetables.",
-    imageicon: "🌿",
-    // image: "/assets/images/UnmatchedFreshness.webp",
+    // imageicon: "🌿",
+    image: "/assets/images/UnmatchedFreshness.webp",
   },
   {
     id: 5,
     title: "Time-Honored Tradition",
     description:
       " Our commitment to traditional cooking techniques not only preserves nutrients but also enhances flavors.",
-    imageicon: "🕰️",
-    // image: "/assets/images/Time-HonoredTradition.webp",
+    // imageicon: "🕰️",
+    image: "/assets/images/Time-HonoredTradition.webp",
   },
   {
     id: 6,
     title: "Quality Assurance",
     description:
       "Rest assured, we never recycle our cooking oil, maintaining the highest quality standards.",
-    imageicon: "♻️",
-    // image: "/assets/images/qualityAssurance.webp",
+    // imageicon: "♻️",
+    image: "/assets/images/qualityAssurance.webp",
   },
 ];
 

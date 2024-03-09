@@ -66,7 +66,6 @@ function Footer() {
       >
         <Box className={classes.overlay}></Box>
         <Container sx={{ paddingBottom: 2, pt: 2 }}>
-      
           <Fade top>
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
               <Typography variant="h4" fontWeight={400}>
@@ -132,7 +131,7 @@ function Footer() {
                     ></ChatBubbleIcon>
                     <Typography variant="h6">General Enquiries</Typography>
                     <Typography variant="body2" marginBottom={1}>
-                      skvbalaji@gmail.com
+                      sindhuskitchenusa@gmail.com
                     </Typography>
                     <Box
                       sx={{
@@ -143,7 +142,7 @@ function Footer() {
                       }}
                     >
                       <a
-                        href="mailto:skvbalaji@gmail.com"
+                        href="mailto:Sindhuskitchenusa@gmail.com"
                         style={{ textDecoration: "none", color: "white" }}
                       >
                         <Button

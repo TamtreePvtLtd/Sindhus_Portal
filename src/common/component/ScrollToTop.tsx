@@ -34,8 +34,8 @@ const ScrollToTop = () => {
           onClick={goToTop}
           style={{
             position: "fixed",
-            bottom: "10px",
-            right: "30px",
+            bottom: "5px",
+            right: "3px",
             height: "40px",
             width: "40px",
             cursor: "pointer",

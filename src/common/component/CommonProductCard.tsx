@@ -78,14 +78,14 @@ function CommonProductCard(props: IProps) {
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 1,
           }}
           component="div"
         >
           {product.title}
         </Typography>
 
-        <Box>
+        <Box sx={{ mt: "5px" }}>
           {product.dailyMenuSizeWithPrice &&
           product.dailyMenuSizeWithPrice.length > 1 ? (
             <Select
@@ -94,9 +94,13 @@ function CommonProductCard(props: IProps) {
               sx={{
                 padding: "8px 3px",
                 borderRadius: "30px",
-                width: "90%",
-                height: "36px",
-                fontSize: "13px",
+                width: "96%",
+                borderColor: "#038265",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                color: "#038265",
+                height: "30px",
+                fontWeight: 500,
               }}
             >
               {product.dailyMenuSizeWithPrice.map((priceItem, index) => (
@@ -121,7 +125,7 @@ function CommonProductCard(props: IProps) {
               ))}
             </Select>
           ) : (
-            <Typography sx={{ color: "black", fontWeight: 350 }}>
+            <Typography sx={{ color: "#038265", fontWeight: 500 }}>
               {selectedSize !== null &&
               product.dailyMenuSizeWithPrice &&
               product.dailyMenuSizeWithPrice.length > 0

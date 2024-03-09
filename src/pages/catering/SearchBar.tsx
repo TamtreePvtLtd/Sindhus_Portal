@@ -35,43 +35,40 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
   const { data: cateringProducts, refetch: refetchProductData } =
     useCateringfetchProductData(selectedMenuId, searchTerm);
 
-    const clearSearch = async () => {
-      setIsClearButtonClick(true);
-      onSelectMenu("");
-      onSelectProduct(""); 
-      setMenuValue(null); 
-      setProductValue(null); 
-      setSearchTerm(""); 
-      setIsMenuClear(false);
-      setIsProductClear(false);
-      refetchMenus(); 
-    
-      
-      const menuAutocomplete = document.getElementById("category-autocomplete");
-      if (menuAutocomplete) {
-        menuAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-    
-      const foodAutocomplete = document.getElementById("food-autocomplete");
-      if (foodAutocomplete) {
-        foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-    
-      
-      const appetizersMenu = cateringMenus.find((menu) => menu.title === "Appetizers");
-      if (appetizersMenu) {
-        onSelectMenu(appetizersMenu._id);
-        setMenuValue({
-          _id: appetizersMenu._id,
-          title: appetizersMenu.title,
-          label: appetizersMenu.title,
-          menuType: appetizersMenu.menuType,
-        });
-      }
-    };
-    
-    
-    
+  const clearSearch = async () => {
+    setIsClearButtonClick(true);
+    onSelectMenu("");
+    onSelectProduct("");
+    setMenuValue(null);
+    setProductValue(null);
+    setSearchTerm("");
+    setIsMenuClear(false);
+    setIsProductClear(false);
+    refetchMenus();
+
+    const menuAutocomplete = document.getElementById("category-autocomplete");
+    if (menuAutocomplete) {
+      menuAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    const foodAutocomplete = document.getElementById("food-autocomplete");
+    if (foodAutocomplete) {
+      foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    const appetizersMenu = cateringMenus.find(
+      (menu) => menu.title === "Appetizers"
+    );
+    if (appetizersMenu) {
+      onSelectMenu(appetizersMenu._id);
+      setMenuValue({
+        _id: appetizersMenu._id,
+        title: appetizersMenu.title,
+        label: appetizersMenu.title,
+        menuType: appetizersMenu.menuType,
+      });
+    }
+  };
 
   useEffect(() => {
     if (menuList) {
@@ -155,7 +152,12 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        spacing={3}
+        justifyContent="center" // Center horizontally
+        alignItems="center" // Center vertically
+      >
         <Grid item xs={12} lg={4}>
           <Autocomplete
             id="category-autocomplete"
@@ -182,8 +184,17 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
               option.title == value.title
             }
             renderInput={(params) => (
-              <TextField {...params} label="Select Menu" variant="outlined" />
+              <TextField
+                {...params}
+                label="Select Menu"
+                variant="outlined"
+                sx={{
+                  justifyContent: "center",
+                  height: "55px",
+                }}
+              />
             )}
+            sx={{ "& .MuiAutocomplete-inputRoot": { height: "45px" } }}
             renderOption={(props, option) => (
               <li {...props}>
                 <Typography style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
@@ -250,6 +261,11 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
                 {...params}
                 label="Select Food"
                 variant="outlined"
+                sx={{
+                  justifyContent: "center",
+                  height: "55px",
+                  "& .MuiAutocomplete-inputRoot": { height: "45px" },
+                }}
                 InputProps={{
                   ...params.InputProps,
                 }}

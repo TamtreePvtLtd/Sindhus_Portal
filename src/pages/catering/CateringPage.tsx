@@ -11,7 +11,6 @@ import CateringSpecial from "./CateringSpecial";
 import { Button } from "@mui/material";
 import { RefObject, useRef } from "react";
 import Menus from "./CateringNavmenu";
-import { useHref } from "react-router-dom";
 import CateringEnquiryForm from "../../common/component/CateringEnquiryForm";
 
 function CateringPage() {
@@ -51,22 +50,24 @@ function CateringPage() {
               }}
             ></Typography>
           </Fade>
-
-          <Box
+          <Button
+            variant="contained"
+            onClick={handleEnquiryButtonOpenClick}
             sx={{
               position: "fixed",
-              top: "70px",
+              top: 160,
               right: 0,
-              backgroundColor: "white",
-              width: "100%",
+              margin: "-55px",
+              height: "40px",
+              cursor: "pointer",
+              justifyContent: "space-between",
+              alignItems: "center",
               display: "flex",
-              justifyContent: "flex-end",
+              transform: "rotate(90deg) translate(50%, 50%)",
             }}
           >
-            <Button variant="contained" onClick={handleEnquiryButtonOpenClick}>
-              Enquire Now
-            </Button>
-          </Box>
+            Enquire Now
+          </Button>
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
