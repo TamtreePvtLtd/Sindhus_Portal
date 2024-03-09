@@ -19,7 +19,6 @@ import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
-
 function ProductDetail() {
   const settings = {
     infinite: true,
@@ -123,8 +122,17 @@ function ProductDetail() {
                   >
                     {menuDetail.title}
                   </Typography>
-
-                  <Typography sx={{ mt: 1 }}>By SINDHU'S&nbsp;</Typography>
+                  <Typography sx={{ mt: 1, display: "flex" }}>
+                    <Typography>By&nbsp;&nbsp; </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "clearface ts bold",
+                        color: theme.palette.primary.main,
+                      }}
+                    >
+                      SINDHU'S&nbsp;
+                    </Typography>
+                  </Typography>
                   <Divider sx={{ margin: "10px 0" }} />
                   <Typography
                     sx={{
@@ -137,7 +145,6 @@ function ProductDetail() {
                       {menuDetail.description}
                     </Typography>
                   </Typography>
-
                   {menuDetail.servingSizeDescription && (
                     <Typography
                       sx={{
@@ -156,7 +163,6 @@ function ProductDetail() {
                       </Typography>
                     </Typography>
                   )}
-
                   {isFromCatering &&
                     menuDetail.cateringMenuSizeWithPrice &&
                     menuDetail.cateringMenuSizeWithPrice.length > 0 && (
@@ -188,7 +194,6 @@ function ProductDetail() {
                         )}
                       </>
                     )}
-
                   {isFromDiningOut && (
                     <>
                       {menuDetail.dailyMenuSizeWithPrice &&
