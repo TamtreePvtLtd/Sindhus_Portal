@@ -56,8 +56,13 @@ function SnacksMenuItem({
   return (
     <>
       {snacksSubMenus && snacksSubMenus.length > 0 && (
-          <Grid display={"flex"} flexDirection={"row"}  justifyContent={"center"} alignItems={"center"} columnGap={4}>  
-          
+        <Grid
+          display={"flex"}
+          flexDirection={"row"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          columnGap={4}
+        >
           <Box>
             <Typography
               sx={{
@@ -75,7 +80,7 @@ function SnacksMenuItem({
                 fontSize: "1.2rem",
                 textTransform: "uppercase",
                 margin: 0,
-                lineHeight: "2",
+                lineHeight: "1",
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -98,16 +103,17 @@ function SnacksMenuItem({
                         ? "1px solid #038265"
                         : "none",
                     margin: 0,
-                    lineHeight: "2",   
+                    lineHeight: "1",
                     fontFamily: "revert-layer",
                     fontSize: "1.2rem",
                     textTransform: "uppercase",
                     display: "inline-block",
-                    textDecoration: "none", // Remove underline by default
+                    textDecoration: "none",
                     "&:hover": {
                       // Apply styles on hover
                       color: "black",
                     },
+                    // marginTop: "15px",
                   }}
                   onClick={() => onSubMenuClick(subMenu._id)}
                 >
@@ -115,7 +121,7 @@ function SnacksMenuItem({
                 </Typography>
               </Box>
             ))}
-    </Grid>
+        </Grid>
       )}
     </>
   );

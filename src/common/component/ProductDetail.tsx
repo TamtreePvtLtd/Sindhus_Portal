@@ -63,6 +63,7 @@ function ProductDetail() {
         sx={{
           float: "left",
           pl: 0,
+          my: 1,
           color: theme.palette.primary.main,
         }}
         onClick={() => navigate(-1)}
@@ -70,7 +71,7 @@ function ProductDetail() {
         {/* <ArrowBackIcon fontSize="large" /> */}
         <ArrowCircleLeftIcon fontSize="large" />
       </IconButton>
-      <Box sx={{ my: 2 }}>
+      <Box sx={{ my: 1 }}>
         <Grid
           container
           spacing={isBelowMediumSize ? 0 : 6}
@@ -79,7 +80,7 @@ function ProductDetail() {
             justifyContent: "center",
           }}
         >
-          <Grid item md={6} xs={9}>
+          <Grid item md={6} xs={9} sx={{ paddingTop: "10px !important" }}>
             <Slider {...settings}>
               {menuDetail?.posterURL &&
                 [menuDetail.posterURL]
@@ -110,7 +111,7 @@ function ProductDetail() {
                   ))}
             </Slider>
           </Grid>
-          <Grid item md={5} xs={12}>
+          <Grid item md={5} xs={12} sx={{ paddingTop: "10px !important" }}>
             <>
               {menuDetail && (
                 <>
@@ -170,8 +171,9 @@ function ProductDetail() {
                         <Typography
                           sx={{
                             fontSize: "18px",
-                            fontWeight: "500",
-                            margin: "8px 0",
+                            fontWeight: "600",
+                            // margin: "8px 0",
+                            marginTop: "8px",
                           }}
                         >
                           Catering Sizes
@@ -182,10 +184,16 @@ function ProductDetail() {
                               sx={{
                                 display: "flex",
                                 color: theme.palette.primary.main,
+                                fontWeight: 500,
                               }}
                               key={index}
                             >
-                              <span style={{ color: "black", opacity: 0.8 }}>
+                              <span
+                                style={{
+                                  color: theme.palette.primary.main,
+                                  fontWeight: 500,
+                                }}
+                              >
                                 {size.size}-
                               </span>
                               &nbsp; [${size.price}]
@@ -231,15 +239,11 @@ function ProductDetail() {
                         <>
                           {isFromSnacks && (
                             <>
-                              {console.log(
-                                "itemSizeWithPrice:",
-                                menuDetail?.itemSizeWithPrice
-                              )}
                               {menuDetail.itemSizeWithPrice &&
                                 menuDetail.itemSizeWithPrice.length > 0 && (
                                   <>
                                     <Typography variant="h6">
-                                      Sizes with Prices:
+                                      Size(s) with Prices:
                                     </Typography>
                                     {menuDetail.itemSizeWithPrice.map(
                                       (item, index) => (
@@ -282,14 +286,27 @@ function ProductDetail() {
                       {menuDetail.itemSizeWithPrice &&
                         menuDetail.itemSizeWithPrice.length > 0 && (
                           <>
-                            <Typography variant="h6">
-                              Sizes with Prices:
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                fontSize: "18px",
+                                fontWeight: "600",
+                                marginTop: "8px",
+                              }}
+                            >
+                              Size(s) with Prices:
                             </Typography>
                             {menuDetail.itemSizeWithPrice.map((item, index) => (
                               <div key={index}>
-                                <Typography key={item._id}>
+                                <Typography
+                                  key={item._id}
+                                  sx={{ color: "#038265", fontWeight: 500 }}
+                                >
                                   <span
-                                    style={{ color: "black", opacity: 0.8 }}
+                                    style={{
+                                      color: "#038265",
+                                      fontWeight: 500,
+                                    }}
                                   >
                                     {item.size}-
                                   </span>

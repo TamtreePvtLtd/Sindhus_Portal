@@ -85,7 +85,7 @@ function CommonProductCard(props: IProps) {
           {product.title}
         </Typography>
 
-        <Box sx={{mt:"5px"}}>
+        <Box sx={{ mt: "5px" }}>
           {product.dailyMenuSizeWithPrice &&
           product.dailyMenuSizeWithPrice.length > 1 ? (
             <Select
@@ -115,9 +115,9 @@ function CommonProductCard(props: IProps) {
 
                     alignItems: "center",
 
-                    // "&:hover": {
-                    //   backgroundColor: "#57ccb5",
-                    // },
+                    "&:hover": {
+                      backgroundColor: "#57ccb5",
+                    },
                   }}
                 >
                   {priceItem.size} - ${priceItem.price}
