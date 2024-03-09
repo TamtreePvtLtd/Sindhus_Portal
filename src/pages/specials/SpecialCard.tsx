@@ -48,7 +48,7 @@ function SpecialCard(props: Iprops) {
             </Typography>
           </Fade>
         </Box>
-        <Box sx={{marginBottom:3 }}>
+        <Box sx={{ marginBottom: 3 }}>
           <Grid container spacing={2}>
             {specials &&
               specials.length > 0 &&
@@ -57,8 +57,13 @@ function SpecialCard(props: Iprops) {
                   <Bounce left>
                     <Card
                       sx={{
-                        width: "100%",
-                        height: "80vh",
+                        // maxWidth: "100%",
+                        // maxHeight: "100%",
+                        width: "50vw",
+                        height: "50vh",
+
+                        // width: "100%",
+                        // height: "80vh",
                         overflow: "hidden",
                         border: "1px solid gray",
                       }}

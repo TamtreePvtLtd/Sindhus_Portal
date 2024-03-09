@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useGetAllMenus } from "../../customRQHooks/Hooks";
+import { useGetAllMenus, useGetAllMenusInCatering } from "../../customRQHooks/Hooks";
 import Fade from "react-reveal";
 
 interface MenusProps {
@@ -19,7 +19,7 @@ const Menus = ({
     isLoading: menusLoading,
     isError: menusError,
     refetch,
-  } = useGetAllMenus();
+  } = useGetAllMenusInCatering();
   const [hoveredMenuId, setHoveredMenuId] = useState<string | null>(null);
   const [selectedMenuIdState, setSelectedMenuIdState] = useState<string>("");
 
