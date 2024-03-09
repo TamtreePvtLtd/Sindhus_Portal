@@ -29,14 +29,25 @@ function WhyChooseUs(props: Iprops) {
         }}
       >
         <Fade right>
-          <Typography
-            variant="h4"
-            fontWeight={"500"}
-            color={"primary"}
-            fontFamily={"revert-layer"}
-          >
-            WHY SINDHU'S?
-          </Typography>
+          <Box sx={{display:"flex",justifyContent:"center"}}>
+            <Typography
+              variant="h4"
+              fontWeight={"600"}
+              color={"primary"}
+              fontFamily={"Dancing Script"}
+            >
+              Why
+            </Typography>
+            <Typography
+              variant="h4"
+              fontWeight={"500"}
+              color={"primary"}
+              fontFamily={"revert-layer"}
+              sx={{ml:1}}
+            >
+              SINDHU'S?
+            </Typography>
+          </Box>
         </Fade>
         <Fade left>
           <Typography

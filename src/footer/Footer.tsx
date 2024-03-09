@@ -131,7 +131,7 @@ function Footer() {
                     ></ChatBubbleIcon>
                     <Typography variant="h6">General Enquiries</Typography>
                     <Typography variant="body2" marginBottom={1}>
-                      Sindhuskitchenusa@gmail.com
+                      sindhuskitchenusa@gmail.com
                     </Typography>
                     <Box
                       sx={{

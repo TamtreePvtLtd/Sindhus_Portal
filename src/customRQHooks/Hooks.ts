@@ -9,12 +9,22 @@ import {
   fetchProductByCateringMenu,
   getAllDailyMenus,
   getAllSpecials,
+  getAllMenusInCatering,
 } from "../services/api";
 
 export const useGetAllMenus = () => {
   return useQuery({
     queryKey: ["menus"],
     queryFn: getAllMenus,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+};
+
+export const useGetAllMenusInCatering = () => {
+  return useQuery({
+    queryKey: ["menu"],
+    queryFn: getAllMenusInCatering,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });

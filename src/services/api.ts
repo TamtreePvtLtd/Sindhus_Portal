@@ -26,12 +26,24 @@ const getAllMenus = async () => {
   }
 };
 
+const getAllMenusInCatering = async () => {
+  console.log("hi");
+  try {
+    const response = await httpWithoutCredentials.get<IMenuList[]>(
+      "/menu/getAllMenusInCatering"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getAllSpecials = async () => {
   try {
     const response = await httpWithoutCredentials.get<ISpecials>(
       "/specials/getAllSpecials"
     );
-// console.log("response",response.data.data)
+    // console.log("response",response.data.data)
     return response.data.data;
   } catch (error) {
     throw error;
@@ -160,7 +172,7 @@ const getAllSnacksProductsWithSubMenu = async (subMenuId: string) => {
     const response = await httpWithoutCredentials.get<ISnacksPage>(
       `/product/getAllSnacksMenu${subMenuId}`
     );
-    console.log("response",response.data)
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error("Error:", error);
@@ -241,4 +253,5 @@ export {
   sendCateringRequest,
   getAllDailyMenus,
   getAllSpecials,
+  getAllMenusInCatering,
 };

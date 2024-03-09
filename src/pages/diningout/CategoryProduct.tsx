@@ -9,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NoProductsAvailable from "../../common/component/NoProductsAvailable";
 import React from "react";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import theme from "../../theme/theme";
 
 function CategoryProducts() {
   const { menuId } = useParams();
@@ -36,8 +38,11 @@ function CategoryProducts() {
           }}
         >
           <Box display={"flex"} alignItems={"center"}>
-            <IconButton onClick={() => navigate(-1)} sx={{ mr: 1 }}>
-              <ArrowBackIcon fontSize="medium" />
+            <IconButton
+              onClick={() => navigate(-1)}
+              sx={{ mr: 1, color:theme.palette.primary.main }}
+            >
+              <ArrowCircleLeftIcon fontSize="large" />
             </IconButton>
 
             <Box
@@ -53,6 +58,7 @@ function CategoryProducts() {
                   WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  fontFamily: "revert-layer",
                 }}
                 variant="h5"
               >
@@ -75,7 +81,7 @@ function CategoryProducts() {
                   xs={12}
                   sm={6}
                   md={4}
-                  lg={3}
+                  lg={2.4}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
                   <CommonProductCard product={product} />
