@@ -104,7 +104,7 @@ function Carousel(props: IProps) {
             >
               {category.menuDatas.title}
             </Typography>
-            {showViewAllArrowIcon && (
+            {/* {showViewAllArrowIcon && (
               <Box sx={{ color: "white" }}>
                 <Typography
                   onClick={() => {
@@ -125,7 +125,7 @@ function Carousel(props: IProps) {
                   <KeyboardArrowRightIcon style={{ fontSize: 35 }} />
                 </Typography>
               </Box>
-            )}
+            )} */}
           </Box>
           <Box sx={{ py: 2 }}>
             <Slider {...settings}>
