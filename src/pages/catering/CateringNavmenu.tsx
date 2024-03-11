@@ -107,8 +107,14 @@ const Menus = ({
                     color:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
-                        ? theme.palette.primary.main
-                        : "text.disabled",
+                        ? "black"
+                        : "black",
+                    // fontWeight:
+                    //   selectedMenuIdState === menu._id ||
+                    //   hoveredMenuId === menu._id
+                    //     ? 600 // Change this to the desired font weight when selected or hovered
+                    //     : 400, // Change this to the desired font weight when not selected or hovered
+
                     textDecoration:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id

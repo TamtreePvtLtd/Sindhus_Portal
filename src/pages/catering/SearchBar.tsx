@@ -259,7 +259,7 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Select Food"
+                label="Search Food"
                 variant="outlined"
                 sx={{
                   justifyContent: "center",
