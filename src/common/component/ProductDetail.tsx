@@ -123,7 +123,7 @@ function ProductDetail() {
                   >
                     {menuDetail.title}
                   </Typography>
-                  <Typography sx={{ mt: 1, display: "flex" }}>
+                  {/* <Typography sx={{ mt: 1, display: "flex" }}>
                     <Typography>By&nbsp;&nbsp; </Typography>
                     <Typography
                       sx={{
@@ -133,7 +133,7 @@ function ProductDetail() {
                     >
                       SINDHU'S&nbsp;
                     </Typography>
-                  </Typography>
+                  </Typography> */}
                   <Divider sx={{ margin: "10px 0" }} />
                   <Typography
                     sx={{

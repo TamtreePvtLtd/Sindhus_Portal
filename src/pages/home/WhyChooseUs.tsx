@@ -8,7 +8,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
-
 interface Iprops {
   whyChooseUs: IWhyChooseUs[];
 }
@@ -29,23 +28,23 @@ function WhyChooseUs(props: Iprops) {
         }}
       >
         <Fade right>
-          <Box sx={{display:"flex",justifyContent:"center"}}>
-            <Typography
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {/* <Typography
               variant="h4"
-              fontWeight={"600"}
+              fontWeight={"500"}
               color={"primary"}
-              fontFamily={"Dancing Script"}
+              fontFamily={"revert-layer"}
             >
               Why
-            </Typography>
+            </Typography> */}
             <Typography
               variant="h4"
               fontWeight={"500"}
               color={"primary"}
               fontFamily={"revert-layer"}
-              sx={{ml:1}}
+              // sx={{ ml: 1 }}
             >
-              SINDHU'S?
+              Why SINDHU'S?
             </Typography>
           </Box>
         </Fade>

@@ -132,7 +132,7 @@ export const cateringSpecialData: ICateringSpecials[] = [
   {
     id: 4,
     title: "Cooking Methods",
-    description: "No colors, no preservatives, No MSG, 100% same day cooking",
+    description: "No colors, No preservatives, No MSG, 100% same day cooking",
     iconkey: CateringSpecialEnum.OUTDOORGRILLICON,
   },
 ];

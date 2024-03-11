@@ -60,7 +60,7 @@ function CommonSnacksCard(props: IProps) {
           />
         </Link>
       </Box>
-      <CardContent>
+      <CardContent sx={{ height: "30%", overflow: "hidden" }}>
         <Typography
           variant="body1"
           sx={{
@@ -69,13 +69,13 @@ function CommonSnacksCard(props: IProps) {
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             WebkitLineClamp: 1,
-            marginTop: "-5px",
+            textAlign: "left",
           }}
           component="div"
         >
           {product.title}
         </Typography>
-        <Box sx={{ mt: "5px" }}>
+        <Box sx={{ mt: "3px" }}>
           {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 1 ? (
             <Select
               value={selectedPrice || ""}

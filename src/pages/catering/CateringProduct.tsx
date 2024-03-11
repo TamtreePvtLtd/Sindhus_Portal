@@ -289,6 +289,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                         lg={6}
                         sx={{
                           paddingLeft: "20px",
+                          paddingRight: "15px",
                           paddingTop: 0,
                           mt: { xs: -2, md: -1 },
                         }}
@@ -330,6 +331,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                                       sx={{
                                         fontSize: "16px",
                                         padding: "0 !important",
+                                        textAlign: "left",
                                       }}
                                     >
                                       <strong>Serving Size(s)</strong>
@@ -359,17 +361,19 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                                         <TableCell
                                           component="th"
                                           scope="row"
-                                          align="center"
                                           sx={{
                                             whiteSpace: "pre-line",
-                                            padding: "8px",
+                                            padding: "5px",
+                                            // paddingLeft: "8px", // Adjust the value as per your requirement
+
+                                            textAlign: "left", // Ensure left alignment
                                           }}
                                         >
                                           {trayItem.size}&nbsp;
                                           <b>[${trayItem.price}]</b>
                                         </TableCell>
 
-                                        <TableCell sx={{ padding: "8px" }}>
+                                        <TableCell sx={{ padding: "5px" }}>
                                           <Box
                                             sx={{
                                               display: "flex",
