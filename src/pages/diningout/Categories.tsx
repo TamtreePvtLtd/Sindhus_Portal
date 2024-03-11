@@ -47,7 +47,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                 color:
                   selectedSubMenuId === ""
                     ? theme.palette.primary.main
-                    : "text.disabled",
+                    : "text.primary",
                 borderBottom:
                   selectedSubMenuId === "" ? "1px solid #038265" : "none",
                 textDecorationColor:
