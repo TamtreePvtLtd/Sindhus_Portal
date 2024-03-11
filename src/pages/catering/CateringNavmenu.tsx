@@ -11,12 +11,14 @@ interface MenusProps {
   onSelectMenu: (menuId: string) => void;
   onNavMenuTitleClick: (menuId: string) => void;
   selectedMenuId: string;
+  clearProductSearch: () => void;
 }
 
 const Menus = ({
   onSelectMenu,
   onNavMenuTitleClick,
   selectedMenuId,
+  clearProductSearch,
 }: MenusProps) => {
   const {
     data: menus,
@@ -62,11 +64,13 @@ const Menus = ({
   const handleMenuClick = (menuId: string) => {
     onSelectMenu(menuId);
     setSelectedMenuIdState(menuId);
+    clearProductSearch();
   };
 
   const handleNavMenuTitleClick = (menuId: string) => {
     onNavMenuTitleClick(menuId);
     setSelectedMenuIdState(menuId);
+    clearProductSearch();
   };
 
   return (

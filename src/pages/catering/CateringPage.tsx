@@ -34,6 +34,15 @@ function CateringPage() {
   const handleNavMenuTitleClick = (menuId: string) => {
     setSelectedMenuId(menuId);
   };
+  const clearProductSearch = () => {
+    setSelectedProductId("");
+  };
+
+    const clearSearch = () => {
+      setSelectedMenuId("");
+      clearProductSearch();
+    };
+
 
   return (
     <>
@@ -80,12 +89,14 @@ function CateringPage() {
             setSelectedProductId(productId)
           }
           selectedMenuId={selectedMenuId}
+          clearSearch={clearSearch} // Pass clearSearch function as prop
         />
       </Container>
       <Menus
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
         selectedMenuId={selectedMenuId}
+        clearProductSearch={clearProductSearch}
       />
       <CateringProduct
         selectedMenuId={selectedMenuId}

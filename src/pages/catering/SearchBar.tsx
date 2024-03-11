@@ -18,6 +18,7 @@ interface IProps {
   onSelectMenu(menuId: string): void;
   onSelectProduct(productId: string): void;
   selectedMenuId: string;
+  clearSearch(): void; // Add clearSearch function prop
 }
 
 function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
