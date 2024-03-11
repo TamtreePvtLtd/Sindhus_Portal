@@ -15,7 +15,7 @@ const SpecialsComponent = lazy(() => import("./pages/specials/Specials"));
 
 const SnacksComponent = lazy(() => import("./pages/snacks/SnacksPage"));
 
-const MenusComponent = lazy(() => import("./pages/menus/Menus"));
+const MenusComponent = lazy(() => import("./pages/menus/MenuPage"));
 
 const CateringComponent = lazy(() => import("./pages/catering/CateringPage"));
 
