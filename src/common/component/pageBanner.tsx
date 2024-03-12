@@ -40,10 +40,11 @@ function PageBanner(props: IProps) {
             <Bounce right duration={1000}>
               <Typography
                 sx={{
-                  textTransform: "uppercase",
+                  // textTransform: "uppercase",
                   marginBottom: "0 !important",
                 }}
                 variant="h6"
+                fontFamily={"Dancing Script, cursive"}
                 fontWeight={"small"}
               >
                 {description}
