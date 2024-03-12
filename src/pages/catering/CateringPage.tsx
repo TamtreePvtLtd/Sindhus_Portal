@@ -12,12 +12,17 @@ import { Button } from "@mui/material";
 import { RefObject, useRef } from "react";
 import Menus from "./CateringNavmenu";
 import CateringEnquiryForm from "../../common/component/CateringEnquiryForm";
+import { IMenuAutoComplete, IProductAutoComplete } from "../../interface/types";
 
 function CateringPage() {
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const footerRef: RefObject<HTMLDivElement | null> = useRef(null);
   const [isEnquiryFormOpen, setIsEnquiryFormOpen] = useState(false);
+  const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
+    null
+  );
+  const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
 
   const handleEnquiryButtonOpenClick = () => {
     setIsEnquiryFormOpen(true);
@@ -38,11 +43,10 @@ function CateringPage() {
     setSelectedProductId("");
   };
 
-    const clearSearch = () => {
-      setSelectedMenuId("");
-      clearProductSearch();
-    };
-
+  const clearSearch = () => {
+    setSelectedMenuId("");
+    clearProductSearch();
+  };
 
   return (
     <>
@@ -85,14 +89,20 @@ function CateringPage() {
       <Container sx={{ mt: 2 }}>
         <SearchBar
           onSelectMenu={(menuId: string) => setSelectedMenuId(menuId)}
-          onSelectProduct={(productId: string) =>
-            setSelectedProductId(productId)
-          }
+          onSelectProduct={(productId: string) => {
+            setSelectedProductId(productId);
+          }}
           selectedMenuId={selectedMenuId}
-          clearSearch={clearSearch} // Pass clearSearch function as prop
+          clearSearch={clearSearch}
+          productValue={productValue}
+          setProductValue={setProductValue}
+          menuValue={menuValue}
+          setMenuValue={setMenuValue}
         />
       </Container>
       <Menus
+        setMenuValue={setMenuValue}
+        setProductValue={setProductValue}
         onSelectMenu={handleMenuSelection}
         onNavMenuTitleClick={handleNavMenuTitleClick}
         selectedMenuId={selectedMenuId}

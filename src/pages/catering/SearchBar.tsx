@@ -18,15 +18,27 @@ interface IProps {
   onSelectMenu(menuId: string): void;
   onSelectProduct(productId: string): void;
   selectedMenuId: string;
-  clearSearch(): void; // Add clearSearch function prop
+  clearSearch(): void;
+  productValue: IProductAutoComplete | null;
+  setProductValue(value: IProductAutoComplete | null): void;
+  menuValue: IMenuAutoComplete | null;
+  setMenuValue(value: IMenuAutoComplete | null): void;
 }
 
-function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
+function SearchBar({
+  onSelectMenu,
+  onSelectProduct,
+  selectedMenuId,
+  productValue,
+  setProductValue,
+  menuValue,
+  setMenuValue,
+}: IProps) {
   const [cateringMenus, setCateringMenus] = useState<IMenuList[]>([]);
-  const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
-    null
-  );
-  const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
+  // const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
+  //   null
+  // );
+  // const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuClear, setIsMenuClear] = useState(false);
   const [isProductClear, setIsProductClear] = useState(false);

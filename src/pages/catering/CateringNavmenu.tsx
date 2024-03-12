@@ -6,12 +6,15 @@ import {
 } from "../../customRQHooks/Hooks";
 import Fade from "react-reveal";
 import theme from "../../theme/theme";
+import { IMenuAutoComplete, IProductAutoComplete } from "../../interface/types";
 
 interface MenusProps {
   onSelectMenu: (menuId: string) => void;
   onNavMenuTitleClick: (menuId: string) => void;
   selectedMenuId: string;
   clearProductSearch: () => void;
+  setProductValue(value: IProductAutoComplete | null): void;
+  setMenuValue(value: IMenuAutoComplete | null): void;
 }
 
 const Menus = ({
@@ -19,6 +22,8 @@ const Menus = ({
   onNavMenuTitleClick,
   selectedMenuId,
   clearProductSearch,
+  setProductValue,
+  setMenuValue,
 }: MenusProps) => {
   const {
     data: menus,
@@ -32,6 +37,9 @@ const Menus = ({
   useEffect(() => {
     setHoveredMenuId(selectedMenuId);
     setSelectedMenuIdState(selectedMenuId);
+
+    // setProductValue(null);
+    // setMenuValue(null);
   }, [selectedMenuId]);
 
   const getMenuItemsInAlphabeticalOrder = () => {
@@ -42,6 +50,7 @@ const Menus = ({
 
   useEffect(() => {
     refetch();
+    clearProductSearch();
   }, [refetch]);
 
   useEffect(() => {
@@ -71,6 +80,8 @@ const Menus = ({
     onNavMenuTitleClick(menuId);
     setSelectedMenuIdState(menuId);
     clearProductSearch();
+    setMenuValue(null);
+    setProductValue(null);
   };
 
   return (
