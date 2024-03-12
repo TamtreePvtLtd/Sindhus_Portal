@@ -3,6 +3,7 @@ import { Grid, Typography } from "@mui/material";
 import { ICategory, ICategoryTitleDispay } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";
+import theme from "../../theme/theme";
 
 interface IProps {
   onSubMenuClick(submenuId: string): void;
@@ -23,79 +24,108 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
       <Box>
         <PageBanner
           imageUrl="public/assets/sindhu-kitchen.avif"
-          content="Our Menu"
-          description="The following is a list of the foods available in our restaurant!"
+          content="Menu"
+          description="Tantalizing glimpse into the culinary delights awaiting you at our restaurant"
         />
       </Box>
-      {loadedCategories && loadedCategories.length > 0 && (
-        <Grid
-          display={"flex"}
-          flexDirection={"row"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          columnGap={4}
-          marginTop="15px"
-        >
-          <Box>
-            <Typography
-              sx={{
-                fontWeight: selectedSubMenuId === "" ? 700 : 500,
-                color:
-                  selectedSubMenuId === "" ? "text.primary" : "text.disabled",
-                borderBottom:
-                  selectedSubMenuId === "" ? "1px solid #038265" : "none",
-                textDecorationColor:
-                  selectedSubMenuId === "" ? "#038265" : "none",
-                textDecorationThickness: "1.5px",
-                textDecorationStyle: "solid",
-                display: "inline-block",
-                fontFamily: "revert-layer",
-                fontSize: "1.2rem",
-                textTransform: "uppercase",
-                margin: 0,
-                lineHeight: "2",
-                "&:hover": {
-                  color: "black",
-                },
-              }}
-              onClick={() => onSubMenuClick("")}
+      <Box>
+        {loadedCategories && loadedCategories.length > 0 && (
+          <Grid
+            container
+            display={"flex"}
+            flexDirection={"row"}
+            paddingX={3}
+            justifyContent={"center"}
+            alignItems={"center"}
+            columnGap={4}
+            spacing={2}
+            marginTop="15px"
+          >
+            <Grid
+              item
+              xs={6}
+              sm={6}
+              md={4}
+              lg={"auto"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              key={"all-category"}
             >
-              All
-            </Typography>
-          </Box>
-
-          {loadedCategories.map((category) => (
-            <Box key={category._id}>
               <Typography
                 sx={{
-                  fontWeight: selectedSubMenuId === category._id ? 700 : 500,
+                  fontWeight: selectedSubMenuId === "" ? 700 : 400,
                   color:
-                    selectedSubMenuId === category._id
-                      ? "text.primary"
-                      : "text.disabled",
+                    selectedSubMenuId === ""
+                      ? theme.palette.primary.main
+                      : "text.primary",
                   borderBottom:
-                    selectedSubMenuId === category._id
-                      ? "1px solid #038265"
-                      : "none",
-                  margin: 0,
-                  lineHeight: "2",
+                    selectedSubMenuId === "" ? "1px solid #038265" : "none",
+                  textDecorationColor:
+                    selectedSubMenuId === "" ? "#038265" : "none",
+                  textDecorationThickness: "1.5px",
+                  textDecorationStyle: "solid",
+                  display: "inline-block",
                   fontFamily: "revert-layer",
                   fontSize: "1.2rem",
                   textTransform: "uppercase",
-                  display: "inline-block",
-                  textDecoration: "none",
+                  margin: 0,
+                  lineHeight: "2",
                   "&:hover": {
                     color: "black",
                   },
+                  cursor: "pointer",
                 }}
-                onClick={() => onSubMenuClick(category._id)}
+                onClick={() => onSubMenuClick("")}
               >
-                {category.title}
+                All
               </Typography>
-            </Box>
-          ))}
-        </Grid>
-      )}
+            </Grid>
+
+            {loadedCategories.map((category) => (
+              <Grid
+                item
+                xs={6}
+                sm={6}
+                md={4}
+                lg={"auto"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                key={category._id}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: selectedSubMenuId === category._id ? 700 : 400,
+                    color:
+                      selectedSubMenuId === category._id
+                        ? theme.palette.primary.main
+                        : "text.primary",
+                    borderBottom:
+                      selectedSubMenuId === category._id
+                        ? "1px solid #038265"
+                        : "none",
+                    margin: 0,
+                    lineHeight: "2",
+                    fontFamily: "revert-layer",
+                    fontSize: "1.2rem",
+                    textTransform: "uppercase",
+                    display: "inline-block",
+                    textDecoration: "none",
+                    "&:hover": {
+                      color: "black",
+                    },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => onSubMenuClick(category._id)}
+                >
+                  {category.title}
+                </Typography>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Box>
     </>
   );
 }
