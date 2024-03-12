@@ -107,7 +107,7 @@ function MenuPage() {
                                   alignItems={"center"}
                                   justifyContent={"center"}
                                   flexWrap={"wrap"}
-                                  >                               >
+                                  >                               
                                   <Typography>{product.title}</Typography>
                                 </Box>
                               </Grid>
