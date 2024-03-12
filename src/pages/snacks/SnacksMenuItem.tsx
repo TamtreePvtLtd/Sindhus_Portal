@@ -63,6 +63,7 @@ function SnacksMenuItem({
           justifyContent={"center"}
           alignItems={"center"}
           columnGap={4}
+          padding={"20px"}
         >
           <Box>
             <Typography
@@ -80,8 +81,8 @@ function SnacksMenuItem({
                 fontFamily: "revert-layer",
                 fontSize: "1.2rem",
                 textTransform: "uppercase",
-                margin: 0,
                 lineHeight: "1",
+                cursor:"pointer",
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -102,13 +103,13 @@ function SnacksMenuItem({
                       selectedSubMenuId === subMenu._id
                         ? "1px solid #038265"
                         : "none",
-                    margin: 0,
                     lineHeight: "1",
                     fontFamily: "revert-layer",
                     fontSize: "1.2rem",
                     textTransform: "uppercase",
                     display: "inline-block",
                     textDecoration: "none",
+                    cursor:"pointer",
                     "&:hover": {
                       // Apply styles on hover
                       color: "black",
