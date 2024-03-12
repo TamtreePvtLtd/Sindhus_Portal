@@ -143,6 +143,7 @@ function CateringSelectedProductDrawer(props: IProps) {
             </IconButton>
           </Box>
           <Divider />
+          <Box sx={{ height: "calc(100vh - 50px)", overflow: "auto" }}>
           <Container>
             {productInfo.length > 0 &&
               productInfo.map((product, index) => (
@@ -279,22 +280,23 @@ function CateringSelectedProductDrawer(props: IProps) {
                 </Box>
               ))}
           </Container>
-        </>
-        {productInfo.length > 0 && (
+          {productInfo.length > 0 && (
           <Box
             sx={{
               width: "100%",
               display: "flex",
               justifyContent: "center",
-              position: "absolute",
+              position: "relative",
               bottom: 20,
             }}
           >
-            <Button variant="contained" onClick={handleSendNowClick}>
+            <Button variant="contained" onClick={handleSendNowClick} >
               Send Now
             </Button>
           </Box>
         )}
+        </Box>
+        </>
       </Drawer>
 
       <CateringRequestModel
