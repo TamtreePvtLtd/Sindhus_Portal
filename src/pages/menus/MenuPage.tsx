@@ -67,13 +67,13 @@ function MenuPage() {
             {selectedMenuId === "" &&
               categoryWithProducts.isSuccess &&
               categoryWithProducts.data?.map((category, index) => (
-                <Grid item xs={12} sm={6} md={6} key={index}>
+                <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
                   <Card
                     sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}
                   >
                     <CardContent>
                       <Typography
-                        variant="h56"
+                        variant="h6"
                         fontFamily="Dancing Script, cursive"
                         sx={{
                           lineHeight: "2",
@@ -107,7 +107,7 @@ function MenuPage() {
                                   alignItems={"center"}
                                   justifyContent={"center"}
                                   flexWrap={"wrap"}
-                                >
+                                  >                               >
                                   <Typography>{product.title}</Typography>
                                 </Box>
                               </Grid>
@@ -115,11 +115,17 @@ function MenuPage() {
                                 item
                                 xs={1}
                                 md={1}
+                                lg={1}
                                 textAlign="center"
                                 alignItems={"center"}
                                 justifyContent={"center"}
                               >
-                                
+                                .....
+                                {/* <ArrowRightIcon
+                                  sx={{
+                                    color: theme.palette.primary.main,
+                                  }}
+                                /> */}
                               </Grid>
                               <Grid item xs={6}>
                                 <Typography
@@ -157,7 +163,7 @@ function MenuPage() {
             {selectedCategory &&
               selectedCategory.menuDatas &&
               selectedCategory.menuDatas.products.map((product, index) => (
-                <Grid item xs={12} key={index}>
+                <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
                   <Grid container justifyContent={"flex-start"}>
                     <Grid item xs={6}>
                       <Box>

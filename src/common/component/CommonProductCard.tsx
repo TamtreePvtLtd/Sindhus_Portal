@@ -61,7 +61,6 @@ function CommonProductCard(props: IProps) {
             sx={{
               width: "100%",
               height: "100%",
-              objectFit: "contain",
               transition: "transform 400ms",
             }}
             loading="lazy"

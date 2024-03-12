@@ -53,7 +53,6 @@ function CommonSnacksCard(props: IProps) {
             sx={{
               width: "100%",
               height: "100%",
-              // objectFit: "contain",
               transition: "transform 400ms",
             }}
             loading="lazy"
@@ -108,7 +107,7 @@ function CommonSnacksCard(props: IProps) {
                     },
                   }}
                 >
-                  {priceItem.size}lb - ${priceItem.price}
+                  {priceItem.size} - ${priceItem.price}
                 </MenuItem>
               ))}
             </Select>
