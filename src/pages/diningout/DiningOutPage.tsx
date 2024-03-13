@@ -14,7 +14,7 @@ function DiningOutPage() {
 
   const onSubMenuClick = (subMenuId: string) => {
     setSelectedMenuId(subMenuId);
-    console.log(subMenuId);
+    
   };
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function DiningOutPage() {
       setselectedCategory(selectedCategory);
     }
   }, [selectedMenuId]);
-  console.log(selectedCategory);
+  
   return (
     <>
       <Categories

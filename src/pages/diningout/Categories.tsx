@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { ICategory, ICategoryTitleDispay } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";
@@ -27,18 +27,22 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
           content="Daily Menu"
           description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
         />
-              
       </Box>
+
       {loadedCategories && loadedCategories.length > 0 && (
         <Grid
           container
+          xs={12}
+          sm={6}
+          md={4}
+          lg={"auto"}
           display={"flex"}
           flexDirection={"row"}
           justifyContent={"center"}
           alignItems={"center"}
           columnGap={4}
           marginTop="15px"
-          // sx={{maxWidth:"90%"}}
+          // sx={{ maxWidth: "80%" }}
         >
           <Box>
             <Typography
