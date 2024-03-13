@@ -8,9 +8,6 @@ import {
   IProductAutoComplete,
 } from "../../interface/types";
 import { useEffect, useState } from "react";
-import { MenuType } from "../../enums/MenuTypesEnum";
-import { queryClient } from "../../App";
-import { getAllMenus } from "../../services/api";
 import { useCateringfetchProductData } from "../../customRQHooks/Hooks";
 import { Typography } from "@mui/material";
 
@@ -18,19 +15,30 @@ interface IProps {
   onSelectMenu(menuId: string): void;
   onSelectProduct(productId: string): void;
   selectedMenuId: string;
+  clearSearch(): void;
+  productValue: IProductAutoComplete | null;
+  setProductValue(value: IProductAutoComplete | null): void;
+  menuValue: IMenuAutoComplete | null;
+  setMenuValue(value: IMenuAutoComplete | null): void;
+  cateringMenus: IMenuList[];
+  refetchMenus: () => Promise<void>;
 }
 
-function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
-  const [cateringMenus, setCateringMenus] = useState<IMenuList[]>([]);
-  const [productValue, setProductValue] = useState<IProductAutoComplete | null>(
-    null
-  );
-  const [menuValue, setMenuValue] = useState<IMenuAutoComplete | null>(null);
+function SearchBar({
+  onSelectMenu,
+  onSelectProduct,
+  selectedMenuId,
+  productValue,
+  setProductValue,
+  menuValue,
+  setMenuValue,
+  cateringMenus,
+  refetchMenus,
+}: IProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuClear, setIsMenuClear] = useState(false);
   const [isProductClear, setIsProductClear] = useState(false);
   const [isClearSearchButtonClick, setIsClearButtonClick] = useState(false);
-  const menuList = queryClient.getQueryData<IMenuList[]>(["menus"]);
 
   const { data: cateringProducts, refetch: refetchProductData } =
     useCateringfetchProductData(selectedMenuId, searchTerm);
@@ -68,27 +76,6 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
         menuType: appetizersMenu.menuType,
       });
     }
-  };
-
-  useEffect(() => {
-    if (menuList) {
-      setFilteredCateringMenus(menuList);
-    } else {
-      refetchMenus();
-    }
-  }, [menuList]);
-
-  const refetchMenus = async () => {
-    const _menuList = await queryClient.fetchQuery(["menus"], getAllMenus);
-    setFilteredCateringMenus(_menuList);
-  };
-
-  const setFilteredCateringMenus = (menuList: IMenuList[]) => {
-    var filteredMenus = menuList.filter(
-      (menu) => menu.menuType == MenuType.OTHERS
-    );
-
-    setCateringMenus([...filteredMenus]);
   };
 
   useEffect(() => {
@@ -152,12 +139,7 @@ function SearchBar({ onSelectMenu, onSelectProduct, selectedMenuId }: IProps) {
 
   return (
     <>
-      <Grid
-        container
-        spacing={3}
-        justifyContent="center" // Center horizontally
-        alignItems="center" // Center vertically
-      >
+      <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} lg={4}>
           <Autocomplete
             id="category-autocomplete"

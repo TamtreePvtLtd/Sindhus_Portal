@@ -1,22 +1,34 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import {
-  useGetAllMenus,
-  useGetAllMenusInCatering,
-} from "../../customRQHooks/Hooks";
+import { useGetAllMenusInCatering } from "../../customRQHooks/Hooks";
 import Fade from "react-reveal";
 import theme from "../../theme/theme";
+import {
+  IMenuAutoComplete,
+  IMenuList,
+  IProductAutoComplete,
+} from "../../interface/types";
 
 interface MenusProps {
   onSelectMenu: (menuId: string) => void;
   onNavMenuTitleClick: (menuId: string) => void;
   selectedMenuId: string;
+  clearProductSearch: () => void;
+  setProductValue(value: IProductAutoComplete | null): void;
+  setMenuValue(value: IMenuAutoComplete | null): void;
+  refetchMenus: () => Promise<void>;
+  cateringMenus: IMenuList[];
 }
 
 const Menus = ({
   onSelectMenu,
   onNavMenuTitleClick,
   selectedMenuId,
+  clearProductSearch,
+  setProductValue,
+  setMenuValue,
+  refetchMenus,
+  cateringMenus,
 }: MenusProps) => {
   const {
     data: menus,
@@ -30,6 +42,7 @@ const Menus = ({
   useEffect(() => {
     setHoveredMenuId(selectedMenuId);
     setSelectedMenuIdState(selectedMenuId);
+    clearProductSearch();
   }, [selectedMenuId]);
 
   const getMenuItemsInAlphabeticalOrder = () => {
@@ -59,20 +72,38 @@ const Menus = ({
     }
   }, [selectedMenuId, menus]);
 
-  const handleMenuClick = (menuId: string) => {
-    onSelectMenu(menuId);
-    setSelectedMenuIdState(menuId);
-  };
+  // const handleMenuClick = (menuId: string) => {
+  //   onSelectMenu(menuId);
+  //   setSelectedMenuIdState(menuId);
+  //   clearProductSearch();
+  //   refetchMenus();
+  // };
 
-  const handleNavMenuTitleClick = (menuId: string) => {
-    onNavMenuTitleClick(menuId);
-    setSelectedMenuIdState(menuId);
+  const handleNavMenuTitleClick = (
+    menuId: string,
+    cateringMenus: IMenuList[]
+  ) => {
+    const selectedMenu = cateringMenus.find((menu) => menu._id === menuId);
+    if (selectedMenu) {
+      onNavMenuTitleClick(menuId);
+      setSelectedMenuIdState(menuId);
+      clearProductSearch();
+      setMenuValue({
+        _id: selectedMenu._id,
+        title: selectedMenu.title,
+        menuType: selectedMenu.menuType,
+        label: selectedMenu.title,
+      });
+      setProductValue(null);
+      refetchMenus();
+      onSelectMenu("");
+    }
   };
 
   return (
     <>
       <Box>
-        {menusLoading && <p>Loading menus...</p>}
+        {/* {menusLoading && <p>Loading menus...</p>} */}
         {menusError && <p>Error fetching menus</p>}
 
         {menus && (
@@ -127,7 +158,7 @@ const Menus = ({
                         ? theme.palette.primary.main
                         : "none",
                   }}
-                  onClick={() => handleMenuClick(menu._id)}
+                  // onClick={() => handleMenuClick(menu._id)}
                   onMouseEnter={() => setHoveredMenuId(menu._id)}
                   onMouseLeave={() => setHoveredMenuId(null)}
                 >
@@ -144,7 +175,7 @@ const Menus = ({
                         textTransform: "uppercase",
                       }}
                       onClick={() => {
-                        handleNavMenuTitleClick(menu._id);
+                        handleNavMenuTitleClick(menu._id, cateringMenus);
                         onSelectMenu(menu._id);
                       }}
                     >
