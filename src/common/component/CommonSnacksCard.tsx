@@ -41,7 +41,7 @@ function CommonSnacksCard(props: IProps) {
         margin: "auto",
       }}
     >
-      <Box sx={{ height: "70%", width: "100%", overflow: "hidden" }}>
+      <Box sx={{ height: "77%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
           state={{ previousPath: paths.SNACKS }}
@@ -59,7 +59,9 @@ function CommonSnacksCard(props: IProps) {
           />
         </Link>
       </Box>
-      <CardContent sx={{ height: "30%", overflow: "hidden" }}>
+      <CardContent
+        sx={{ height: "23%", overflow: "hidden", paddingTop: "2px" }}
+      >
         <Typography
           variant="body1"
           sx={{
