@@ -44,21 +44,21 @@ function MenuPage() {
       />
 
       <Container>
-        <Box sx={{ padding: "25px" }}>
+        <Box sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
           <Typography
             variant="h6"
             fontFamily="Dancing Script, cursive"
-            alignItems={"center"}
-            justifyContent={"center"}
+            // alignItems={"center"}
+            // justifyContent={"center"}
             sx={{
               color: theme.palette.primary.main,
               my: 1,
               fontWeight: 700,
               fontSize: "40px",
-              paddingLeft: "17px",
+              paddingLeft: "40px",
               lineHeight: "1.6",
               marginBottom: "10px",
-              width: "40px",
+              // width: "40px",
             }}
           >
             {selectedMenuId && selectedCategory?.menuDatas?.title}
@@ -107,7 +107,7 @@ function MenuPage() {
                                   alignItems={"center"}
                                   justifyContent={"center"}
                                   flexWrap={"wrap"}
-                                  >                               
+                                >
                                   <Typography>{product.title}</Typography>
                                 </Box>
                               </Grid>
