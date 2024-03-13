@@ -6,6 +6,7 @@ import { ISubMenu } from "../../interface/types";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 // import useTheme from "@mui/material/styles/useTheme";
 import { Grid, Typography } from "@mui/material";
+import theme from "../../theme/theme";
 
 interface IProps {
   onSubMenuClick(submenuId: string): void;
@@ -62,13 +63,14 @@ function SnacksMenuItem({
           justifyContent={"center"}
           alignItems={"center"}
           columnGap={4}
+          padding={"20px"}
         >
           <Box>
             <Typography
               sx={{
-                fontWeight: selectedSubMenuId === "" ? 700 : 500,
+                fontWeight: selectedSubMenuId === "" ? 700 : 400,
                 color:
-                  selectedSubMenuId === "" ? "text.primary" : "text.disabled",
+                  selectedSubMenuId === "" ? theme.palette.primary.main : "text.primary",
                 borderBottom:
                   selectedSubMenuId === "" ? "1px solid #038265" : "none",
                 textDecorationColor:
@@ -79,8 +81,8 @@ function SnacksMenuItem({
                 fontFamily: "revert-layer",
                 fontSize: "1.2rem",
                 textTransform: "uppercase",
-                margin: 0,
                 lineHeight: "1",
+                cursor:"pointer",
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -93,22 +95,21 @@ function SnacksMenuItem({
               <Box>
                 <Typography
                   sx={{
-                    fontWeight: selectedSubMenuId === subMenu._id ? 700 : 500,
+                    fontWeight: selectedSubMenuId === subMenu._id ? 700 : 400,
                     color:
-                      selectedSubMenuId === subMenu._id
-                        ? "text.primary"
-                        : "text.disabled",
+                      selectedSubMenuId === subMenu._id ?
+                       theme.palette.primary.main : "text.primary",
                     borderBottom:
                       selectedSubMenuId === subMenu._id
                         ? "1px solid #038265"
                         : "none",
-                    margin: 0,
                     lineHeight: "1",
                     fontFamily: "revert-layer",
                     fontSize: "1.2rem",
                     textTransform: "uppercase",
                     display: "inline-block",
                     textDecoration: "none",
+                    cursor:"pointer",
                     "&:hover": {
                       // Apply styles on hover
                       color: "black",

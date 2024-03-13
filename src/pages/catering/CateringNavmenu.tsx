@@ -139,7 +139,14 @@ const Menus = ({
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
                         ? theme.palette.primary.main
-                        : "text.disabled",
+                        : "black",
+
+                    fontWeight:
+                      selectedMenuIdState === menu._id ||
+                      hoveredMenuId === menu._id
+                        ? 700 // Change this to the desired font weight when selected or hovered
+                        : 200, // Change this to the desired font weight when not selected or hovered
+
                     textDecoration:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
@@ -159,7 +166,11 @@ const Menus = ({
                     <Typography
                       style={{
                         lineHeight: 1,
-                        fontWeight: 700,
+                        fontWeight:
+                          selectedMenuIdState === menu._id ||
+                          hoveredMenuId === menu._id
+                            ? 700 // Change this to the desired font weight when selected or hovered
+                            : 400, // Change this to the desired font weight when not selected or hovered
                         fontSize: "1.2rem",
                         textTransform: "uppercase",
                       }}
