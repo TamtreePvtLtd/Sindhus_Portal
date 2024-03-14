@@ -45,7 +45,7 @@ function CommonProductCard(props: IProps) {
     >
       <Box
         sx={{
-          height: "77%",
+          height: "72%",
           width: "100%",
           overflow: "hidden",
         }}
@@ -68,7 +68,9 @@ function CommonProductCard(props: IProps) {
         </Link>
       </Box>
 
-      <CardContent sx={{ height: "23%", overflow: "hidden", paddingTop: "3px" }}>
+      <CardContent
+        sx={{ height: "28%", overflow: "hidden", paddingTop: "3px" }}
+      >
         <Typography
           variant="body1"
           sx={{
@@ -83,16 +85,16 @@ function CommonProductCard(props: IProps) {
           {product.title}
         </Typography>
 
-        <Box sx={{ mt: "2.5px" }}>
+        <Box>
           {product.dailyMenuSizeWithPrice &&
           product.dailyMenuSizeWithPrice.length > 1 ? (
             <Select
               value={selectedSize || ""}
               onChange={handlePriceChange}
               sx={{
-                padding: "8px 3px",
+                // padding: "8px 3px",
                 borderRadius: "30px",
-                width: "96%",
+                // width: "96%",
                 borderColor: "#038265",
                 borderWidth: "1px",
                 borderStyle: "solid",
