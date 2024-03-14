@@ -94,7 +94,7 @@ function CateringEnquiryForm({ isOpen, onClose }) {
         setFormData(null);
         setTimeout(() => {
           onClose();
-        }, 1000);
+        }, 500);
       }
     } catch (error) {
       updateSnackBarState(
