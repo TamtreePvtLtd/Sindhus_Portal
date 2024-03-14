@@ -15,8 +15,7 @@ import { ICateringEnquiry } from "../../interface/types";
 import { createCateringEnquiry } from "../../services/api";
 import { SnackbarSeverityEnum } from "../../enums/SnackbarSeverityEnum";
 import { useSnackBar } from "../../context/SnackBarContext";
-import Zoom from "react-reveal/Zoom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -73,7 +72,6 @@ function CateringEnquiryForm({ isOpen, onClose }) {
   const handleCloseDialog = () => {
     reset();
     setIsDialogOpen(false);
-    onClose();
   };
 
   const onSubmitCateringEnquiry = async (data: ICateringEnquiry) => {
@@ -86,15 +84,17 @@ function CateringEnquiryForm({ isOpen, onClose }) {
     try {
       if (formData) {
         await createCateringEnquiry(formData);
-        handleOpenDialog();
         updateSnackBarState(
           true,
           "Form submitted successfully",
           SnackbarSeverityEnum.SUCCESS
         );
         reset();
+        handleCloseDialog();
         setFormData(null);
-        handleCloseDialog(); // Close dialog after form submission
+        setTimeout(() => {
+          onClose();
+        }, 500);
       }
     } catch (error) {
       updateSnackBarState(
