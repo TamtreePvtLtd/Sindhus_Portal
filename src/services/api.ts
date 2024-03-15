@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   ICateringEnquiry,
   ICateringMenu,
@@ -239,6 +240,21 @@ const getAllDailyMenus = async () => {
     throw error;
   }
 };
+
+const getAllDiningOutProductsMenuCard = async () => {
+  try {
+    const url = `${
+      import.meta.env.VITE_AXIOS_BASE_URL
+      }diningOut/getAllDiningOutProductsMenuCard`;
+    window.open(url, "_blank");
+    const response = await fetch(url);
+   
+  } catch (error) {
+    console.error("Error fetching dining out products:", error);
+    }
+};
+
+
 const getMenuType3 = async (menuId?: string) => {
   try {
     const response = await httpWithoutCredentials.get<menuWithProduct>(
@@ -270,4 +286,5 @@ export {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
+  getAllDiningOutProductsMenuCard
 };

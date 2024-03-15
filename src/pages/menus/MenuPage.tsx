@@ -1,11 +1,19 @@
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { ICategory } from "../../interface/types";
-import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import Menus from "./Menus";
 import { useGetAllDiningOutProducts } from "../../customRQHooks/Hooks";
 import theme from "../../theme/theme";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { getAllDiningOutProductsMenuCard } from "../../services/api";
 
 function MenuPage() {
   const categoryWithProducts = useGetAllDiningOutProducts();
@@ -32,6 +40,13 @@ function MenuPage() {
   }, [selectedMenuId]);
   console.log(selectedCategory);
 
+  const handlePrint = async () => {
+    try {
+      await getAllDiningOutProductsMenuCard();
+    } catch (error) {
+      console.error("Error downloading XLSheet:", error);
+    }
+  };
   return (
     <>
       <Menus
@@ -42,9 +57,21 @@ function MenuPage() {
         onSubMenuClick={onSubMenuClick}
         selectedSubMenuId={selectedMenuId}
       />
-
+      <Button
+        variant="contained"
+        sx={{ float: "right", padding: "10px",marginRight:"10px" }}
+        onClick={handlePrint}
+      >
+        print
+      </Button>
       <Container>
-        <Box sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Typography
             variant="h6"
             fontFamily="Dancing Script, cursive"
