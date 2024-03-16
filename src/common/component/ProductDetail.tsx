@@ -93,7 +93,7 @@ function ProductDetail() {
                             height: "350px",
                             width: "100%",
                             overflow: "hidden",
-                            border: "1px solid #ddd",
+                            // border: "1px solid #ddd",
                             background: "#fff",
                           }}
                         >
