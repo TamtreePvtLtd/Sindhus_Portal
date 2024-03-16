@@ -45,7 +45,7 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
             <Grid
               item
               xs={4}
-              sm={6}
+              sm={4}
               md={4}
               lg={"auto"}
               display={"flex"}
@@ -87,7 +87,7 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
               <Grid
                 item
                 xs={4}
-                sm={6}
+                sm={4}
                 md={4}
                 lg={"auto"}
                 display={"flex"}

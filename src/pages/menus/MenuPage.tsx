@@ -19,6 +19,7 @@ function MenuPage() {
 
   const onSubMenuClick = (subMenuId: string) => {
     setSelectedMenuId(subMenuId);
+    setselectedCategory(null);
   };
 
   useEffect(() => {
@@ -44,12 +45,10 @@ function MenuPage() {
       />
 
       <Container>
-        <Box sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <Box>
           <Typography
             variant="h6"
             fontFamily="Dancing Script, cursive"
-            // alignItems={"center"}
-            // justifyContent={"center"}
             sx={{
               color: theme.palette.primary.main,
               my: 1,
@@ -58,18 +57,24 @@ function MenuPage() {
               paddingLeft: "40px",
               lineHeight: "1.6",
               marginBottom: "10px",
-              // width: "40px",
+              display: "flex",
+              justifyContent: "start",
             }}
           >
             {selectedMenuId && selectedCategory?.menuDatas?.title}
           </Typography>
+
           <Grid container spacing={2}>
-            {selectedMenuId === "" &&
+            {(!selectedMenuId || selectedMenuId === "") &&
               categoryWithProducts.isSuccess &&
               categoryWithProducts.data?.map((category, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
                   <Card
-                    sx={{ maxWidth: 700, margin: "auto", boxShadow: "none" }}
+                    sx={{
+                      maxWidth: 700,
+                      margin: "auto",
+                      boxShadow: "none",
+                    }}
                   >
                     <CardContent>
                       <Typography
@@ -79,7 +84,6 @@ function MenuPage() {
                           lineHeight: "2",
                           fontSize: "35px",
                           fontWeight: "bold",
-
                           display: "inline-block",
                           textDecoration: "none",
                           textWrap: "wrap",
@@ -102,7 +106,7 @@ function MenuPage() {
                         (product, productIndex) => (
                           <Grid item key={product._id}>
                             <Grid container alignItems="center">
-                              <Grid item xs={5}>
+                              <Grid item xs={5} sm={6} md={4}>
                                 <Box
                                   alignItems={"center"}
                                   justifyContent={"center"}
@@ -117,24 +121,11 @@ function MenuPage() {
                                 md={1}
                                 lg={1}
                                 textAlign="center"
-                                alignItems={"center"}
-                                justifyContent={"center"}
                               >
                                 .....
-                                {/* <ArrowRightIcon
-                                  sx={{
-                                    color: theme.palette.primary.main,
-                                  }}
-                                /> */}
                               </Grid>
-                              <Grid item xs={6}>
-                                <Typography
-                                  alignItems={"center"}
-                                  justifyContent={"center"}
-                                  sx={{
-                                    textWrap: "wrap",
-                                  }}
-                                >
+                              <Grid item xs={6} sm={3} md={4}>
+                                <Typography>
                                   {product.dailyMenuSizeWithPrice &&
                                   product.dailyMenuSizeWithPrice.length > 0
                                     ? product.dailyMenuSizeWithPrice.map(
@@ -163,21 +154,17 @@ function MenuPage() {
             {selectedCategory &&
               selectedCategory.menuDatas &&
               selectedCategory.menuDatas.products.map((product, index) => (
-                <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
-                  <Grid container justifyContent={"flex-start"}>
-                    <Grid item xs={6}>
+                <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
+                  <Grid container justifyContent={"center"}>
+                    <Grid item xs={5} sm={2} md={2}>
                       <Box>
                         <Typography>{product.title}</Typography>
                       </Box>
                     </Grid>
-                    <Grid item xs={1} md={1} textAlign="center">
-                      <ArrowRightIcon
-                        sx={{
-                          color: theme.palette.primary.main,
-                        }}
-                      />
+                    <Grid item xs={1} md={1} sm={2} lg={1} textAlign="center">
+                      .....
                     </Grid>
-                    <Grid item xs={5} textAlign="center">
+                    <Grid item xs={5} md={4} sm={5} textAlign="start">
                       <Typography>
                         {product.dailyMenuSizeWithPrice &&
                         product.dailyMenuSizeWithPrice.length > 0
