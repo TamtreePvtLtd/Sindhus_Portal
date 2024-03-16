@@ -44,7 +44,7 @@ function MenuPage() {
         selectedSubMenuId={selectedMenuId}
       />
 
-      <Container>
+      <Container sx={{ margin: "0 10%" }}>
         <Box>
           <Typography
             variant="h6"
@@ -54,9 +54,9 @@ function MenuPage() {
               my: 1,
               fontWeight: 700,
               fontSize: "40px",
-              paddingLeft: "40px",
+              // paddingLeft: "40px",
               lineHeight: "1.6",
-              marginBottom: "10px",
+              // marginBottom: "10px",
               display: "flex",
               justifyContent: "start",
             }}
@@ -64,7 +64,7 @@ function MenuPage() {
             {selectedMenuId && selectedCategory?.menuDatas?.title}
           </Typography>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ marginBottom: "18px" }}>
             {(!selectedMenuId || selectedMenuId === "") &&
               categoryWithProducts.isSuccess &&
               categoryWithProducts.data?.map((category, index) => (
@@ -155,7 +155,7 @@ function MenuPage() {
               selectedCategory.menuDatas &&
               selectedCategory.menuDatas.products.map((product, index) => (
                 <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
-                  <Grid container justifyContent={"center"}>
+                  <Grid container justifyContent={"start"}>
                     <Grid item xs={5} sm={2} md={2}>
                       <Box>
                         <Typography>{product.title}</Typography>
