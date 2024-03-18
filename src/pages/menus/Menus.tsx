@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { ICategory } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";

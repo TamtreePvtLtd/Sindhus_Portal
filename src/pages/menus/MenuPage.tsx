@@ -44,7 +44,7 @@ function MenuPage() {
         selectedSubMenuId={selectedMenuId}
       />
 
-      <Container sx={{ margin: "0 10%" }}>
+      <Box sx={{ margin: "0 10%" }}>
         <Box>
           <Typography
             variant="h6"
@@ -106,7 +106,7 @@ function MenuPage() {
                         (product, productIndex) => (
                           <Grid item key={product._id}>
                             <Grid container alignItems="center">
-                              <Grid item xs={5} sm={6} md={4}>
+                              <Grid item xs={5} sm={5.2} md={4}>
                                 <Box
                                   alignItems={"center"}
                                   justifyContent={"center"}
@@ -119,12 +119,13 @@ function MenuPage() {
                                 item
                                 xs={1}
                                 md={1}
+                                sm={1}
                                 lg={1}
                                 textAlign="center"
                               >
                                 .....
                               </Grid>
-                              <Grid item xs={6} sm={3} md={4}>
+                              <Grid item xs={6} sm={5} md={4}>
                                 <Typography>
                                   {product.dailyMenuSizeWithPrice &&
                                   product.dailyMenuSizeWithPrice.length > 0
@@ -156,15 +157,15 @@ function MenuPage() {
               selectedCategory.menuDatas.products.map((product, index) => (
                 <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
                   <Grid container justifyContent={"start"}>
-                    <Grid item xs={5} sm={2} md={2}>
+                    <Grid item xs={6} sm={4} md={2}>
                       <Box>
                         <Typography>{product.title}</Typography>
                       </Box>
                     </Grid>
-                    <Grid item xs={1} md={1} sm={2} lg={1} textAlign="center">
+                    <Grid item xs={1} md={2} sm={4} lg={1} textAlign="center">
                       .....
                     </Grid>
-                    <Grid item xs={5} md={4} sm={5} textAlign="start">
+                    <Grid item xs={5} md={4} sm={7} textAlign="start">
                       <Typography>
                         {product.dailyMenuSizeWithPrice &&
                         product.dailyMenuSizeWithPrice.length > 0
@@ -187,7 +188,7 @@ function MenuPage() {
               ))}
           </Grid>
         </Box>
-      </Container>
+      </Box>
     </>
   );
 }
