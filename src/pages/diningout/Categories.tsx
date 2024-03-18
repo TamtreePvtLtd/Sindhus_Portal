@@ -64,6 +64,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                 textTransform: "uppercase",
                 margin: 0,
                 lineHeight: "1",
+                cursor:"pointer",
                 "&:hover": {
                   color: "black",
                 },
@@ -93,6 +94,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                   fontSize: "1.2rem",
                   textTransform: "uppercase",
                   display: "inline-block",
+                  cursor:"pointer",
                   textDecoration: "none",
                   "&:hover": {
                     color: "black",
