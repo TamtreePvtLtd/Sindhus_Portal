@@ -32,10 +32,10 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
       {loadedCategories && loadedCategories.length > 0 && (
         <Grid
           container
-          xs={12}
-          sm={6}
-          md={4}
-          lg={"auto"}
+          // xs={12}
+          // sm={6}
+          // md={6}
+          // lg={"auto"}
           display={"flex"}
           flexDirection={"row"}
           justifyContent={"center"}

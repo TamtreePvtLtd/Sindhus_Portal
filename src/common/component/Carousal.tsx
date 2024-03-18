@@ -49,23 +49,25 @@ function Carousel(props: IProps) {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
+          arrow: false,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          arrows: !isBelowMediumScreen,
+          arrow: false
         },
       },
+      // {
+      //   breakpoint: 480,
+      //   settings: {
+      //     slidesToShow: 1,
+      //     slidesToScroll: 1,
+      //     arrows: !isBelowMediumScreen,
+      //   },
+      // },
     ],
   };
 
