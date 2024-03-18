@@ -134,7 +134,7 @@ function NavBar() {
                 width: isBelowSMScreen ? "3.5rem" : "4rem",
                 marginRight: "10px",
 
-                paddingTop: isBelowSMScreen ? "10px" : "3px",
+                paddingTop: isBelowSMScreen ? "7px" : "3px",
                 paddingLeft: isBelowSMScreen ? "10px" : "0px",
                 cursor: "pointer",
               }}
@@ -150,7 +150,7 @@ function NavBar() {
                   fontFamily: "clearface ts bold",
                   cursor: "pointer",
                   marginTop: "3px",
-                  paddingTop: isBelowSMScreen ? "15px" : "3px",
+                  paddingTop: isBelowSMScreen ? "10px" : "3px",
                 }}
                 onClick={handleNavigateToHome}
               >
@@ -162,6 +162,7 @@ function NavBar() {
                     display: "flex",
                     flexWrap: "wrap",
                     justifyContent: "center",
+                    marginTop: "-7px",
                   }}
                 >
                   <CallIcon />
