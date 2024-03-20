@@ -54,9 +54,7 @@ function MenuPage() {
               my: 1,
               fontWeight: 700,
               fontSize: "40px",
-              // paddingLeft: "40px",
               lineHeight: "1.6",
-              // marginBottom: "10px",
               display: "flex",
               justifyContent: "start",
             }}
@@ -143,6 +141,22 @@ function MenuPage() {
                                       )
                                     : ""}
                                 </Typography>
+                                <Typography>
+                                  {product.itemSizeWithPrice &&
+                                  product.itemSizeWithPrice.length > 0
+                                    ? product.itemSizeWithPrice.map(
+                                        (sizePrice, priceIndex) => (
+                                          <span key={priceIndex}>
+                                            {sizePrice.size}/ ${" "}
+                                            {sizePrice.price.toFixed(2)}
+                                            {priceIndex !==
+                                              product.itemSizeWithPrice.length -
+                                                1 && ", "}
+                                          </span>
+                                        )
+                                      )
+                                    : ""}
+                                </Typography>
                               </Grid>
                             </Grid>
                           </Grid>
@@ -176,6 +190,22 @@ function MenuPage() {
                                   {sizePrice.price.toFixed(2)}
                                   {priceIndex !==
                                     product.dailyMenuSizeWithPrice.length - 1 &&
+                                    ", "}
+                                </span>
+                              )
+                            )
+                          : ""}
+                      </Typography>
+                      <Typography>
+                        {product.itemSizeWithPrice &&
+                        product.itemSizeWithPrice.length > 0
+                          ? product.itemSizeWithPrice.map(
+                              (sizePrice, priceIndex) => (
+                                <span key={priceIndex}>
+                                  {sizePrice.size}/ ${" "}
+                                  {sizePrice.price.toFixed(2)}
+                                  {priceIndex !==
+                                    product.itemSizeWithPrice.length - 1 &&
                                     ", "}
                                 </span>
                               )
