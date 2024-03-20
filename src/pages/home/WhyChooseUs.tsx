@@ -29,23 +29,27 @@ function WhyChooseUs(props: Iprops) {
       >
         <Fade right>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            {/* <Typography
-              variant="h4"
-              fontWeight={"500"}
-              color={"primary"}
-              fontFamily={"revert-layer"}
-            >
-              Why
-            </Typography> */}
-            <Typography
-              variant="h4"
-              fontWeight={"500"}
-              color={"primary"}
-              fontFamily={"revert-layer"}
-              // sx={{ ml: 1 }}
-            >
-              Why SINDHU'S?
-            </Typography>
+            <Box sx={{ display: "flex" }}>
+              <Typography
+                variant="h4"
+                fontWeight={"500"}
+                color={"primary"}
+                fontFamily={"revert-layer"}
+                // sx={{ ml: 1 }}
+              >
+                Why
+              </Typography>
+              <Typography
+                variant="h4"
+                fontWeight={"800"}
+                color={"primary"}
+                sx={{
+                  fontFamily: "clearface ts bold",
+                }}
+              >
+                &nbsp;SINDHU'S
+              </Typography>
+            </Box>
           </Box>
         </Fade>
         <Fade left>
@@ -93,15 +97,6 @@ function WhyChooseUs(props: Iprops) {
                       <Box
                         className={`${classes.overlay} ${classes.centerImage}`}
                       >
-                        {/* <Box
-                          sx={{
-                            fontSize: "6rem",
-                          }}
-                          className={classes.imageWithBorder}
-                        >
-                          {whychoose.imageicon}
-                        </Box> */}
-
                         <Typography gutterBottom variant="h5" fontWeight={400}>
                           {whychoose.title}
                         </Typography>

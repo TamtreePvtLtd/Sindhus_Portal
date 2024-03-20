@@ -16,8 +16,11 @@ interface IProps {
 
 function CommonProductCard(props: IProps) {
   const { product } = props;
-  const [selectedSize, setSelectedSize] = useState(
+  const [selectedSize, setSelectedSize] = useState<string | number>(
     product.dailyMenuSizeWithPrice?.[0]?.size || ""
+  );
+  const [selectedSnackSize, setSelectedSnackSize] = useState<string | number>(
+    product.itemSizeWithPrice?.[0]?.size || ""
   );
 
   useEffect(() => {
@@ -25,13 +28,24 @@ function CommonProductCard(props: IProps) {
       product.dailyMenuSizeWithPrice &&
       product.dailyMenuSizeWithPrice.length > 0
     ) {
-      setSelectedSize(String(product.dailyMenuSizeWithPrice[0]?.price) || "");
+      setSelectedSize(product.dailyMenuSizeWithPrice[0]?.price || "");
     }
-  }, [product.dailyMenuSizeWithPrice]);
+    if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
+      setSelectedSnackSize(product.itemSizeWithPrice[0]?.price || "");
+    }
+  }, [product.dailyMenuSizeWithPrice, product.itemSizeWithPrice]);
 
-  const handlePriceChange = (event: SelectChangeEvent<string>) => {
-    setSelectedSize(event.target.value);
+  const handlePriceChange = (
+    event: SelectChangeEvent<string>,
+    type: string
+  ) => {
+    if (type === "dailyMenuSize") {
+      setSelectedSize(event.target.value);
+    } else if (type === "itemSize") {
+      setSelectedSnackSize(event.target.value);
+    }
   };
+
   return (
     <Card
       sx={{
@@ -90,11 +104,9 @@ function CommonProductCard(props: IProps) {
           product.dailyMenuSizeWithPrice.length > 1 ? (
             <Select
               value={selectedSize || ""}
-              onChange={handlePriceChange}
+              onChange={(event) => handlePriceChange(event, "dailyMenuSize")}
               sx={{
-                // padding: "8px 3px",
                 borderRadius: "30px",
-                // width: "96%",
                 borderColor: "#038265",
                 borderWidth: "1px",
                 borderStyle: "solid",
@@ -110,11 +122,8 @@ function CommonProductCard(props: IProps) {
                   sx={{
                     display: "flex",
                     justifyContent: "flex-start",
-
                     fontSize: "13px",
-
                     alignItems: "center",
-
                     "&:hover": {
                       backgroundColor: "#57ccb5",
                     },
@@ -133,6 +142,40 @@ function CommonProductCard(props: IProps) {
                 : ""}
             </Typography>
           )}
+
+          {product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0 ? (
+            <Select
+              value={selectedSnackSize || ""}
+              onChange={(event) => handlePriceChange(event, "itemSize")}
+              sx={{
+                borderRadius: "30px",
+                borderColor: "#038265",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                color: "#038265",
+                height: "30px",
+                fontWeight: 500,
+              }}
+            >
+              {product.itemSizeWithPrice.map((item, index) => (
+                <MenuItem
+                  key={item._id}
+                  value={item.price}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    fontSize: "13px",
+                    alignItems: "center",
+                    "&:hover": {
+                      backgroundColor: "#57ccb5",
+                    },
+                  }}
+                >
+                  {item.size} - ${item.price}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : null}
         </Box>
       </CardContent>
     </Card>

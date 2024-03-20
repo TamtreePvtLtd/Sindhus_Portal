@@ -114,7 +114,7 @@ export interface ICategory {
   title: string;
   image?: string;
   products?: IProduct[];
-}
+  }
 export interface ICategoryTitleDispay {
   menuDatas: ICategory;
 }
@@ -123,8 +123,8 @@ export interface ICategoryWithProducts {
 }
 
 export interface IMenuDatas {
-  _id: string;
-  title: string;
+  _id?: string;
+  title?: string;
   image?: string;
   menuType?: number;
   products?: IProductDinnigOut[];
@@ -155,9 +155,15 @@ export interface IProductDinnigOut {
   netWeight: number;
   price: number | null;
   dailyMenuSizeWithPrice: DailyMenuSizeWithPrice[] | null;
+  itemSizeWithPrice: ItemSizeWithPrice[] | null;
 }
 
 export interface DailyMenuSizeWithPrice {
+  size: string;
+  price: number;
+  _id: string;
+}
+export interface ItemSizeWithPrice {
   size: string;
   price: number;
   _id: string;
