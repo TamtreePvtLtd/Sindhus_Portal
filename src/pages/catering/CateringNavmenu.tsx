@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useGetAllMenusInCatering } from "../../customRQHooks/Hooks";
 import Fade from "react-reveal";
@@ -102,51 +102,50 @@ const Menus = ({
 
   return (
     <>
-      <Box>
-        {/* {menusLoading && <p>Loading menus...</p>} */}
-        {menusError && <p>Error fetching menus</p>}
+      {/* {menusLoading && <p>Loading menus...</p>} */}
+      {menusError && <p>Error fetching menus</p>}
 
-        {menus && (
-          <Grid
-            container
-            spacing={4}
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              alignItems: "space-around",
-              margin: "auto",
-              maxWidth: "88%",
-              marginTop: "15px",
-            }}
-          >
-            {getMenuItemsInAlphabeticalOrder().map((menu) => (
-              <Grid
-                item
-                key={menu._id}
-                xs={6}
-                sm={4}
-                md={3}
-                lg="auto"
-                sx={{ paddingTop: "15px !important" }}
-              >
-                <Box
-                  sx={{
+      {menus && (
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          marginTop="15px"
+          marginRight={"-15px"}
+          spacing={2}
+          width={"100%"}
+        >
+          {getMenuItemsInAlphabeticalOrder().map((menu) => (
+            <Grid
+              item
+              xs={6}
+              sm={6}
+              md={3}
+              lg={"auto"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              paddingX={"20px"}
+            >
+              <Fade Left>
+                <Typography
+                  style={{
+                    lineHeight: 1,
+                    fontWeight:
+                      selectedMenuIdState === menu._id ||
+                      hoveredMenuId === menu._id
+                        ? 700
+                        : 400,
+                    fontSize: "1.2rem",
+                    textTransform: "uppercase",
                     textAlign: "center",
-                    paddingX: "20px",
+                    margin: 0,
                     cursor: "pointer",
                     color:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
                         ? theme.palette.primary.main
                         : "black",
-
-                    fontWeight:
-                      selectedMenuIdState === menu._id ||
-                      hoveredMenuId === menu._id
-                        ? 700 // Change this to the desired font weight when selected or hovered
-                        : 200, // Change this to the desired font weight when not selected or hovered
-
                     textDecoration:
                       selectedMenuIdState === menu._id ||
                       hoveredMenuId === menu._id
@@ -158,36 +157,18 @@ const Menus = ({
                         ? theme.palette.primary.main
                         : "none",
                   }}
-                  // onClick={() => handleMenuClick(menu._id)}
-                  onMouseEnter={() => setHoveredMenuId(menu._id)}
-                  onMouseLeave={() => setHoveredMenuId(null)}
+                  onClick={() => {
+                    handleNavMenuTitleClick(menu._id, cateringMenus);
+                    onSelectMenu(menu._id);
+                  }}
                 >
-                  <Fade left>
-                    <Typography
-                      style={{
-                        lineHeight: 1,
-                        fontWeight:
-                          selectedMenuIdState === menu._id ||
-                          hoveredMenuId === menu._id
-                            ? 700 // Change this to the desired font weight when selected or hovered
-                            : 400, // Change this to the desired font weight when not selected or hovered
-                        fontSize: "1.2rem",
-                        textTransform: "uppercase",
-                      }}
-                      onClick={() => {
-                        handleNavMenuTitleClick(menu._id, cateringMenus);
-                        onSelectMenu(menu._id);
-                      }}
-                    >
-                      {menu.title}
-                    </Typography>
-                  </Fade>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
+                  {menu.title}
+                </Typography>
+              </Fade>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </>
   );
 };

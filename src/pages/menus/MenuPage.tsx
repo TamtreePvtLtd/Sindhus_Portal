@@ -7,7 +7,6 @@ import { useGetAllDiningOutProducts } from "../../customRQHooks/Hooks";
 import theme from "../../theme/theme";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
-
 function MenuPage() {
   const categoryWithProducts = useGetAllDiningOutProducts();
 
@@ -63,7 +62,7 @@ function MenuPage() {
             {selectedMenuId && selectedCategory?.menuDatas?.title}
           </Typography>
 
-          <Grid container spacing={2} >
+          <Grid container spacing={2} marginBottom={"18px"}>
             {(!selectedMenuId || selectedMenuId === "") &&
               categoryWithProducts.isSuccess &&
               categoryWithProducts.data?.map((category, index) => (
@@ -83,7 +82,7 @@ function MenuPage() {
                       boxShadow: "none",
                     }}
                   >
-                    <CardContent  sx={{paddingTop:0}} >
+                    <CardContent sx={{ paddingTop: 0 }}>
                       <Typography
                         variant="h6"
                         fontFamily="Dancing Script, cursive"
@@ -95,7 +94,6 @@ function MenuPage() {
                           textDecoration: "none",
                           textWrap: "wrap",
                           color: theme.palette.primary.main,
-                         
 
                           "&:hover": {
                             color: "black",
@@ -114,7 +112,7 @@ function MenuPage() {
                         (product, productIndex) => (
                           <Grid item key={product._id}>
                             <Grid container alignItems="center">
-                              <Grid item xs={5} sm={5.2} md={4} sm={6}>
+                              <Grid item xs={5} md={4} sm={6}>
                                 <Box
                                   alignItems={"center"}
                                   justifyContent={"center"}
