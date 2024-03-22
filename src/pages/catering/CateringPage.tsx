@@ -151,7 +151,7 @@ function CateringPage() {
           onClose={handleEnquiryButtonCloseClick}
           isOpen={isEnquiryFormOpen}
         />
-      )}{" "}
+      )}
     </>
   );
 }
