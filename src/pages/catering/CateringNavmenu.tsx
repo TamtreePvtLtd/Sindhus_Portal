@@ -159,8 +159,8 @@ const Menus = ({
                         : "none",
                   }}
                   // onClick={() => handleMenuClick(menu._id)}
-                  onMouseEnter={() => setHoveredMenuId(menu._id)}
-                  onMouseLeave={() => setHoveredMenuId(null)}
+                  // onMouseEnter={() => setHoveredMenuId(menu._id)}
+                  // onMouseLeave={() => setHoveredMenuId(null)}
                 >
                   <Fade left>
                     <Typography
