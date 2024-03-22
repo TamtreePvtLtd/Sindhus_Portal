@@ -30,6 +30,7 @@ export const useCommonGridStyle = makeStyles(() => ({
   innerBox: {
     "& .MuiTypography-root, & .MuiGrid-root": {
       zIndex: 4,
+      padding: 0,
     },
   },
 }));

@@ -69,6 +69,16 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
   }, [cateringResponse?.items]);
 
   useEffect(() => {
+    let timeoutId;
+    if (!selectedMenuId) {
+      timeoutId = setTimeout(() => {
+        refetchProducts();
+      }, 100);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [selectedMenuId]);
+
+  useEffect(() => {
     if (pageNum > 0) refetchProducts();
 
     if (pageNum <= 0 && (selectedMenuId != "" || selectedProductId != "")) {

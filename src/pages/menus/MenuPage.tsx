@@ -7,6 +7,7 @@ import { useGetAllDiningOutProducts } from "../../customRQHooks/Hooks";
 import theme from "../../theme/theme";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
+
 function MenuPage() {
   const categoryWithProducts = useGetAllDiningOutProducts();
 
@@ -62,11 +63,19 @@ function MenuPage() {
             {selectedMenuId && selectedCategory?.menuDatas?.title}
           </Typography>
 
-          <Grid container spacing={2} sx={{ marginBottom: "18px" }}>
+          <Grid container spacing={2} >
             {(!selectedMenuId || selectedMenuId === "") &&
               categoryWithProducts.isSuccess &&
               categoryWithProducts.data?.map((category, index) => (
-                <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  key={index}
+                  style={{ padding: 0 }}
+                >
                   <Card
                     sx={{
                       maxWidth: 700,
@@ -74,7 +83,7 @@ function MenuPage() {
                       boxShadow: "none",
                     }}
                   >
-                    <CardContent>
+                    <CardContent  sx={{paddingTop:0}} >
                       <Typography
                         variant="h6"
                         fontFamily="Dancing Script, cursive"
@@ -86,6 +95,7 @@ function MenuPage() {
                           textDecoration: "none",
                           textWrap: "wrap",
                           color: theme.palette.primary.main,
+                         
 
                           "&:hover": {
                             color: "black",
@@ -104,7 +114,7 @@ function MenuPage() {
                         (product, productIndex) => (
                           <Grid item key={product._id}>
                             <Grid container alignItems="center">
-                              <Grid item xs={5} sm={5.2} md={4}>
+                              <Grid item xs={5} sm={5.2} md={4} sm={6}>
                                 <Box
                                   alignItems={"center"}
                                   justifyContent={"center"}
@@ -123,7 +133,7 @@ function MenuPage() {
                               >
                                 .....
                               </Grid>
-                              <Grid item xs={6} sm={5} md={4}>
+                              <Grid item xs={6} sm={5} md={5} paddingLeft={2}>
                                 <Typography>
                                   {product.dailyMenuSizeWithPrice &&
                                   product.dailyMenuSizeWithPrice.length > 0
@@ -176,10 +186,17 @@ function MenuPage() {
                         <Typography>{product.title}</Typography>
                       </Box>
                     </Grid>
-                    <Grid item xs={1} md={2} sm={4} lg={1} textAlign="center">
+                    <Grid item xs={1} md={2} sm={1} lg={1} textAlign="center">
                       .....
                     </Grid>
-                    <Grid item xs={5} md={4} sm={7} textAlign="start">
+                    <Grid
+                      item
+                      xs={5}
+                      md={4}
+                      sm={5}
+                      textAlign="start"
+                      paddingLeft={1}
+                    >
                       <Typography>
                         {product.dailyMenuSizeWithPrice &&
                         product.dailyMenuSizeWithPrice.length > 0

@@ -131,6 +131,7 @@ function SearchBar({
     if (selectedMenu) {
       setMenuValue(selectedMenu);
       onSelectMenu(selectedMenu._id);
+      setProductValue(null);
     } else {
       setMenuValue(null);
       onSelectMenu("");

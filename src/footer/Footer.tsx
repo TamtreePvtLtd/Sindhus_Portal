@@ -65,7 +65,7 @@ function Footer() {
         className={`${classes.footerContainer} ${classes.innerBox}`}
       >
         <Box className={classes.overlay}></Box>
-        <Container sx={{ paddingBottom: 2, pt: 2 }}>
+        <Container >
           <Fade top>
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
               <Typography variant="h4" fontWeight={400}>
@@ -84,7 +84,7 @@ function Footer() {
                 justifyContent: "center",
               }}
             >
-              <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
+              <Grid item lg={3} xs={12} className={classes.commonGridStyle} >
                 <Fade left>
                   <Box sx={{ my: 1 }}>
                     <LocationOnIcon
@@ -121,7 +121,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "gray", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "15px" }}
               />
               <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
                 <Fade bottom delay={300}>
@@ -186,7 +186,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "gray", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "20px" }}
               />
               <Grid item lg={2.9} xs={12} className={classes.commonGridStyle}>
                 <Fade bottom delay={400}>
@@ -284,7 +284,7 @@ function Footer() {
               <Divider
                 orientation="vertical"
                 flexItem
-                sx={{ background: "gray", marginBottom: "25px" }}
+                sx={{ background: "gray", marginBottom: "15px" }}
               />
               <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
                 <Box sx={{ my: 1 }}>
