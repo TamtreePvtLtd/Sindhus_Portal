@@ -90,7 +90,7 @@ function ProductDetail() {
                       <Card sx={{ boxShadow: "none" }}>
                         <Box
                           sx={{
-                            height: "350px",
+                            height: isBelowMediumSize ? "auto" : "350px",
                             width: "100%",
                             overflow: "hidden",
                             // border: "1px solid #ddd",
@@ -117,8 +117,9 @@ function ProductDetail() {
                 <>
                   <Typography
                     sx={{
-                      fontWeight: "bolder",
-                      fontSize: "20px",
+                      fontWeight: 800,
+                      fontSize: "22px",
+                      marginBottom: "10px",
                     }}
                   >
                     {menuDetail.title}
@@ -134,7 +135,7 @@ function ProductDetail() {
                       SINDHU'S&nbsp;
                     </Typography>
                   </Typography> */}
-                  <Divider sx={{ margin: "10px 0" }} />
+                  {/* <Divider sx={{ margin: "10px 0" }} /> */}
                   <Typography
                     sx={{
                       fontSize: "18px",
@@ -223,7 +224,11 @@ function ProductDetail() {
                             (sizePrice) => (
                               <Typography
                                 key={sizePrice._id}
-                                sx={{ color: "#038265", fontWeight: 500 }}
+                                sx={{
+                                  color: "#038265",
+                                  fontWeight: 500,
+                                  marginBottom: "8px",
+                                }}
                               >
                                 <span
                                   style={{ color: "#038265", fontWeight: 500 }}
@@ -237,6 +242,40 @@ function ProductDetail() {
                         </>
                       ) : (
                         <>
+                          {menuDetail.itemSizeWithPrice &&
+                            menuDetail.itemSizeWithPrice.length > 0 && (
+                              
+                               <>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                fontSize: "18px",
+                                fontWeight: "600",
+                                marginTop: "8px",
+                              }}
+                            >
+                              Size(s) with Prices:
+                            </Typography>
+                            {menuDetail.itemSizeWithPrice.map((item, index) => (
+                              <div key={index}>
+                                <Typography
+                                  key={item._id}
+                                  sx={{ color: "#038265", fontWeight: 500 }}
+                                >
+                                  <span
+                                    style={{
+                                      color: "#038265",
+                                      fontWeight: 500,
+                                    }}
+                                  >
+                                    {item.size}-
+                                  </span>
+                                  &nbsp;${item.price}
+                                </Typography>
+                              </div>
+                            ))}
+                          </>
+                            )}
                           {isFromSnacks && (
                             <>
                               {menuDetail.itemSizeWithPrice &&

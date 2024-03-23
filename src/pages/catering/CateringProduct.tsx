@@ -69,6 +69,16 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
   }, [cateringResponse?.items]);
 
   useEffect(() => {
+    let timeoutId;
+    if (!selectedMenuId) {
+      timeoutId = setTimeout(() => {
+        refetchProducts();
+      }, 100);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [selectedMenuId]);
+
+  useEffect(() => {
     if (pageNum > 0) refetchProducts();
 
     if (pageNum <= 0 && (selectedMenuId != "" || selectedProductId != "")) {
@@ -232,7 +242,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                   my: 1,
                   fontWeight: 700,
                   fontSize: "40px",
-                  paddingLeft: "17px",
+                  paddingLeft: "20px",
                   lineHeight: "1.6",
                   marginBottom: "20px",
                 }}
@@ -269,7 +279,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                               height: "150px",
                               width: "150px",
                               marginBottom: "20px",
-                              marginLeft: "10px",
+                              marginLeft: "20px",
                             }}
                           >
                             <img
@@ -290,6 +300,7 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                         sx={{
                           paddingLeft: "20px",
                           paddingRight: "15px",
+                          marginBottom: "10px",
                           paddingTop: 0,
                           mt: { xs: -2, md: -1 },
                         }}
@@ -319,7 +330,12 @@ function CateringProduct({ selectedMenuId, selectedProductId }: IProps) {
                           </Typography>
                         )}
                       </Grid>
-                      <Grid item xs={12} lg={3} sx={{ paddingTop: 0 }}>
+                      <Grid
+                        item
+                        xs={12}
+                        lg={3}
+                        sx={{ paddingTop: 0, marginX: "20px" }}
+                      >
                         {product.cateringMenuSizeWithPrice &&
                           product.cateringMenuSizeWithPrice.length > 0 && (
                             <TableContainer>

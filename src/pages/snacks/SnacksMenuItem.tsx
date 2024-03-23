@@ -53,7 +53,6 @@ function SnacksMenuItem({
   //     },
   //   ],
   // };
-
   return (
     <>
       {snacksSubMenus && snacksSubMenus.length > 0 && (
@@ -63,14 +62,16 @@ function SnacksMenuItem({
           justifyContent={"center"}
           alignItems={"center"}
           columnGap={4}
-          padding={"20px"}
+          padding={"15px"}
         >
           <Box>
             <Typography
               sx={{
                 fontWeight: selectedSubMenuId === "" ? 700 : 400,
                 color:
-                  selectedSubMenuId === "" ? theme.palette.primary.main : "text.primary",
+                  selectedSubMenuId === ""
+                    ? theme.palette.primary.main
+                    : "text.primary",
                 borderBottom:
                   selectedSubMenuId === "" ? "1px solid #038265" : "none",
                 textDecorationColor:
@@ -82,7 +83,7 @@ function SnacksMenuItem({
                 fontSize: "1.2rem",
                 textTransform: "uppercase",
                 lineHeight: "1",
-                cursor:"pointer",
+                cursor: "pointer",
               }}
               onClick={() => onSubMenuClick("")}
             >
@@ -97,8 +98,9 @@ function SnacksMenuItem({
                   sx={{
                     fontWeight: selectedSubMenuId === subMenu._id ? 700 : 400,
                     color:
-                      selectedSubMenuId === subMenu._id ?
-                       theme.palette.primary.main : "text.primary",
+                      selectedSubMenuId === subMenu._id
+                        ? theme.palette.primary.main
+                        : "text.primary",
                     borderBottom:
                       selectedSubMenuId === subMenu._id
                         ? "1px solid #038265"
@@ -109,7 +111,7 @@ function SnacksMenuItem({
                     textTransform: "uppercase",
                     display: "inline-block",
                     textDecoration: "none",
-                    cursor:"pointer",
+                    cursor: "pointer",
                     "&:hover": {
                       // Apply styles on hover
                       color: "black",

@@ -32,19 +32,22 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
       {loadedCategories && loadedCategories.length > 0 && (
         <Grid
           container
-          // xs={12}
-          // sm={6}
-          // md={6}
-          // lg={"auto"}
-          display={"flex"}
-          flexDirection={"row"}
-          justifyContent={"center"}
-          alignItems={"center"}
+          justifyContent="center"
+          alignItems="center"
           columnGap={4}
           marginTop="15px"
-          // sx={{ maxWidth: "80%" }}
         >
-          <Box>
+          <Grid
+            item
+            xs={4}
+            sm={4}
+            md={4}
+            lg={"auto"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            key={"all-category"}
+          >
             <Typography
               sx={{
                 fontWeight: selectedSubMenuId === "" ? 700 : 500,
@@ -64,7 +67,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                 textTransform: "uppercase",
                 margin: 0,
                 lineHeight: "1",
-                cursor:"pointer",
+                cursor: "pointer",
                 "&:hover": {
                   color: "black",
                 },
@@ -73,10 +76,20 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
             >
               All
             </Typography>
-          </Box>
+          </Grid>
 
           {loadedCategories.map((category) => (
-            <Box key={category._id}>
+            <Grid
+              item
+              xs={4}
+              sm={4}
+              md={4}
+              lg={"auto"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              key={category._id}
+            >
               <Typography
                 sx={{
                   fontWeight: selectedSubMenuId === category._id ? 700 : 400,
@@ -93,8 +106,11 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                   fontFamily: "revert-layer",
                   fontSize: "1.2rem",
                   textTransform: "uppercase",
+
+                  textWrap: "nowrap",
                   display: "inline-block",
-                  cursor:"pointer",
+                  cursor: "pointer",
+
                   textDecoration: "none",
                   "&:hover": {
                     color: "black",
@@ -104,7 +120,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
               >
                 {category.title}
               </Typography>
-            </Box>
+            </Grid>
           ))}
         </Grid>
       )}
