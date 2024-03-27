@@ -1,0 +1,9 @@
+.google-review-modal .rating-stars {
+  font-size: 20px;
+  color: #fbbc05;
+}
+
+.google-review-modal .empty-star {
+  color: #e0e0e0;
+  font-size: 20px; 
+}
