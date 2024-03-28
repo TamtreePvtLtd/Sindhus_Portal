@@ -72,13 +72,6 @@ const Menus = ({
     }
   }, [selectedMenuId, menus]);
 
-  // const handleMenuClick = (menuId: string) => {
-  //   onSelectMenu(menuId);
-  //   setSelectedMenuIdState(menuId);
-  //   clearProductSearch();
-  //   refetchMenus();
-  // };
-
   const handleNavMenuTitleClick = (
     menuId: string,
     cateringMenus: IMenuList[]

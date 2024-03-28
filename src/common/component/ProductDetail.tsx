@@ -93,7 +93,6 @@ function ProductDetail() {
                             height: isBelowMediumSize ? "auto" : "350px",
                             width: "100%",
                             overflow: "hidden",
-                            // border: "1px solid #ddd",
                             background: "#fff",
                           }}
                         >
@@ -124,18 +123,6 @@ function ProductDetail() {
                   >
                     {menuDetail.title}
                   </Typography>
-                  {/* <Typography sx={{ mt: 1, display: "flex" }}>
-                    <Typography>By&nbsp;&nbsp; </Typography>
-                    <Typography
-                      sx={{
-                        fontFamily: "clearface ts bold",
-                        color: theme.palette.primary.main,
-                      }}
-                    >
-                      SINDHU'S&nbsp;
-                    </Typography>
-                  </Typography> */}
-                  {/* <Divider sx={{ margin: "10px 0" }} /> */}
                   <Typography
                     sx={{
                       fontSize: "18px",
@@ -212,9 +199,6 @@ function ProductDetail() {
                             sx={{
                               fontSize: "18px",
                               fontWeight: "600",
-                              // fontSize: "18px",
-                              // fontWeight: "500",
-                              // margin: "8px 0",
                               marginTop: "8px",
                             }}
                           >
@@ -244,37 +228,41 @@ function ProductDetail() {
                         <>
                           {menuDetail.itemSizeWithPrice &&
                             menuDetail.itemSizeWithPrice.length > 0 && (
-                              
-                               <>
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                fontSize: "18px",
-                                fontWeight: "600",
-                                marginTop: "8px",
-                              }}
-                            >
-                              Size(s) with Prices:
-                            </Typography>
-                            {menuDetail.itemSizeWithPrice.map((item, index) => (
-                              <div key={index}>
+                              <>
                                 <Typography
-                                  key={item._id}
-                                  sx={{ color: "#038265", fontWeight: 500 }}
+                                  variant="h6"
+                                  sx={{
+                                    fontSize: "18px",
+                                    fontWeight: "600",
+                                    marginTop: "8px",
+                                  }}
                                 >
-                                  <span
-                                    style={{
-                                      color: "#038265",
-                                      fontWeight: 500,
-                                    }}
-                                  >
-                                    {item.size}-
-                                  </span>
-                                  &nbsp;${item.price}
+                                  Size(s) with Prices:
                                 </Typography>
-                              </div>
-                            ))}
-                          </>
+                                {menuDetail.itemSizeWithPrice.map(
+                                  (item, index) => (
+                                    <div key={index}>
+                                      <Typography
+                                        key={item._id}
+                                        sx={{
+                                          color: "#038265",
+                                          fontWeight: 500,
+                                        }}
+                                      >
+                                        <span
+                                          style={{
+                                            color: "#038265",
+                                            fontWeight: 500,
+                                          }}
+                                        >
+                                          {item.size}-
+                                        </span>
+                                        &nbsp;${item.price}
+                                      </Typography>
+                                    </div>
+                                  )
+                                )}
+                              </>
                             )}
                           {isFromSnacks && (
                             <>
