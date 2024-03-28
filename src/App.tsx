@@ -27,9 +27,9 @@ const ProductDetailComponent = lazy(
   () => import("./common/component/ProductDetail")
 );
 
-const CategoryProductComponent = lazy(
-  () => import("./pages/diningout/CategoryProduct")
-);
+// const CategoryProductComponent = lazy(
+//   () => import("./pages/diningout/CategoryProduct")
+// );
 
 function App() {
   return (
@@ -60,10 +60,10 @@ function App() {
                     path={paths.PRODUCTDETAIL}
                     element={<ProductDetailComponent />}
                   />
-                  <Route
+                  {/* <Route
                     path={paths.PRODUCTSBYCATEGORY}
                     element={<CategoryProductComponent />}
-                  />
+                  /> */}
                 </Route>
               </Routes>
             </Suspense>

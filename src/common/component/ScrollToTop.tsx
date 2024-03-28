@@ -40,7 +40,6 @@ const ScrollToTop = () => {
             width: "40px",
             cursor: "pointer",
             backgroundColor: "#038265",
-            // boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
             zIndex: 99,
             borderRadius: "50%",
           }}

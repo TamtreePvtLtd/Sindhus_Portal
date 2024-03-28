@@ -113,10 +113,8 @@ function SnacksMenuItem({
                     textDecoration: "none",
                     cursor: "pointer",
                     "&:hover": {
-                      // Apply styles on hover
                       color: "black",
                     },
-                    // marginTop: "15px",
                   }}
                   onClick={() => onSubMenuClick(subMenu._id)}
                 >

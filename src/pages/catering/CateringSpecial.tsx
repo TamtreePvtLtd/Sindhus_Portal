@@ -15,9 +15,7 @@ function CateringSpecial() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // backgroundColor: "#0382657",
-          backgroundColor: "#f5c03d ", // Add background color here
-
+          backgroundColor: "#f5c03d ",
           boxShadow: 2,
           borderRadius: "10px",
         }}
@@ -35,8 +33,7 @@ function CateringSpecial() {
   const iconStyles = {
     color: theme.palette.primary.main,
     fontSize: "8rem",
-    backgroundColor: "#f5c03d ", // Add background color here
-
+    backgroundColor: "#f5c03d ",
     p: 4,
   };
 
@@ -60,7 +57,7 @@ function CateringSpecial() {
   ];
 
   return (
-    <Container >
+    <Container>
       <Grid container spacing={1}>
         <Grid item lg={4} xs={12}>
           {cateringSpecialData.slice(0, 2).map((special) => (
