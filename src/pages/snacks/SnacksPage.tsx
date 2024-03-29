@@ -26,7 +26,7 @@ function SnacksPage() {
     <>
       <Box>
         <PageBanner
-          imageUrl="assets/images/snacks-banner.jpg"
+          imageUrl="public/assets/snacks-banner.jpg"
           content="Snacks"
           description="Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!"
         />
