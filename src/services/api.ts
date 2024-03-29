@@ -153,7 +153,7 @@ const getProductsByMenuIdWithSearchTerm = async (
       return [];
     }
 
-    if (searchTerm && searchTerm.length >= 3) {
+    if (searchTerm && searchTerm.length >= 1) {
       homePageProduct += `?searchTerm=${searchTerm}`;
     }
     const response = await httpWithoutCredentials.get<IProductDropDownData[]>(
