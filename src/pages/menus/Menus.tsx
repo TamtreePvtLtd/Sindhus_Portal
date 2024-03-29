@@ -23,7 +23,7 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
     <>
       <Box>
         <PageBanner
-          imageUrl="public/assets/sindhu-kitchen.avif"
+          imageUrl="assets/sindhu-kitchen-menu-banner.jpg"
           content="Menu"
           description="Tantalizing glimpse into the culinary delights awaiting you at our restaurant"
         />
