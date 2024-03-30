@@ -35,6 +35,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
           justifyContent="center"
           alignItems="center"
           columnGap={4}
+          spacing={2}
           marginTop="15px"
         >
           <Grid
@@ -102,7 +103,7 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                       ? "1px solid #038265"
                       : "none",
                   margin: 0,
-                  lineHeight: "2",
+                  lineHeight: "1.2",
                   fontFamily: "revert-layer",
                   fontSize: "1.2rem",
                   textTransform: "uppercase",
