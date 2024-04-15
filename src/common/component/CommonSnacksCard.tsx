@@ -3,13 +3,14 @@ import { IProductCardList } from "../../interface/types";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import useTheme from "@mui/material/styles/useTheme";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { paths } from "../../routes/path";
 import { useEffect, useState } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 interface IProps {
   product: IProductCardList;
@@ -18,7 +19,6 @@ interface IProps {
 function CommonSnacksCard(props: IProps) {
   const { product } = props;
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
-  const theme = useTheme();
 
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
@@ -35,13 +35,13 @@ function CommonSnacksCard(props: IProps) {
       sx={{
         mr: 2,
         width: "200px",
-        height: "260px",
+        height: "285px",
         border: "1px solid #ddd",
         boxShadow: "none",
         margin: "auto",
       }}
     >
-      <Box sx={{ height: "72%", width: "100%", overflow: "hidden" }}>
+      <Box sx={{ height: "60%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
           state={{ previousPath: paths.SNACKS }}
@@ -60,7 +60,7 @@ function CommonSnacksCard(props: IProps) {
         </Link>
       </Box>
       <CardContent
-        sx={{ height: "28%", overflow: "hidden", paddingTop: "2px" }}
+        sx={{ height: "40%", overflow: "hidden", paddingTop: "2px"}}
       >
         <Typography
           variant="body1"
@@ -93,7 +93,7 @@ function CommonSnacksCard(props: IProps) {
                 fontWeight: 500,
               }}
             >
-              {product.itemSizeWithPrice.map((priceItem, index) => (
+              {product.itemSizeWithPrice.map((priceItem) => (
                 <MenuItem
                   key={priceItem._id}
                   value={priceItem.price}
@@ -120,6 +120,37 @@ function CommonSnacksCard(props: IProps) {
                 : ""}
             </Typography>
           )}
+        </Box>
+        <Box
+          marginY={1}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginRight:"5px"
+          }}
+        >
+          <Button
+            sx={{
+              border: "1.5px solid #038265",
+              borderRadius: "30px",
+              fontSize: "13px",
+              color: "#038265",
+              fontWeight: 700,
+              padding: "2px",
+              width: "159px",
+              height:"32px",
+              textAlign:"center",
+              textJustify:"center",
+              "&:hover": {
+                backgroundColor: "#038265",
+                color: "white",
+              },
+            }}
+            startIcon={<AddShoppingCartIcon />}
+          >
+            Add to Cart
+          </Button>
         </Box>
       </CardContent>
     </Card>

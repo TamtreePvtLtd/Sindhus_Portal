@@ -5,7 +5,6 @@ import { fetchProductById } from "../../services/api";
 import { IProduct } from "../../interface/types";
 import { useSnackBar } from "../../context/SnackBarContext";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
@@ -13,11 +12,13 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 function ProductDetail() {
   const settings = {
@@ -32,7 +33,7 @@ function ProductDetail() {
   const { productId } = useParams();
   const { updateSnackBarState } = useSnackBar();
   const [menuDetail, setMenuDetail] = useState<IProduct>();
-
+  const [quantity, setQuantity] = useState<number>(0);
   const { state } = useLocation();
 
   const isFromCatering = state && state.previousPath === paths.CATERING;
@@ -56,6 +57,16 @@ function ProductDetail() {
   useEffect(() => {
     fetchProductDetail();
   }, []);
+
+  const handleDecrement = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
 
   return (
     <Container>
@@ -296,8 +307,10 @@ function ProductDetail() {
                                         </div>
                                       )
                                     )}
+                                    
                                   </>
                                 )}
+                                
                             </>
                           )}
                         </>
@@ -343,6 +356,68 @@ function ProductDetail() {
                             ))}
                           </>
                         )}
+                                      <Box sx={{marginTop:2}}>
+                                        <ButtonGroup
+                                          sx={{
+                                            lineHeight: 1,
+                                            padding: 0,
+                                            border: "1px solid #038265",
+                                            "& .MuiButtonGroup-grouped": {
+                                              minWidth: "32px",
+                                            },
+                                          }}
+                                          size="large"
+                                        >
+                                          <Button
+                                            onClick={() => handleDecrement()}
+                                            sx={{
+                                              color: "black",
+                                              fontSize: "16px",
+                                            }}
+                                          >
+                                            -
+                                          </Button>
+                                          <Button
+                                            sx={{
+                                              color: "black",
+                                              fontSize: "16px",
+                                            }}
+                                          >
+                                            {" "}
+                                            {quantity}
+                                          </Button>
+                                          <Button
+                                            onClick={() => handleIncrement()}
+                                            sx={{
+                                              color: "black",
+                                              fontSize: "16px",
+                                            }}
+                                          >
+                                            +
+                                          </Button>
+                                        </ButtonGroup>
+                                      </Box>
+                                      <Box sx={{marginTop:2}}>
+                                        <Button
+                                        fullWidth
+                                          sx={{
+                                            border: "2px solid #038265",
+                                            borderRadius: "30px",
+                                            fontSize: "18px",
+                                            color: "#038265",
+                                            fontWeight: 700,
+                                            textAlign: "center",
+                                            textJustify: "center",
+                                            "&:hover": {
+                                              backgroundColor: "#038265",
+                                              color: "white",
+                                            },
+                                          }}
+                                          startIcon={<AddShoppingCartIcon />}
+                                        >
+                                          Add to Cart
+                                        </Button>
+                                      </Box>
                     </>
                   )}
                 </>
