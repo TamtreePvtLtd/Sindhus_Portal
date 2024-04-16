@@ -14,6 +14,7 @@ import {
   ISpecials,
   IMenuDatastype,
   menuWithProduct,
+  IBanner,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -103,6 +104,18 @@ const getAllDiningOutMenuDatas = async () => {
   }
 };
 
+const getPageTitle = async (pagetitle: string) => {
+  try {
+    const response = await httpWithoutCredentials.get<IBanner>(
+      `banner/getPageTitle/${pagetitle}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const createCateringEnquiry = async (data: ICateringEnquiry) => {
   try {
     const response = await httpWithoutCredentials.post(
@@ -138,6 +151,7 @@ const getfetchProductsByMenuId = async (menuId: string) => {
     throw error;
   }
 };
+
 
 const getProductsByMenuIdWithSearchTerm = async (
   selectedMenuId: string = "",
@@ -270,4 +284,5 @@ export {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
+  getPageTitle,
 };

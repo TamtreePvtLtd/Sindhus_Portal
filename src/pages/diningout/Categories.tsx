@@ -1,9 +1,10 @@
 import Box from "@mui/material/Box";
 import { Container, Grid, Typography } from "@mui/material";
-import { ICategory, ICategoryTitleDispay } from "../../interface/types";
+import { IBannerData, ICategory, ICategoryTitleDispay } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";
 import theme from "../../theme/theme";
+import { getPageTitle } from "../../services/api";
 
 interface IProps {
   onSubMenuClick(submenuId: string): void;
@@ -19,14 +20,28 @@ function Categories({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
     setLoadedCategories(categories);
   }, [categories]);
 
+  useEffect(() => {
+    async function fetchBannerData() {
+      const pagetitle = "3";
+      const bannerData: IBannerData = await getPageTitle(pagetitle);
+      // Assuming bannerData structure matches the expected shape
+      setBannerData(bannerData);
+    }
+    fetchBannerData();
+  }, []); // Empty dependency array ensures it runs only once
+
+  const [bannerData, setBannerData] = useState<IBannerData | null>(null);
+
   return (
     <>
       <Box>
-        <PageBanner
-          imageUrl="public/assets/DailyMenuBanner-Image.jpg"
-          content="Daily Menu"
-          description="Delight in our globally inspired dishes, crafted with locally sourced ingredients for an unforgettable culinary experience."
-        />
+        {bannerData && (
+          <PageBanner
+            imageUrl={bannerData.image}
+            content={bannerData.title}
+            description={bannerData.description}
+          />
+        )}
       </Box>
 
       {loadedCategories && loadedCategories.length > 0 && (

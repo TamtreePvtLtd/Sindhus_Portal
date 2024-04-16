@@ -1,9 +1,10 @@
 import Box from "@mui/material/Box";
 import { Container, Grid, Typography } from "@mui/material";
-import { ICategory } from "../../interface/types";
+import { IBannerData, ICategory } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";
 import theme from "../../theme/theme";
+import { getPageTitle } from "../../services/api";
 
 interface IProps {
   onSubMenuClick(submenuId: string): void;
@@ -19,14 +20,27 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
     setLoadedCategories(categories);
   }, [categories]);
 
+   useEffect(() => {
+     async function fetchBannerData() {
+       const pagetitle = "2";
+       const bannerData: IBannerData = await getPageTitle(pagetitle);
+       // Assuming bannerData structure matches the expected shape
+       setBannerData(bannerData);
+     }
+     fetchBannerData();
+   }, []); // Empty dependency array ensures it runs only once
+
+   const [bannerData, setBannerData] = useState<IBannerData | null>(null);
   return (
     <>
       <Box>
-        <PageBanner
-          imageUrl="assets/sindhu-kitchen-menu-banner.jpg"
-          content="Menu"
-          description="Tantalizing glimpse into the culinary delights awaiting you at our restaurant"
-        />
+        {bannerData && (
+          <PageBanner
+            imageUrl={bannerData.image}
+            content={bannerData.title}
+            description={bannerData.description}
+          />
+        )}
       </Box>
 
       <Box>

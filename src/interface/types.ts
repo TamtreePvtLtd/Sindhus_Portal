@@ -146,7 +146,18 @@ export interface IMenuDatastype1 {
   _id: string;
   title: string;
 }
-
+export interface IBanner {
+  _id: string;
+  image: string;
+  pageTitle: string;
+  title: string;
+  description: string;
+}
+export interface IBannerData {
+  image: string;
+  title: string;
+  description: string;
+}
 export interface IProductDinnigOut {
   _id: string;
   title: string;
