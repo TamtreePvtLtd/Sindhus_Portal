@@ -81,12 +81,13 @@ const Menus = ({
       onNavMenuTitleClick(menuId);
       setSelectedMenuIdState(menuId);
       clearProductSearch();
-      setMenuValue({
-        _id: selectedMenu._id,
-        title: selectedMenu.title,
-        menuType: selectedMenu.menuType,
-        label: selectedMenu.title,
-      });
+      // setMenuValue({
+      //   _id: selectedMenu._id,
+      //   title: selectedMenu.title,
+      //   menuType: selectedMenu.menuType,
+      //   label: selectedMenu.title,
+      // });
+      setMenuValue(null)
       setProductValue(null);
       refetchMenus();
       onSelectMenu("");

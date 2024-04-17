@@ -64,18 +64,18 @@ function SearchBar({
       foodAutocomplete.dispatchEvent(new Event("input", { bubbles: true }));
     }
 
-    const appetizersMenu = cateringMenus.find(
-      (menu) => menu.title === "Appetizers"
-    );
-    if (appetizersMenu) {
-      onSelectMenu(appetizersMenu._id);
-      setMenuValue({
-        _id: appetizersMenu._id,
-        title: appetizersMenu.title,
-        label: appetizersMenu.title,
-        menuType: appetizersMenu.menuType,
-      });
-    }
+    // const appetizersMenu = cateringMenus.find(
+    //   (menu) => menu.title === ""
+    // );
+    // if (appetizersMenu) {
+    //   onSelectMenu(appetizersMenu._id);
+    //   setMenuValue({
+    //     _id: appetizersMenu._id,
+    //     title: appetizersMenu.title,
+    //     label: appetizersMenu.title,
+    //     menuType: appetizersMenu.menuType,
+    //   });
+    // }
   };
 
   useEffect(() => {
