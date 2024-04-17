@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import CardContent from "@mui/material/CardContent";
 import { IProductCardList } from "../../interface/types";
 import { Link } from "react-router-dom";
@@ -6,11 +7,9 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { paths } from "../../routes/path";
-import { useEffect, useState } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Button, ButtonGroup, Grid } from "@mui/material";
 
 interface IProps {
   product: IProductCardList;
@@ -19,6 +18,7 @@ interface IProps {
 function CommonSnacksCard(props: IProps) {
   const { product } = props;
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [quantity, setQuantity] = useState<number>(0);
 
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
@@ -30,18 +30,28 @@ function CommonSnacksCard(props: IProps) {
     setSelectedPrice(event.target.value as number);
   };
 
+  const handleDecrement = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+
   return (
     <Card
       sx={{
         mr: 2,
-        width: "200px",
-        height: "285px",
+        width: "220px",
+        height: "350px",
         border: "1px solid #ddd",
         boxShadow: "none",
         margin: "auto",
       }}
     >
-      <Box sx={{ height: "60%", width: "100%", overflow: "hidden" }}>
+      <Box sx={{ height: "68%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
           state={{ previousPath: paths.SNACKS }}
@@ -52,7 +62,7 @@ function CommonSnacksCard(props: IProps) {
             src={product.posterURL}
             sx={{
               width: "100%",
-              height: "100%",
+              height: "95%",
               transition: "transform 400ms",
             }}
             loading="lazy"
@@ -60,7 +70,7 @@ function CommonSnacksCard(props: IProps) {
         </Link>
       </Box>
       <CardContent
-        sx={{ height: "40%", overflow: "hidden", paddingTop: "2px"}}
+        sx={{ height: "32%", overflow: "hidden", paddingTop: "2px" }}
       >
         <Typography
           variant="body1"
@@ -100,10 +110,8 @@ function CommonSnacksCard(props: IProps) {
                   sx={{
                     display: "flex",
                     justifyContent: "flex-start",
-
                     fontSize: "13px",
                     alignItems: "center",
-
                     "&:hover": {
                       backgroundColor: "#57ccb5",
                     },
@@ -121,37 +129,106 @@ function CommonSnacksCard(props: IProps) {
             </Typography>
           )}
         </Box>
-        <Box
-          marginY={1}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginRight:"5px"
-          }}
+        <Grid
+          container
+          sx={{ marginTop: 1.5 }}
+          padding={0}
+          display={"flex"}
+          flexDirection={"row"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          gap={2}
+          margin={0}
         >
-          <Button
-            sx={{
-              border: "1.5px solid #038265",
-              borderRadius: "30px",
-              fontSize: "13px",
-              color: "#038265",
-              fontWeight: 700,
-              padding: "2px",
-              width: "159px",
-              height:"32px",
-              textAlign:"center",
-              textJustify:"center",
-              "&:hover": {
-                backgroundColor: "#038265",
-                color: "white",
-              },
-            }}
-            startIcon={<AddShoppingCartIcon />}
-          >
-            Add to Cart
-          </Button>
-        </Box>
+          <Grid item>
+            <ButtonGroup
+              sx={{
+                padding:0,
+                height:"25px",
+                width:"30px",
+                "& .MuiButtonGroup-grouped": {
+                  minWidth: "30px",
+                },
+              }}
+              size="small"
+              
+              aria-label="small outlined button group"
+            >
+              <Button
+                onClick={() => handleDecrement()}
+                sx={{
+                  color: "black",
+                  fontSize: "16px",
+                  borderTopLeftRadius: "20px",
+                  borderBottomLeftRadius: "20px",
+                  border: "1px solid #038265",
+                  padding:"2px"
+                }}
+              >
+                -
+              </Button>
+              <Button
+                sx={{
+                  color: "black",
+                  fontSize: "16px",
+                  border: "1px solid #038265",
+                  padding:"2px"
+                }}
+              >
+                {quantity}
+              </Button>
+              <Button
+                onClick={() => handleIncrement()}
+                sx={{
+                  color: "black",
+                  fontSize: "16px",
+                  borderTopRightRadius: "20px",
+                  borderBottomRightRadius: "20px",
+                  border: "1px solid #038265",
+                  padding:"2px"
+                }}
+              >
+                +
+              </Button>
+            </ButtonGroup>
+          </Grid>
+          <Grid item>
+            <Button
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#ffffff",
+                fontSize: "15px",
+                fontWeight: 500,
+                height: "25px",
+                width: "35px",
+                borderRadius: "16px",
+                border: "1px solid #038265",
+                color: "black",
+                "&:hover": {
+                  backgroundColor: "#038265",
+                  color: "white",
+                  border: "none",
+                  boxShadow: "none",
+                },
+              }}
+              startIcon={
+                <img
+                  src="/assets/images/sindhus-logo.png"
+                  alt="icon"
+                  style={{
+                    height: "15px",
+                    width: "15px",
+                    backgroundColor: "white",
+                    borderRadius: "50%",
+                  }}
+                />
+              }
+            >
+              Add
+            </Button>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
