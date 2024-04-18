@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Container, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { ICategory } from "../../interface/types";
 import { useEffect, useState } from "react";
 import PageBanner from "../../common/component/pageBanner";
@@ -9,9 +9,17 @@ interface IProps {
   onSubMenuClick(submenuId: string): void;
   categories: ICategory[];
   selectedSubMenuId?: string;
+  handleDownloadPDF: () => void;
 }
 
-function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
+function Menus({
+  onSubMenuClick,
+  categories,
+  selectedSubMenuId,
+  handleDownloadPDF,
+ 
+}: IProps) {
+
   const [loadedCategories, setLoadedCategories] =
     useState<ICategory[]>(categories);
 
@@ -28,7 +36,37 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
           description="Tantalizing glimpse into the culinary delights awaiting you at our restaurant"
         />
       </Box>
+      <Box>
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#038265",
+            textAlign: "center",
+            padding: "10px",
+            fontWeight: 600,
+          }}
+        ></Typography>
 
+        <Button
+          variant="contained"
+          onClick={() => handleDownloadPDF()}
+          sx={{
+            position: "fixed",
+            top: 520,
+            right: 0,
+            margin: "-55px",
+            height: "40px",
+            cursor: "pointer",
+            justifyContent: "space-between",
+            alignItems: "center",
+            display: "flex",
+            transform: "rotate(90deg) translate(50%, 50%)",
+            zIndex: 99,
+          }}
+        >
+          Download Menu 
+        </Button>
+      </Box>
       <Box>
         {loadedCategories && loadedCategories.length > 0 && (
           <Grid
@@ -82,7 +120,6 @@ function Menus({ onSubMenuClick, categories, selectedSubMenuId }: IProps) {
                 All
               </Typography>
             </Grid>
-
             {loadedCategories.map((category) => (
               <Grid
                 item
