@@ -18,16 +18,27 @@ interface IProps {
 function CommonSnacksCard(props: IProps) {
   const { product } = props;
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(0);
 
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
       setSelectedPrice(product.itemSizeWithPrice[0]?.price || null);
+      setSelectedSize(product.itemSizeWithPrice[0]?.size || null);
     }
   }, [product.itemSizeWithPrice]);
 
+
   const handlePriceChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedPrice(event.target.value as number);
+    const selectedPriceValue = event.target.value as number;
+    setSelectedPrice(selectedPriceValue);
+
+    const selectedSizeItem = product.itemSizeWithPrice!.find(
+      (item) => item.price === selectedPriceValue
+    );
+    if (selectedSizeItem) {
+      setSelectedSize(selectedSizeItem.size);
+    }
   };
 
   const handleDecrement = () => {
@@ -38,6 +49,26 @@ function CommonSnacksCard(props: IProps) {
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);
+  };
+
+const handleAddToCart = () => {
+    if (selectedSize !== null && selectedPrice !== null) {
+      const itemDetails = {
+        productId: product._id,
+        sizes: [
+          {
+            size: selectedSize,
+            qty: quantity,
+            price: selectedPrice,
+          },
+        ],
+      };
+
+      // Save to localStorage
+      const existingItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+      existingItems.push(itemDetails);
+      localStorage.setItem("cartItems", JSON.stringify(existingItems));
+    }
   };
 
   return (
@@ -194,6 +225,7 @@ function CommonSnacksCard(props: IProps) {
           </Grid>
           <Grid item>
             <Button
+            onClick={handleAddToCart}
               sx={{
                 display: "flex",
                 alignItems: "center",

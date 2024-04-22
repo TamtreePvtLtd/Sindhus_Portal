@@ -17,6 +17,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import React from "react";
 import CallIcon from "@mui/icons-material/Call";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from "@mui/material/Badge";
 
 const navMenus = [
   {
@@ -133,7 +135,6 @@ function NavBar() {
                 height: "auto",
                 width: isBelowSMScreen ? "3.5rem" : "4rem",
                 marginRight: "10px",
-
                 paddingTop: isBelowSMScreen ? "7px" : "3px",
                 paddingLeft: isBelowSMScreen ? "10px" : "0px",
                 cursor: "pointer",
@@ -261,6 +262,30 @@ function NavBar() {
               ))}
             </Box>
           )}
+          <Box display={"flex"} sx={{ marginRight: isMobile ? "auto" : null, marginLeft: isMobile ? null : "auto", marginTop: isMobile ? "10px" : null }}>
+  <IconButton size="large" color="inherit">
+    <Badge
+      overlap="circular"
+      badgeContent={12}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      color="success"
+      sx={{
+        '& .MuiBadge-badge': {
+          width: '25px',
+          height: '25px',
+          borderRadius: '50%',
+          top: 0,
+          right: 0,
+          padding:0,
+          fontSize:"12px"
+        },
+      }}
+    >
+      <ShoppingCartIcon sx={{ fill: "black", fontSize: "30px" }} />
+    </Badge>
+  </IconButton>
+</Box>
+
         </Toolbar>
       </AppBar>
 
