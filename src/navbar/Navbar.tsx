@@ -164,7 +164,17 @@ function NavBar() {
                     justifyContent: "center",
                     marginTop: "-7px",
                   }}
-                >
+                ><a
+                style={{
+                  color: "inherit",
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                href="tel:+19402792536"
+              >
+                  
                   <CallIcon />
                   <Typography
                     sx={{
@@ -177,6 +187,7 @@ function NavBar() {
                   >
                     Call us:+1 940-279-2536
                   </Typography>
+                  </a>
                 </Box>
               )}
             </Box>
@@ -190,6 +201,16 @@ function NavBar() {
                   color: "black",
                 }}
               >
+                <a
+                  style={{
+                    color: "inherit",
+                    textDecoration: "none",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  href="tel:+19402792536"
+                >
                 <CallIcon />
                 <Typography
                   sx={{
@@ -199,6 +220,7 @@ function NavBar() {
                 >
                   &nbsp;Call us : +1 940-279-2536
                 </Typography>
+                </a>
               </Box>
             )}
           </Box>
