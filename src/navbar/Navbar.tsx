@@ -19,6 +19,8 @@ import React from "react";
 import CallIcon from "@mui/icons-material/Call";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from "@mui/material/Badge";
+import MyBagDrawer from "../pageDrawer/MyBagDrawer";
+import { CartItem } from "../interface/types";
 
 const navMenus = [
   {
@@ -47,6 +49,7 @@ function NavBar() {
   const theme = useTheme();
   const isBelowSMScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [cartDrawerOpen, setCartDrawerOpen] = React.useState(false);
 
   const isMobile = matches;
 
@@ -58,6 +61,15 @@ function NavBar() {
   const handleDrawerClose = () => {
     setDrawerOpen(false);
     setAppBarPosition("static");
+  };
+
+  const handleCartDrawerOpen = () => {
+    setCartDrawerOpen(true);
+    setDrawerOpen(false);  // Close the main drawer if it's open
+  };
+
+  const handleCartDrawerClose = () => {
+    setCartDrawerOpen(false);
   };
 
   const [appBarPosition, setAppBarPosition] = React.useState("static");
@@ -96,6 +108,12 @@ function NavBar() {
 
   const handleNavigateToHome = () => {
     navigate(paths.HOME);
+  };
+  const getTotalQuantityInCart = () => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems") || "[]") as CartItem[];
+    return storedCartItems.reduce((total, item) => {
+      return total + item.sizes.reduce((qtyTotal, sizeItem) => qtyTotal + sizeItem.qty, 0);
+    }, 0);
   };
 
   return (
@@ -263,10 +281,10 @@ function NavBar() {
             </Box>
           )}
           <Box display={"flex"} sx={{ marginRight: isMobile ? "auto" : null, marginLeft: isMobile ? null : "auto", marginTop: isMobile ? "10px" : null }}>
-  <IconButton size="large" color="inherit">
+  <IconButton size="large" color="inherit" onClick={handleCartDrawerOpen}>
     <Badge
       overlap="circular"
-      badgeContent={12}
+      badgeContent={getTotalQuantityInCart()}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       color="success"
       sx={{
@@ -285,10 +303,8 @@ function NavBar() {
     </Badge>
   </IconButton>
 </Box>
-
         </Toolbar>
       </AppBar>
-
       {drawerOpen && (
         <Drawer
           anchor="top"
@@ -341,6 +357,7 @@ function NavBar() {
           </List>
         </Drawer>
       )}
+      <MyBagDrawer open={cartDrawerOpen} onClose={handleCartDrawerClose} />
     </Box>
   );
 }

@@ -270,3 +270,15 @@ export interface ICateringSpecials {
   title: string;
   description: string;
 }
+
+
+export interface Size {
+  size: string;
+  qty: number;
+  price: number;
+}
+
+export interface CartItem {
+  productId: string;
+  sizes: Size[];
+}
