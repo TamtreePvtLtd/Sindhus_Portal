@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { format } from 'date-fns';
 import TextField from "@mui/material/TextField";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -12,10 +13,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ICateringEnquiry } from "../../interface/types";
-import { createCateringEnquiry } from "../../services/api";
 import { SnackbarSeverityEnum } from "../../enums/SnackbarSeverityEnum";
 import { useSnackBar } from "../../context/SnackBarContext";
-import { useEffect, useState } from "react";
+import emailjs from '@emailjs/browser';
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -83,7 +84,27 @@ function CateringEnquiryForm({ isOpen, onClose }) {
   const handleConfirmSubmit = async () => {
     try {
       if (formData) {
-        await createCateringEnquiry(formData);
+        const formattedEventDate = format(new Date(formData.eventDate), 'dd/MM/yyyy')
+
+        const templateParams = {
+          fullName: formData.fullName,
+          email: formData.email,
+          mobileNumber: formData.mobileNumber,
+          typeOfEvent: formData.typeOfEvent,
+          guestCount: formData.guestCount,
+          eventDate: formattedEventDate,
+          message: formData.message,
+        };
+
+        await emailjs.send(
+          'service_cnrkm44',
+          'template_hoqf8rf',
+          templateParams,
+          {
+            publicKey: 'BYqHlKQkGe_1cZnUV',
+          }
+        );
+
         updateSnackBarState(
           true,
           "Form submitted successfully",
