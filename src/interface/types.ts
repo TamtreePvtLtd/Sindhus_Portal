@@ -281,4 +281,14 @@ export interface Size {
 export interface CartItem {
   productId: string;
   sizes: Size[];
+  title?:string;
+  posterURL?:string
+}
+
+
+export interface ProductData {
+  _id: string;
+  title: string;
+  posterURL: string;
+  itemSizeWithPrice: { size: string; price: number }[];
 }
