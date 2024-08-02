@@ -39,7 +39,7 @@ function Loader(props: Props) {
               backgroundColor: "white",
             }}
             className="spinner-image"
-            src="assets/images/sindhus-logo.png"
+            src="assets/images/output-onlinepngtools (1).png"
             alt=""
           />
         </Box>
