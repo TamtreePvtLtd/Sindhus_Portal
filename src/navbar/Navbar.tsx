@@ -127,12 +127,12 @@ function NavBar() {
             }}
           >
             <img
-              src="assets/images/sindhus-logo.png"
+              src="assets/images/output-onlinepngtools (1).png"
               alt="Logo"
               style={{
                 height: "auto",
-                width: isBelowSMScreen ? "3.5rem" : "4rem",
-                marginRight: "10px",
+                width: isBelowSMScreen ? "3.5rem" : "3rem",
+                marginRight: "6px",
 
                 paddingTop: isBelowSMScreen ? "7px" : "3px",
                 paddingLeft: isBelowSMScreen ? "10px" : "0px",
