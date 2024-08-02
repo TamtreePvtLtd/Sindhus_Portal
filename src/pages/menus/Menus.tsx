@@ -37,7 +37,7 @@ function Menus({
         />
       </Box>
       <Box>
-        <Typography
+        {/* <Typography
           variant="h4"
           sx={{
             color: "#038265",
@@ -46,8 +46,8 @@ function Menus({
             fontWeight: 600,
           }}
         ></Typography>
-
-        <Button
+ */}
+        {/* <Button
           variant="contained"
           onClick={() => handleDownloadPDF()}
           sx={{
@@ -65,7 +65,7 @@ function Menus({
           }}
         >
           Download Menu 
-        </Button>
+        </Button> */}
       </Box>
       <Box>
         {loadedCategories && loadedCategories.length > 0 && (
