@@ -545,14 +545,20 @@ import {
 import { useTheme,} from "@mui/material/styles";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import CallIcon from "@mui/icons-material/Call";
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import MybagDrawer from "../pageDrawer/MyBagDrawer";
 
 function NavBar() {
   const theme = useTheme();
   const isBelowSMScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [appBarPosition, setAppBarPosition] = React.useState("static");
   const { cartCount } = useCart(); // Use cart context here
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+   const toggleDrawer = () => {
+     setIsDrawerOpen(!isDrawerOpen);
+   };
+
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -693,12 +699,14 @@ function NavBar() {
                     color: "black",
                     marginRight: "20px",
                   }}
+                  onClick={toggleDrawer}
                 />
               </Badge>
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
+      <MybagDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} />
     </Box>
   );
 }

@@ -150,7 +150,7 @@
 // }
 
 // export default CommonSnacksCard;
-
+import React, { useEffect, useState } from "react";
 import {
   CardContent,
   Card,
@@ -163,34 +163,87 @@ import {
 } from "@mui/material";
 import { IProductCardList } from "../../interface/types";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useCart } from "../../context/CartContext";
+import { CartItem, useCart } from "../../context/CartContext";
 import { paths } from "../../routes/path";
-
+import { useSnackBar } from "../../context/SnackBarContext";
 
 interface IProps {
   product: IProductCardList;
 }
 
+
 function CommonSnacksCard(props: IProps) {
   const { product } = props;
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
-  const { setCartCount } = useCart(); // Use cart context here
-
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const { cartItems, setCartItems, setCartCount } = useCart();
+const { updateSnackBarState } = useSnackBar();
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
-      setSelectedPrice(product.itemSizeWithPrice[0]?.price || null);
+      const initialPrice = product.itemSizeWithPrice[0]?.price || null;
+      const initialSize = product.itemSizeWithPrice[0]?.size || null;
+      setSelectedPrice(initialPrice);
+      setSelectedSize(initialSize);
     }
   }, [product.itemSizeWithPrice]);
 
   const handlePriceChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedPrice(event.target.value as number);
+    const newPrice = event.target.value as number;
+    setSelectedPrice(newPrice);
+
+    // Find the corresponding size for the selected price
+    const selectedSizeItem = product.itemSizeWithPrice?.find(
+      (item) => item.price === newPrice
+    );
+
+    if (selectedSizeItem) {
+      setSelectedSize(selectedSizeItem.size);
+    }
   };
 
   const handleAddToCart = () => {
-    // Update the cart count in the context
-    setCartCount((prevCount) => prevCount + 1);
-    console.log("Added to cart:", product.title, selectedPrice);
+    if (selectedPrice !== null && selectedSize !== null) {
+      const existingItemIndex = cartItems.findIndex(
+        (item) => item.id === product._id && item.size === selectedSize
+      );
+
+      let updatedItems: CartItem[];
+
+      if (existingItemIndex > -1) {
+        // Update existing item
+        updatedItems = [...cartItems];
+        const existingItem = updatedItems[existingItemIndex];
+        updatedItems[existingItemIndex] = {
+          ...existingItem,
+          quantity: existingItem.quantity + 1,
+          // Calculate the total price based on the updated quantity
+          totalPrice: (existingItem.quantity + 1) * existingItem.price,
+        };
+      } else {
+        // Add new item
+        updatedItems = [
+          ...cartItems,
+          {
+            id: product._id,
+            title: product.title,
+            size: selectedSize,
+            price: selectedPrice,
+            quantity: 1,
+            // Calculate the total price for the new item
+            totalPrice: selectedPrice,
+          },
+        ];
+         updateSnackBarState(true, "Item added to cart", "success");
+      }
+
+      // Update the cart state and local storage
+      setCartItems(updatedItems);
+      setCartCount(
+        updatedItems.reduce((count, item) => count + item.quantity, 0)
+      );
+
+      console.log("Added to cart:", product.title, selectedSize, selectedPrice);
+    }
   };
 
   return (
@@ -198,7 +251,7 @@ function CommonSnacksCard(props: IProps) {
       sx={{
         mr: 2,
         width: "220px",
-        height: "360px", 
+        height: "360px",
         border: "1px solid #ddd",
         boxShadow: "none",
         margin: "auto",
@@ -207,8 +260,7 @@ function CommonSnacksCard(props: IProps) {
       <Box sx={{ height: "72%", width: "100%", overflow: "hidden" }}>
         <Link
           to={`/detail/${product._id}`}
-          state={{ previousPath: paths
-            .SNACKS }}
+          state={{ previousPath: paths.SNACKS }}
           style={{ textDecoration: "none" }}
         >
           <CardMedia
@@ -257,7 +309,7 @@ function CommonSnacksCard(props: IProps) {
                 fontWeight: 500,
               }}
             >
-              {product.itemSizeWithPrice.map((priceItem, index) => (
+              {product.itemSizeWithPrice.map((priceItem) => (
                 <MenuItem
                   key={priceItem._id}
                   value={priceItem.price}
@@ -292,7 +344,7 @@ function CommonSnacksCard(props: IProps) {
               color: "#fff",
               width: "70%",
               borderRadius: "10px",
-              height: "30px", // Adjusted height
+              height: "30px",
               fontWeight: 500,
               "&:hover": {
                 backgroundColor: "#025e46",

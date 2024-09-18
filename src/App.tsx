@@ -42,12 +42,12 @@ function App() {
               <Suspense fallback={<Loader showSuspendLoading={true} />}>
                 <Routes>
                   <Route path={paths.ROOT} element={<Layout />}>
-                    {/* <Route index element={<Home />} />
+                    <Route index element={<Home />} />
                     <Route path={paths.HOME} element={<Home />} />
                     <Route
                       path={paths.SPECIALS}
                       element={<SpecialsComponent />}
-                    /> */}
+                    />
                     <Route path={paths.SNACKS} element={<SnacksComponent />} />
                     <Route path={paths.MENUS} element={<MenusComponent />} />
                     <Route
