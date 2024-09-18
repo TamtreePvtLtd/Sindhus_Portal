@@ -32,46 +32,58 @@ const ProductDetailComponent = lazy(
 //   () => import("./pages/diningout/CategoryProduct")
 // );
 
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51Q0H2607vIgVGrvrBHu66vPAra6sQeU9QMsjjb5pqJ3FmwJQvicMNirFWqWh1OtGSvgKr0KkJxeCARiB4q9Op2yH00S1xWaW3H"
+);
+
 function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <SnackBarProvider>
-          <CartProvider>
-            <BrowserRouter>
-              <Suspense fallback={<Loader showSuspendLoading={true} />}>
-                <Routes>
-                  <Route path={paths.ROOT} element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route path={paths.HOME} element={<Home />} />
-                    <Route
-                      path={paths.SPECIALS}
-                      element={<SpecialsComponent />}
-                    />
-                    <Route path={paths.SNACKS} element={<SnacksComponent />} />
-                    <Route path={paths.MENUS} element={<MenusComponent />} />
-                    <Route
-                      path={paths.CATERING}
-                      element={<CateringComponent />}
-                    />
-                    <Route
-                      path={paths.DAILYMENU}
-                      element={<DiningOutComponent />}
-                    />
-                    <Route
-                      path={paths.PRODUCTDETAIL}
-                      element={<ProductDetailComponent />}
-                    />
-                    {/* <Route
+          <Elements stripe={stripePromise}>
+            <CartProvider>
+              <BrowserRouter>
+                <Suspense fallback={<Loader showSuspendLoading={true} />}>
+                  <Routes>
+                    <Route path={paths.ROOT} element={<Layout />}>
+                      <Route index element={<Home />} />
+                      <Route path={paths.HOME} element={<Home />} />
+                      <Route
+                        path={paths.SPECIALS}
+                        element={<SpecialsComponent />}
+                      />
+                      <Route
+                        path={paths.SNACKS}
+                        element={<SnacksComponent />}
+                      />
+                      <Route path={paths.MENUS} element={<MenusComponent />} />
+                      <Route
+                        path={paths.CATERING}
+                        element={<CateringComponent />}
+                      />
+                      <Route
+                        path={paths.DAILYMENU}
+                        element={<DiningOutComponent />}
+                      />
+                      <Route
+                        path={paths.PRODUCTDETAIL}
+                        element={<ProductDetailComponent />}
+                      />
+                      {/* <Route
                     path={paths.PRODUCTSBYCATEGORY}
                     element={<CategoryProductComponent />}
                   /> */}
-                  </Route>
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-            <CustomSnackBar />
-          </CartProvider>
+                    </Route>
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+              <CustomSnackBar />
+            </CartProvider>
+          </Elements>
         </SnackBarProvider>
       </QueryClientProvider>
     </>
