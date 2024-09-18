@@ -343,196 +343,6 @@
 
 // export default NavBar;
 
-
-
-// import AppBar from "@mui/material/AppBar";
-// import Box from "@mui/material/Box";
-// import Toolbar from "@mui/material/Toolbar";
-// import Typography from "@mui/material/Typography";
-// import useTheme from "@mui/material/styles/useTheme";
-// import useMediaQuery from "@mui/material/useMediaQuery";
-
-// import CssBaseline from "@mui/material/CssBaseline";
-// import React, { useEffect, useState } from "react";
-// import CallIcon from "@mui/icons-material/Call";
-// import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-// import Badge from "@mui/material/Badge";
-
-// function NavBar() {
-//   const matches = useMediaQuery("(max-width: 1024px)");
-//   const [cartCount, setCartCount] = useState(0);
-
-//   useEffect(() => {
-//     const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
-//     setCartCount(cartItems.length);
-//   }, []);
-
-//   const theme = useTheme();
-//   const isBelowSMScreen = useMediaQuery(theme.breakpoints.down("sm"));
-//   const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-
-
-//   const [appBarPosition, setAppBarPosition] = React.useState("static");
-
-//   React.useEffect(() => {
-//     if (!matches) {
-//       setDrawerOpen(false);
-//     }
-//   }, [matches]);
-
-//   React.useEffect(() => {
-//     const handleScroll = () => {
-//       if (window.scrollY > 0) {
-//         setAppBarPosition("fixed");
-//       } else {
-//         setAppBarPosition("static");
-//       }
-//     };
-//     window.addEventListener("scroll", handleScroll);
-//     return () => {
-//       window.removeEventListener("scroll", handleScroll);
-//     };
-//   }, []);
-
- 
-
-//   return (
-//     <Box
-//       sx={{
-//         display: "flex",
-//         flexWrap: "wrap",
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//     >
-//       <CssBaseline />
-//       <AppBar
-//         sx={{
-//           zIndex: drawerOpen ? theme.zIndex.drawer + 1 : 1100,
-//           borderStyle: "solid",
-//           borderWidth: 0,
-//           height: "70px",
-//           backgroundColor: "white",
-//           position: isBelowSMScreen ? "fixed" : appBarPosition,
-//           boxShadow: "none",
-//         }}
-//         component="nav"
-//       >
-//         <Toolbar sx={{ p: 0 }}>
-//           <Box
-//             sx={{
-//               display: "flex",
-//               alignItems: "center",
-//               flexGrow: 1,
-//             }}
-//           >
-//             <img
-//               src="assets/images/output-onlinepngtools (1).png"
-//               alt="Logo"
-//               style={{
-//                 height: "auto",
-//                 width: isBelowSMScreen ? "3.5rem" : "3rem",
-//                 marginRight: "6px",
-//                 paddingTop: isBelowSMScreen ? "7px" : "3px",
-//                 paddingLeft: isBelowSMScreen ? "10px" : "0px",
-//                 cursor: "pointer",
-//               }}
-//               loading="lazy"
-//             />
-//             <Box>
-//               <Typography
-//                 sx={{
-//                   fontWeight: 600,
-//                   color: "#038265",
-//                   fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
-//                   fontFamily: "clearface ts bold",
-//                   cursor: "pointer",
-//                   marginTop: "3px",
-//                   paddingTop: isBelowSMScreen ? "10px" : "3px",
-//                 }}
-//               >
-//                 SINDHU&#8217;S
-//               </Typography>
-//               {isBelowSMScreen && (
-//                 <Box
-//                   sx={{
-//                     display: "flex",
-//                     flexWrap: "wrap",
-//                     justifyContent: "center",
-//                     marginTop: "-7px",
-//                   }}
-//                 >
-//                   <CallIcon />
-//                   <Typography
-//                     sx={{
-//                       fontSize: "12px",
-//                       fontWeight: 500,
-//                       color: "black",
-//                       marginLeft: "-25px",
-//                       marginBottom: "3px",
-//                     }}
-//                   >
-//                     Call us:+1 940-279-2536
-//                   </Typography>
-//                 </Box>
-//               )}
-//             </Box>
-//             {!isBelowSMScreen && (
-//               <Box
-//                 sx={{
-//                   display: "flex",
-//                   justifyContent: "center",
-//                   marginLeft: "30px",
-//                   marginTop: "6px",
-//                   color: "black",
-//                 }}
-//               >
-//                 <CallIcon />
-//                 <Typography
-//                   sx={{
-//                     fontSize: "16px",
-//                     fontWeight: 500,
-//                   }}
-//                 >
-//                   &nbsp;Call us : +1 940-279-2536
-//                 </Typography>
-//               </Box>
-//             )}
-//             <Box
-//               sx={{
-//                 display: "flex",
-//                 justifyContent: "flex-end",
-//                 flexGrow: 1,
-//                 alignItems: "center",
-//               }}
-//             >
-//               <Badge
-//                 badgeContent={cartCount}
-//                 color="primary"
-//                 sx={{
-//                   "& .MuiBadge-badge": {
-//                     backgroundColor: "#038265",
-//                     color: "#fff",
-//                   },
-//                 }}
-//               >
-//                 <ShoppingBagIcon
-//                   sx={{
-//                     color: "black",
-//                     marginRight: "20px",
-//                   }}
-//                 />
-//               </Badge>
-//             </Box>
-//           </Box>
-//         </Toolbar>
-//       </AppBar>
-//     </Box>
-//   );
-// }
-
-// export default NavBar;
 import {
   Box,
   AppBar,
@@ -682,6 +492,7 @@ function NavBar() {
                 justifyContent: "flex-end",
                 flexGrow: 1,
                 alignItems: "center",
+                marginTop:"10px"
               }}
             >
               <Badge
@@ -691,13 +502,15 @@ function NavBar() {
                   "& .MuiBadge-badge": {
                     backgroundColor: "#038265",
                     color: "#fff",
+                  
                   },
                 }}
               >
                 <ShoppingBagIcon
                   sx={{
                     color: "black",
-                    marginRight: "20px",
+                    marginRight: "5px",
+                    fontSize:"35px"
                   }}
                   onClick={toggleDrawer}
                 />

@@ -22,7 +22,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [cartCount, setCartCount] = useState<number>(0);
+
+  // Calculate cartCount dynamically based on the total quantity of items in cart
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   useEffect(() => {
     // Load cart items from local storage on initial render
@@ -31,23 +33,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       setCartItems(JSON.parse(storedCartItems));
     }
 
-    // Load cart count from local storage
-    const storedCartCount = localStorage.getItem("cartCount");
-    if (storedCartCount) {
-      setCartCount(Number(storedCartCount));
-    }
-
     // Clear local storage on page refresh
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem("cartItems");
-      localStorage.removeItem("cartCount");
     });
 
     // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("beforeunload", () => {
         localStorage.removeItem("cartItems");
-        localStorage.removeItem("cartCount");
       });
     };
   }, []);
@@ -57,15 +51,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  useEffect(() => {
-    // Save cart count to local storage whenever cartCount changes
-    localStorage.setItem("cartCount", String(cartCount));
-  }, [cartCount]);
-
   return (
-    <CartContext.Provider
-      value={{ cartItems, setCartItems, cartCount, setCartCount }}
-    >
+    <CartContext.Provider value={{ cartItems, setCartItems, cartCount }}>
       {children}
     </CartContext.Provider>
   );
