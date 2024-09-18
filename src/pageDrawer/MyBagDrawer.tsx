@@ -13,6 +13,7 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Button,
 } from "@mui/material";
 import { useCart } from "../context/CartContext";
 
@@ -63,6 +64,9 @@ function MybagDrawer({ isOpen, onClose }) {
     setCartItems(updatedItems);
   };
 
+  // Calculate total price
+  const totalAmount = cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
+
   return (
     <Drawer
       anchor="right"
@@ -99,67 +103,91 @@ function MybagDrawer({ isOpen, onClose }) {
         sx={{
           padding: 2,
           overflowY: "auto",
-          height: "calc(100vh - 50px)", // Fill remaining height
+          height: "calc(100vh - 50px - 60px)", // Adjust height to leave space for total amount
         }}
       >
         {cartItems.length === 0 ? (
           <Typography>Your bag is empty.</Typography>
         ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <strong>Item</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Size</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Price</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Total Price</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Quantity</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Actions</strong>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {cartItems.map((item) => (
-                  <TableRow key={`${item.id}-${item.size}`}>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.size}</TableCell>
-                    <TableCell>${item.price.toFixed(2)}</TableCell>
-                    <TableCell>${item.totalPrice.toFixed(2)}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
+          <>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
                     <TableCell>
-                      <IconButton
-                        onClick={() => handleIncrement(item.id, item.size)}
-                      >
-                        +
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleDecrement(item.id, item.size)}
-                        disabled={item.quantity <= 1} // Disable if quantity is 1
-                      >
-                        -
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleDelete(item.id, item.size)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      <strong>Item</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Size</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Price</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Total Price</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Quantity</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Actions</strong>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {cartItems.map((item) => (
+                    <TableRow key={`${item.id}-${item.size}`}>
+                      <TableCell>{item.title}</TableCell>
+                      <TableCell>{item.size}</TableCell>
+                      <TableCell>${item.price.toFixed(2)}</TableCell>
+                      <TableCell>${item.totalPrice.toFixed(2)}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => handleIncrement(item.id, item.size)}
+                        >
+                          +
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDecrement(item.id, item.size)}
+                          disabled={item.quantity <= 1} // Disable if quantity is 1
+                        >
+                          -
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDelete(item.id, item.size)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Box
+              sx={{
+                padding: 2,
+                borderTop: "1px solid #ddd",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+                              <Button
+                                  
+                variant="contained"
+                color="primary"
+                sx={{
+                  padding: "10px 20px",
+                  borderRadius: "4px",
+                }}
+              >
+                <Typography variant="h6" color="white">
+                  Pay: ${totalAmount.toFixed(2)}
+                </Typography>
+              </Button>
+            </Box>
+          </>
         )}
       </Box>
     </Drawer>
@@ -167,4 +195,3 @@ function MybagDrawer({ isOpen, onClose }) {
 }
 
 export default MybagDrawer;
-
