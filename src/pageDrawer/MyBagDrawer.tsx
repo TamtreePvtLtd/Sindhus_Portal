@@ -441,6 +441,7 @@ function MybagDrawer({ isOpen, onClose }) {
       <PaymentDialog
         open={isPaymentDialogOpen}
         onClose={() => setIsPaymentDialogOpen(false)}
+        amount={totalAmount.toFixed(2)}
       />
     </>
   );
