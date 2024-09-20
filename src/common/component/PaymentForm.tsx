@@ -120,10 +120,6 @@
 
 // export default PaymentDialog;
 
-
-
-
-
 // import React, { useState } from "react";
 // import axios from "axios"; // Import axios for API calls
 // import {
@@ -312,8 +308,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
 import dayjs from "dayjs";
 
-function PaymentDialog({ open, onClose, amount }) {
-  const [fullName, setFullName] = useState("");
+function PaymentDialog({ open, onClose, amount, cartItems }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -327,74 +324,86 @@ function PaymentDialog({ open, onClose, amount }) {
 
   const handleSubmit = async () => {
     if (!stripe || !elements || !deliveryDate) {
-      setError("Please select a valid delivery date.");
+      setError("");
       return;
     }
 
     setLoading(true);
 
     const paymentData = {
-      fullName,
+      firstName,
+      lastName,
       address: deliveryOption === "delivery" ? address : "N/A",
       phoneNumber,
       email,
       deliveryOption,
       deliveryDate: dayjs(deliveryDate).format("YYYY-MM-DD"),
       amount: parseFloat(amount) * 100, // amount in cents for Stripe
+      cartItems,
     };
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
+   try {
+     const response = await axios.post(
+       "http://localhost:3000/payment/createPaymentIntent",
+       paymentData
+     );
+     console.log("Backend Response: ", response.data); // Check backend response
 
-      const { clientSecret } = response.data;
+     const { clientSecret } = response.data;
 
-      const { error: stripeError } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          payment_method_data: {
-            billing_details: {
-              name: paymentData.fullName,
-              email: paymentData.email,
-            },
-          },
-        },
-        redirect: "if_required",
-        clientSecret,
-      });
+     const { error, paymentIntent } = await stripe.confirmPayment({
+       elements,
+       clientSecret,
+       confirmParams: {
+         return_url: "https://teststripepayment.com/test",
+       },
+     });
 
-      if (stripeError) {
-        setError(stripeError.message);
-        console.error("Stripe error:", stripeError);
-      } else {
-        setError("");
-        onClose();
-      }
-    } catch (err) {
-      setError("Payment failed, please try again.");
-      console.error("Error:", err);
-    } finally {
-      setLoading(false);
-    }
+     if (error) {
+       console.error("Error during payment confirmation: ", error);
+       setError(error.message || "Payment failed.");
+     } else if (paymentIntent.status === "succeeded") {
+       alert("Payment successful!");
+       onClose();
+     } else if (paymentIntent.status === "requires_action") {
+       setError("Additional verification required.");
+     } else {
+       setError("Payment incomplete.");
+     }
+   } catch (error) {
+     console.error("Payment processing error: ", error); // Log the entire error object
+     setError("An error occurred during payment processing.");
+   } finally {
+     setLoading(false);
+   }
+
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Checkout</DialogTitle>
       <DialogContent>
+        
         <Box
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem", mt: 2 }}
         >
           <TextField
-            label="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            label="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             fullWidth
             required
           />
+
+          <TextField
+            label="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            fullWidth
+            required
+          />
+
           <TextField
             label="Phone Number"
             value={phoneNumber}
@@ -402,6 +411,7 @@ function PaymentDialog({ open, onClose, amount }) {
             fullWidth
             required
           />
+
           <TextField
             label="Email"
             value={email}
@@ -409,9 +419,12 @@ function PaymentDialog({ open, onClose, amount }) {
             fullWidth
             required
           />
+
           <TextField label="Amount ($)" value={amount} fullWidth disabled />
+
           <FormControl component="fieldset">
             <FormLabel component="legend">Delivery or Pickup</FormLabel>
+
             <RadioGroup
               row
               value={deliveryOption}
@@ -422,6 +435,7 @@ function PaymentDialog({ open, onClose, amount }) {
                 control={<Radio />}
                 label="Delivery"
               />
+
               <FormControlLabel
                 value="pickup"
                 control={<Radio />}
@@ -429,6 +443,7 @@ function PaymentDialog({ open, onClose, amount }) {
               />
             </RadioGroup>
           </FormControl>
+
           <TextField
             label="Address"
             value={address}
@@ -437,6 +452,7 @@ function PaymentDialog({ open, onClose, amount }) {
             disabled={deliveryOption === "pickup"}
             required={deliveryOption === "delivery"}
           />
+
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Select Delivery or Pickup Date"
@@ -450,6 +466,7 @@ function PaymentDialog({ open, onClose, amount }) {
           </LocalizationProvider>
           <CardElement />
         </Box>
+
         {error && (
           <Box color="error.main" mt={2}>
             {error}
