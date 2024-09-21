@@ -292,7 +292,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   FormControlLabel,
@@ -323,9 +322,20 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
   const stripe = useStripe();
   const elements = useElements();
 
+  const validatePostalCode = (postalCode) => {
+    const postalCodePattern = /^[0-9]{6}$/; // Adjust the pattern based on your requirements
+    return postalCodePattern.test(postalCode);
+  };
+
+  // Handle form submission
   const handleSubmit = async () => {
     if (!stripe || !elements || !deliveryDate) {
-      setError("");
+      setError("Payment is incomplete. Please check all the fields.");
+      return;
+    }
+
+    if (!validatePostalCode(postalCode)) {
+      setError("Please enter a valid postal code.");
       return;
     }
 
@@ -341,19 +351,18 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
       deliveryDate: dayjs(deliveryDate).format("YYYY-MM-DD"),
       amount: parseFloat(amount) * 100,
       cartItems,
-      postalCode, // Ensure postalCode is included
+      postalCode,
     };
 
     try {
+      // Create payment intent on the server
       const response = await axios.post(
         "http://localhost:3000/payment/createPaymentIntent",
         paymentData
       );
-      console.log("Backend Response: ", response.data);
-
       const { clientSecret } = response.data;
-      console.log("ClientSecret: ", clientSecret);
 
+      // Confirm the card payment
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
@@ -361,10 +370,10 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             card: elements.getElement(CardElement),
             billing_details: {
               name: `${firstName} ${lastName}`,
-              email: email,
+              email,
               address: {
                 line1: address,
-                postal_code: postalCode, // Add postal_code here
+                postal_code: postalCode,
               },
             },
           },
@@ -398,6 +407,7 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem", mt: 2 }}
         >
+          {/* Form Fields */}
           <TextField
             label="First Name"
             value={firstName}
@@ -405,7 +415,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             fullWidth
             required
           />
-
           <TextField
             label="Last Name"
             value={lastName}
@@ -413,7 +422,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             fullWidth
             required
           />
-
           <TextField
             label="Phone Number"
             value={phoneNumber}
@@ -421,7 +429,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             fullWidth
             required
           />
-
           <TextField
             label="Email"
             value={email}
@@ -429,12 +436,10 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             fullWidth
             required
           />
-
           <TextField label="Amount ($)" value={amount} fullWidth disabled />
 
           <FormControl component="fieldset">
             <FormLabel component="legend">Delivery or Pickup</FormLabel>
-
             <RadioGroup
               row
               value={deliveryOption}
@@ -445,7 +450,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
                 control={<Radio />}
                 label="Delivery"
               />
-
               <FormControlLabel
                 value="pickup"
                 control={<Radio />}
@@ -483,7 +487,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
           </LocalizationProvider>
           <CardElement />
         </Box>
-
         {error && (
           <Box color="error.main" mt={2}>
             {error}
