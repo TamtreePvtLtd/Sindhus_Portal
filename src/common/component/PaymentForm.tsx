@@ -318,6 +318,7 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
   const [deliveryDate, setDeliveryDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
   const stripe = useStripe();
   const elements = useElements();
@@ -338,52 +339,61 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
       email,
       deliveryOption,
       deliveryDate: dayjs(deliveryDate).format("YYYY-MM-DD"),
-      amount: parseFloat(amount) * 100, // amount in cents for Stripe
+      amount: parseFloat(amount) * 100,
       cartItems,
+      postalCode, // Ensure postalCode is included
     };
 
-   try {
-     const response = await axios.post(
-       "http://localhost:3000/payment/createPaymentIntent",
-       paymentData
-     );
-     console.log("Backend Response: ", response.data); // Check backend response
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/payment/createPaymentIntent",
+        paymentData
+      );
+      console.log("Backend Response: ", response.data);
 
-     const { clientSecret } = response.data;
+      const { clientSecret } = response.data;
+      console.log("ClientSecret: ", clientSecret);
 
-     const { error, paymentIntent } = await stripe.confirmPayment({
-       elements,
-       clientSecret,
-       confirmParams: {
-         return_url: "https://teststripepayment.com/test",
-       },
-     });
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              name: `${firstName} ${lastName}`,
+              email: email,
+              address: {
+                line1: address,
+                postal_code: postalCode, // Add postal_code here
+              },
+            },
+          },
+        }
+      );
 
-     if (error) {
-       console.error("Error during payment confirmation: ", error);
-       setError(error.message || "Payment failed.");
-     } else if (paymentIntent.status === "succeeded") {
-       alert("Payment successful!");
-       onClose();
-     } else if (paymentIntent.status === "requires_action") {
-       setError("Additional verification required.");
-     } else {
-       setError("Payment incomplete.");
-     }
-   } catch (error) {
-     console.error("Payment processing error: ", error); // Log the entire error object
-     setError("An error occurred during payment processing.");
-   } finally {
-     setLoading(false);
-   }
-
+      if (error) {
+        console.error("Error during payment confirmation: ", error);
+        setError(error.message || "Payment failed.");
+      } else if (paymentIntent.status === "succeeded") {
+        alert("Payment successful!");
+        onClose();
+      } else if (paymentIntent.status === "requires_action") {
+        setError("Additional verification required.");
+      } else {
+        setError("Payment incomplete.");
+      }
+    } catch (error) {
+      console.error("Payment processing error: ", error);
+      setError("An error occurred during payment processing.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Checkout</DialogTitle>
       <DialogContent>
-        
         <Box
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem", mt: 2 }}
@@ -452,12 +462,19 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
             disabled={deliveryOption === "pickup"}
             required={deliveryOption === "delivery"}
           />
+          <TextField
+            label="Postal Code"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            fullWidth
+            required
+          />
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Select Delivery or Pickup Date"
               value={deliveryDate}
-              onChange={(newValue) => setDeliveryDate(newValue)} // Use onChange instead of onAccept
+              onChange={(newValue) => setDeliveryDate(newValue)}
               renderInput={(params) => <TextField {...params} />}
               disablePast
               fullWidth
