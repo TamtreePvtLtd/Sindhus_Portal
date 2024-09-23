@@ -307,7 +307,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
 import dayjs from "dayjs";
 
-function PaymentDialog({ open, onClose, amount, cartItems }) {
+function PaymentDialog({ open, onClose, amount, orderedItems }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -325,6 +325,22 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
   const validatePostalCode = (postalCode) => {
     const postalCodePattern = /^[0-9]{6}$/; // Adjust the pattern based on your requirements
     return postalCodePattern.test(postalCode);
+  };
+
+  const saveCartItems = async (cartItems) => {
+    try {
+      const response = await fetch("http://localhost:3000/cart/cartItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartItems }),
+      });
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("Error saving cart items:", error);
+    }
   };
 
   // Handle form submission
@@ -350,7 +366,7 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
       deliveryOption,
       deliveryDate: dayjs(deliveryDate).format("YYYY-MM-DD"),
       amount: parseFloat(amount) * 100,
-      cartItems,
+      orderedItems,
       postalCode,
     };
 
@@ -379,12 +395,12 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
           },
         }
       );
-
       if (error) {
         console.error("Error during payment confirmation: ", error);
         setError(error.message || "Payment failed.");
       } else if (paymentIntent.status === "succeeded") {
         alert("Payment successful!");
+        saveCartItems(orderedItems);
         onClose();
       } else if (paymentIntent.status === "requires_action") {
         setError("Additional verification required.");
@@ -392,8 +408,6 @@ function PaymentDialog({ open, onClose, amount, cartItems }) {
         setError("Payment incomplete.");
       }
     } catch (error) {
-      console.error("Payment processing error: ", error);
-      setError("An error occurred during payment processing.");
     } finally {
       setLoading(false);
     }

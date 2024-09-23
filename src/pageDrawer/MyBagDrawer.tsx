@@ -214,9 +214,7 @@
 //   );
 // }
 
-
 // export default MybagDrawer;
-
 
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -442,11 +440,10 @@ function MybagDrawer({ isOpen, onClose }) {
         open={isPaymentDialogOpen}
         onClose={() => setIsPaymentDialogOpen(false)}
         amount={totalAmount.toFixed(2)}
-        
+        orderedItems={cartItems}
       />
     </>
   );
 }
-
 
 export default MybagDrawer;
