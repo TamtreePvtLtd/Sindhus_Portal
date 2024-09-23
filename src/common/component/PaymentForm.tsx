@@ -327,21 +327,33 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
     return postalCodePattern.test(postalCode);
   };
 
-  const saveCartItems = async (cartItems) => {
-    try {
-      const response = await fetch("http://localhost:3000/cart/cartItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cartItems }),
-      });
-      const data = await response.json();
-      console.log(data.message);
-    } catch (error) {
-      console.error("Error saving cart items:", error);
-    }
-  };
+ const saveCartItems = async (cartItems, paymentData) => {
+   console.log("Sending request to save cart items:", {
+     cartItems,
+     paymentData,
+   });
+
+   try {
+     const response = await fetch("http://localhost:3000/cart/cartItem", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({ cartItems, paymentData }),
+     });
+
+     if (!response.ok) {
+       throw new Error(`HTTP error! status: ${response.status}`);
+     }
+
+     const data = await response.json();
+     console.log(data.message);
+   } catch (error) {
+     console.error("Error saving cart items:", error);
+   }
+ };
+
+
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -360,7 +372,7 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
     const paymentData = {
       firstName,
       lastName,
-      address: deliveryOption === "delivery" ? address : "N/A",
+      address: deliveryOption === "delivery" ? address : address,
       phoneNumber,
       email,
       deliveryOption,
@@ -400,7 +412,7 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
         setError(error.message || "Payment failed.");
       } else if (paymentIntent.status === "succeeded") {
         alert("Payment successful!");
-        saveCartItems(orderedItems);
+        saveCartItems(orderedItems, paymentData);
         onClose();
       } else if (paymentIntent.status === "requires_action") {
         setError("Additional verification required.");
@@ -477,8 +489,8 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             fullWidth
-            disabled={deliveryOption === "pickup"}
-            required={deliveryOption === "delivery"}
+            // disabled={deliveryOption === "pickup"}
+            // required={deliveryOption === "delivery"}
           />
           <TextField
             label="Postal Code"
