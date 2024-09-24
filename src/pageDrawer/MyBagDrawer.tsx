@@ -24,6 +24,8 @@ function MybagDrawer({ isOpen, onClose }) {
   const { cartItems, setCartItems } = useCart();
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
+  const taxRate = 8.25 / 100; // Tax rate of 8.25%
+
   const handleDelete = (id, size) => {
     const updatedItems = cartItems.filter(
       (item) => !(item.id === id && item.size === size)
@@ -69,9 +71,13 @@ function MybagDrawer({ isOpen, onClose }) {
   };
 
   const totalAmount = cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
- const clearCart = () => {
-   setCartItems([]); // Clear cart items after successful payment
- };
+  const taxAmount = totalAmount * taxRate; // Calculate the tax amount
+  const totalWithTax = totalAmount + taxAmount; // Add tax to the total
+
+  const clearCart = () => {
+    setCartItems([]); // Clear cart items after successful payment
+  };
+
   return (
     <>
       <Drawer
@@ -132,9 +138,9 @@ function MybagDrawer({ isOpen, onClose }) {
                       <TableCell>
                         <strong>Price</strong>
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <strong>Total Price</strong>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         <strong>Quantity</strong>
                       </TableCell>
@@ -160,7 +166,7 @@ function MybagDrawer({ isOpen, onClose }) {
                         <TableCell>{item.title}</TableCell>
                         <TableCell>{item.size}</TableCell>
                         <TableCell>${item.price.toFixed(2)}</TableCell>
-                        <TableCell>${item.totalPrice.toFixed(2)}</TableCell>
+                        {/* <TableCell>${item.totalPrice.toFixed(2)}</TableCell> */}
                         <TableCell>
                           <Box
                             sx={{
@@ -221,9 +227,20 @@ function MybagDrawer({ isOpen, onClose }) {
                   padding: 2,
                   borderTop: "1px solid #ddd",
                   display: "flex",
-                  justifyContent: "flex-end",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: 1, // Adds space between the text fields
                 }}
               >
+                <Typography variant="subtitle1">
+                  Total: ${totalAmount.toFixed(2)}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Tax (8.25%): ${taxAmount.toFixed(2)}
+                </Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  Total with Tax: ${totalWithTax.toFixed(2)}
+                </Typography>
                 <Button
                   variant="contained"
                   color="primary"
@@ -233,9 +250,7 @@ function MybagDrawer({ isOpen, onClose }) {
                   }}
                   onClick={() => setIsPaymentDialogOpen(true)} // Open dialog
                 >
-                  <Typography variant="h6" color="white">
-                    Total: ${totalAmount.toFixed(2)}
-                  </Typography>
+                  Proceed to Payment
                 </Button>
               </Box>
             </>
@@ -246,7 +261,7 @@ function MybagDrawer({ isOpen, onClose }) {
       <PaymentDialog
         open={isPaymentDialogOpen}
         onClose={() => setIsPaymentDialogOpen(false)}
-        amount={totalAmount.toFixed(2)}
+        amount={totalWithTax.toFixed(2)} // Pass the total with tax
         orderedItems={cartItems}
         clearCart={clearCart}
         closeDrawer={onClose}

@@ -390,6 +390,7 @@ function PaymentDialog({
       return;
     }
 
+    // Validate postal code
     if (!validatePostalCode(postalCode)) {
       setError("Please enter a valid postal code.");
       return;
@@ -397,29 +398,39 @@ function PaymentDialog({
 
     setLoading(true);
 
-    const paymentData = {
-      firstName,
-      lastName,
-      address: `${addressLine1}, ${addressLine2}`,
-      phoneNumber,
-      email,
-      deliveryOption,
-      deliveryDate: dayjs(deliveryDate).format("YYYY-DD-MM"),
-      amount: parseFloat(amount) * 100,
-      orderedItems,
-      postalCode,
-      createdAt: new Date(),
-    };
-
     try {
+      // Ensure the deliveryDate is valid and formatted correctly
+      const formattedDeliveryDate = dayjs(deliveryDate).isValid()
+        ? dayjs(deliveryDate).format("MM/DD/YYYY")
+        : null;
+
+      if (!formattedDeliveryDate) {
+        throw new Error("Invalid delivery date.");
+      }
+
+      const paymentData = {
+        firstName,
+        lastName,
+        address: `${addressLine1}, ${addressLine2}`,
+        phoneNumber,
+        email,
+        deliveryOption,
+        deliveryDate: formattedDeliveryDate, // Ensure it's valid
+        amount: parseFloat(amount) * 100,
+        orderedItems,
+        postalCode,
+        createdAt: new Date(),
+      };
+
       // Create payment intent on the server
       const response = await axios.post(
         "http://localhost:3000/payment/createPaymentIntent",
         paymentData
       );
+
       const { clientSecret } = response.data;
 
-      // Confirm the card payment
+      // Confirm card payment
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
@@ -437,8 +448,9 @@ function PaymentDialog({
           },
         }
       );
+
       if (error) {
-        console.error("Error during payment confirmation: ", error);
+        console.error("Error during payment confirmation:", error);
         setError(error.message || "Payment failed.");
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
@@ -447,16 +459,15 @@ function PaymentDialog({
         saveCartItems(orderedItems, paymentData);
         closeDrawer();
         onClose();
-      } else if (paymentIntent.status === "requires_action") {
-        setError("Additional verification required.");
-      } else {
-        setError("Payment incomplete.");
       }
     } catch (error) {
+      console.error("Error creating payment intent:", error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   const resetForm = () => {
     setFirstName("");
