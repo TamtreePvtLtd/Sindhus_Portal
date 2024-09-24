@@ -19,8 +19,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useSnackBar } from "../../context/SnackBarContext";
 
-function PaymentDialog({ open, onClose, amount, orderedItems }) {
+function PaymentDialog({
+  open,
+  onClose,
+  amount,
+  orderedItems,
+  clearCart,
+  closeDrawer,
+}) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -31,6 +39,7 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const { updateSnackBarState } = useSnackBar();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -123,8 +132,11 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
         console.error("Error during payment confirmation: ", error);
         setError(error.message || "Payment failed.");
       } else if (paymentIntent.status === "succeeded") {
-        alert("Payment successful!");
+         updateSnackBarState(true, "Payment Successful", "success");
+        resetForm();
+        clearCart();
         saveCartItems(orderedItems, paymentData);
+        closeDrawer();
         onClose();
       } else if (paymentIntent.status === "requires_action") {
         setError("Additional verification required.");
@@ -136,7 +148,17 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
       setLoading(false);
     }
   };
-
+  const resetForm = () => {
+    setFirstName("");
+    setLastName("");
+    setAddress("");
+    setPhoneNumber("");
+    setEmail("");
+    setDeliveryOption("delivery");
+    setDeliveryDate(null);
+    setPostalCode("");
+    setError("");
+  };
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Checkout</DialogTitle>
@@ -201,6 +223,7 @@ function PaymentDialog({ open, onClose, amount, orderedItems }) {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             fullWidth
+            multiline
             // disabled={deliveryOption === "pickup"}
             // required={deliveryOption === "delivery"}
           />
