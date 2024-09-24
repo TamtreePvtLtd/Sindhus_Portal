@@ -171,13 +171,12 @@ interface IProps {
   product: IProductCardList;
 }
 
-
 function CommonSnacksCard(props: IProps) {
   const { product } = props;
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const { cartItems, setCartItems, setCartCount } = useCart();
-const { updateSnackBarState } = useSnackBar();
+  const { updateSnackBarState } = useSnackBar();
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
       const initialPrice = product.itemSizeWithPrice[0]?.price || null;
@@ -225,6 +224,7 @@ const { updateSnackBarState } = useSnackBar();
           ...cartItems,
           {
             id: product._id,
+            imageUrl: product.posterURL,
             title: product.title,
             size: selectedSize,
             price: selectedPrice,
@@ -233,7 +233,7 @@ const { updateSnackBarState } = useSnackBar();
             totalPrice: selectedPrice,
           },
         ];
-         updateSnackBarState(true, "Item added to cart", "success");
+        updateSnackBarState(true, "Item added to cart", "success");
       }
 
       // Update the cart state and local storage

@@ -404,7 +404,7 @@ function PaymentDialog({
       phoneNumber,
       email,
       deliveryOption,
-      deliveryDate: dayjs(deliveryDate).format("YYYY-MM-DD"),
+      deliveryDate: dayjs(deliveryDate).format("YYYY-DD-MM"),
       amount: parseFloat(amount) * 100,
       orderedItems,
       postalCode,

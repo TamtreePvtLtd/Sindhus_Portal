@@ -121,6 +121,9 @@ function MybagDrawer({ isOpen, onClose }) {
                   <TableHead>
                     <TableRow>
                       <TableCell>
+                        <strong>Image</strong>
+                      </TableCell>
+                      <TableCell>
                         <strong>Item</strong>
                       </TableCell>
                       <TableCell>
@@ -143,44 +146,64 @@ function MybagDrawer({ isOpen, onClose }) {
                   <TableBody>
                     {cartItems.map((item) => (
                       <TableRow key={`${item.id}-${item.size}`}>
+                        <TableCell>
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              objectFit: "cover",
+                            }} // Adjust the size of the image as needed
+                          />
+                        </TableCell>
                         <TableCell>{item.title}</TableCell>
                         <TableCell>{item.size}</TableCell>
                         <TableCell>${item.price.toFixed(2)}</TableCell>
                         <TableCell>${item.totalPrice.toFixed(2)}</TableCell>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginTop: "25px",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <IconButton
-                            onClick={() => handleIncrement(item.id, item.size)}
+                        <TableCell>
+                          <Box
                             sx={{
-                              border: "1px solid #ddd",
-                              borderRadius: "3px",
-                              height: "25px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              gap: "10px", // Add space between buttons
                             }}
                           >
-                            +
-                          </IconButton>
-                          <TableCell sx={{ padding: 0, textAlign: "center" }}>
-                            {item.quantity}
-                          </TableCell>
-                          <IconButton
-                            onClick={() => handleDecrement(item.id, item.size)}
-                            disabled={item.quantity <= 1}
-                            sx={{
-                              border: "1px solid #ddd",
-                              borderRadius: "3px",
-                              height: "25px",
-                            }}
-                          >
-                            -
-                          </IconButton>
-                        </Box>
-
+                            <IconButton
+                              onClick={() =>
+                                handleIncrement(item.id, item.size)
+                              }
+                              sx={{
+                                border: "1px solid #ddd",
+                                borderRadius: "3px",
+                                height: "30px", // Adjust button height to fit better
+                                width: "30px", // Adjust button width
+                              }}
+                            >
+                              +
+                            </IconButton>
+                            <Typography
+                              sx={{ minWidth: "20px", textAlign: "center" }}
+                            >
+                              {item.quantity}
+                            </Typography>
+                            <IconButton
+                              onClick={() =>
+                                handleDecrement(item.id, item.size)
+                              }
+                              disabled={item.quantity <= 1}
+                              sx={{
+                                border: "1px solid #ddd",
+                                borderRadius: "3px",
+                                height: "30px",
+                                width: "30px",
+                              }}
+                            >
+                              -
+                            </IconButton>
+                          </Box>
+                        </TableCell>
                         <TableCell>
                           <IconButton
                             onClick={() => handleDelete(item.id, item.size)}
