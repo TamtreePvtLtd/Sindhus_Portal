@@ -357,116 +357,121 @@ function PaymentDialog({
     return postalCodePattern.test(postalCode);
   };
 
-  const saveCartItems = async (cartItems, paymentData) => {
-    console.log("Sending request to save cart items:", {
-      cartItems,
-      paymentData,
-    });
+ const saveCartItems = async (cartItems, paymentData, orderNumber) => {
+   console.log("Sending request to save cart items:", {
+     cartItems,
+     paymentData,
+     orderNumber, // Log and pass the order number
+   });
 
-    try {
-      const response = await fetch("http://localhost:3000/cart/cartItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cartItems, paymentData }),
-      });
+   try {
+     const response = await fetch("http://localhost:3000/cart/cartItem", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({ cartItems, paymentData, orderNumber }), // Send order number
+     });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+     if (!response.ok) {
+       throw new Error(`HTTP error! status: ${response.status}`);
+     }
 
-      const data = await response.json();
-      console.log(data.message);
-    } catch (error) {
-      console.error("Error saving cart items:", error);
-    }
-  };
+     const data = await response.json();
+     console.log(data.message);
+   } catch (error) {
+     console.error("Error saving cart items:", error);
+   }
+ };
+
 
   // Handle form submission
-  const handleSubmit = async () => {
-    if (!stripe || !elements || !deliveryDate) {
-      setError("Payment is incomplete. Please check all the fields.");
-      return;
-    }
+ const handleSubmit = async () => {
+   if (!stripe || !elements || !deliveryDate) {
+     setError("Payment is incomplete. Please check all the fields.");
+     return;
+   }
 
-    // Validate postal code
-    if (!validatePostalCode(postalCode)) {
-      setError("Please enter a valid postal code.");
-      return;
-    }
+   // Validate postal code
+   if (!validatePostalCode(postalCode)) {
+     setError("Please enter a valid postal code.");
+     return;
+   }
 
-    setLoading(true);
+   setLoading(true);
 
-    try {
-      // Ensure the deliveryDate is valid and formatted correctly
-      const formattedDeliveryDate = dayjs(deliveryDate).isValid()
-        ? dayjs(deliveryDate).format("MM/DD/YYYY")
-        : null;
+   try {
+     const formattedDeliveryDate = dayjs(deliveryDate).isValid()
+       ? dayjs(deliveryDate).format("MM/DD/YYYY")
+       : null;
 
-      if (!formattedDeliveryDate) {
-        throw new Error("Invalid delivery date.");
-      }
+     if (!formattedDeliveryDate) {
+       throw new Error("Invalid delivery date.");
+     }
 
-      const paymentData = {
-        firstName,
-        lastName,
-        address: `${addressLine1}, ${addressLine2}`,
-        phoneNumber,
-        email,
-        deliveryOption,
-        deliveryDate: formattedDeliveryDate, // Ensure it's valid
-        amount: parseFloat(amount) * 100,
-        orderedItems,
-        postalCode,
-        createdAt: new Date(),
-      };
+     const paymentData = {
+       firstName,
+       lastName,
+       address: `${addressLine1}, ${addressLine2}`,
+       phoneNumber,
+       email,
+       deliveryOption,
+       deliveryDate: formattedDeliveryDate,
+       amount: parseFloat(amount) * 100,
+       orderedItems,
+       postalCode,
+       createdAt: new Date(),
+     };
 
-      // Create payment intent on the server
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
+     // Create payment intent on the server
+     const response = await axios.post(
+       "http://localhost:3000/payment/createPaymentIntent",
+       paymentData
+     );
 
-      const { clientSecret } = response.data;
+     const { clientSecret, orderNumber } = response.data; // Get the orderNumber from the response
 
-      // Confirm card payment
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: `${firstName} ${lastName}`,
-              email,
-              address: {
-                line1: addressLine1,
-                line2: addressLine2,
-                postal_code: postalCode,
-              },
-            },
-          },
-        }
-      );
+     // Confirm card payment
+     const { error, paymentIntent } = await stripe.confirmCardPayment(
+       clientSecret,
+       {
+         payment_method: {
+           card: elements.getElement(CardElement),
+           billing_details: {
+             name: `${firstName} ${lastName}`,
+             email,
+             address: {
+               line1: addressLine1,
+               line2: addressLine2,
+               postal_code: postalCode,
+             },
+           },
+         },
+       }
+     );
 
-      if (error) {
-        console.error("Error during payment confirmation:", error);
-        setError(error.message || "Payment failed.");
-      } else if (paymentIntent.status === "succeeded") {
-        updateSnackBarState(true, "Payment Successful", "success");
-        resetForm();
-        clearCart();
-        saveCartItems(orderedItems, paymentData);
-        closeDrawer();
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+     if (error) {
+       console.error("Error during payment confirmation:", error);
+       setError(error.message || "Payment failed.");
+     } else if (paymentIntent.status === "succeeded") {
+       updateSnackBarState(true, "Payment Successful", "success");
+       resetForm();
+       clearCart();
+
+       // Pass the orderNumber along with cart items and payment data
+       saveCartItems(orderedItems, paymentData, orderNumber);
+
+       closeDrawer();
+       onClose();
+     }
+   } catch (error) {
+     console.error("Error creating payment intent:", error);
+     setError(error.message);
+   } finally {
+     setLoading(false);
+   }
+ };
+
 
 
   const resetForm = () => {
