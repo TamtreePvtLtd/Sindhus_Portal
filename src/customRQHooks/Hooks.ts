@@ -11,6 +11,7 @@ import {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
+  getAllCoupens,
 } from "../services/api";
 import { IMenuDatas } from "../interface/types";
 
@@ -106,5 +107,14 @@ export const usegetAllSpecials = () => {
 export const useGetAllMenuType3 = (menuId: string) => {
   return useQuery(["products", menuId], () => getMenuType3(menuId), {
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetAllCoupens = () => {
+  return useQuery({
+    queryKey: ["coupens"],
+    queryFn: getAllCoupens,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };
