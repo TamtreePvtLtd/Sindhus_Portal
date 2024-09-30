@@ -270,3 +270,17 @@ export interface ICateringSpecials {
   title: string;
   description: string;
 }
+
+export interface ICoupen {
+  _id: string;
+  coupenName: string;
+  coupenType: string;
+  discountAmount: number;
+  minAmount: number;
+  maxAmount: number;
+  availability: boolean;
+}
+
+export interface ICoupenResponse {
+  items: ICoupen[];
+}

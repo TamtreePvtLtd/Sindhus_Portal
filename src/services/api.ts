@@ -14,6 +14,7 @@ import {
   ISpecials,
   IMenuDatastype,
   menuWithProduct,
+  ICoupenResponse,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -253,6 +254,18 @@ const getMenuType3 = async (menuId?: string) => {
   }
 };
 
+const getAllCoupens = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<ICoupenResponse>(
+      "/coupen/getAllCoupens",);
+
+    return response.data;
+  } catch (error) {
+    var message = (error as Error).message;
+    throw new Error(message);
+  }
+};
+
 export {
   getAllMenus,
   fetchProductById,
@@ -270,4 +283,5 @@ export {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
+  getAllCoupens
 };
