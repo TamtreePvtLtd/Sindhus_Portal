@@ -14,8 +14,8 @@ const SuccessModal = ({ open, handleClose }) => {
           borderRadius: "10px",
         }}
       >
-        <h2>Thank you for your purchase!</h2>
-        {/* <p>Your Invoice Number #: {orderNumber}</p> */}
+        <h2>Thank you for your purchase! </h2>
+        <p>Your Payment was Successful.</p>
         <p>Please check your email for further details.</p>
         <Button onClick={handleClose} variant="contained" color="primary">
           Ok

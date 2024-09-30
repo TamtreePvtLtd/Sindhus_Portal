@@ -44,7 +44,7 @@ function PaymentDialog({
   const [postalCode, setPostalCode] = useState("");
   const [orderNumber, setOrderNumber] = useState();
   const { updateSnackBarState } = useSnackBar();
-   const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -59,6 +59,7 @@ function PaymentDialog({
     return postalCodePattern.test(postalCode);
   };
 
+  // Function to fetch the last order number and generate a new one
   // Function to fetch the last order number and generate a new one
   const getLastOrderNumber = async () => {
     try {
@@ -78,24 +79,24 @@ function PaymentDialog({
 
       const orderNumberData = await response.json();
       console.log("order no data", orderNumberData);
-      console.log("type order no data", typeof orderNumberData);
 
-      var newOrderNumber;
+      let newOrderNumber;
 
+      // Check if there's any existing order number in the database
       if (orderNumberData) {
+        // Extract the numeric part from the order number and increment it
         const numericOrderNumber = parseInt(orderNumberData.slice(1), 10) + 1;
         newOrderNumber = `#${numericOrderNumber.toString()}`;
-
-        console.log(numericOrderNumber);
       } else {
-        console.error("Invalid order number data");
+        // If no previous order exists, start with #1000
+        newOrderNumber = `#1000`;
       }
 
       console.log("newOrderNumber", newOrderNumber);
 
-      // Return the new order number and indicate that the transaction exists
-      setOrderNumber(newOrderNumber || "#1000");
-      // }
+      // Set the generated new order number
+      setOrderNumber(newOrderNumber);
+
       return newOrderNumber;
     } catch (error) {
       console.error("Error fetching last order number:", error);
@@ -271,7 +272,7 @@ function PaymentDialog({
 
         // Pass the orderNumber along with cart items and payment data
         saveCartItems(orderedItems, paymentData);
-setOpenModal(true);
+        setOpenModal(true);
         closeDrawer();
         onClose();
       }
@@ -448,7 +449,7 @@ setOpenModal(true);
       <SuccessModal
         open={openModal}
         handleClose={() => setOpenModal(false)}
-        // orderNumber={orderNumber}
+        
       />
     </Box>
   );
