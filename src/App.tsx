@@ -50,7 +50,7 @@ function App() {
                 <Suspense fallback={<Loader showSuspendLoading={true} />}>
                   <Routes>
                     <Route path={paths.ROOT} element={<Layout />}>
-                      <Route index element={<Home />} />
+                      <Route index element={<SnacksComponent />} />
                       <Route path={paths.HOME} element={<Home />} />
                       <Route
                         path={paths.SPECIALS}

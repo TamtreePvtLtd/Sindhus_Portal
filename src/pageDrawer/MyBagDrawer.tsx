@@ -236,7 +236,7 @@ function MybagDrawer({ isOpen, onClose }) {
                   Total: ${totalAmount.toFixed(2)}
                 </Typography>
                 <Typography variant="subtitle1">
-                  Tax (8.25%): ${taxAmount.toFixed(2)}
+                  Estimated Tax (8.25%): ${taxAmount.toFixed(2)}
                 </Typography>
                 <Typography variant="h6" fontWeight="bold">
                   Total with Tax: ${totalWithTax.toFixed(2)}
