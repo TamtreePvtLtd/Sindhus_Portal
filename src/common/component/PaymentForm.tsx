@@ -20,6 +20,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useSnackBar } from "../../context/SnackBarContext";
+import SuccessModal from "./SuccessModel";
+
 
 function PaymentDialog({
   open,
@@ -42,6 +44,7 @@ function PaymentDialog({
   const [postalCode, setPostalCode] = useState("");
   const [orderNumber, setOrderNumber] = useState();
   const { updateSnackBarState } = useSnackBar();
+   const [openModal, setOpenModal] = useState(false);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -268,7 +271,7 @@ function PaymentDialog({
 
         // Pass the orderNumber along with cart items and payment data
         saveCartItems(orderedItems, paymentData);
-
+setOpenModal(true);
         closeDrawer();
         onClose();
       }
@@ -294,148 +297,160 @@ function PaymentDialog({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Checkout</DialogTitle>
-      <DialogContent>
-        <Box
-          component="form"
-          sx={{ display: "flex", flexDirection: "column", gap: "1rem", mt: 2 }}
-        >
-          {/* Form Fields */}
-          <TextField
-            label="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField label="Amount ($)" value={amount} fullWidth disabled />
-
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Delivery or Pickup</FormLabel>
-            <RadioGroup
-              row
-              value={deliveryOption}
-              onChange={(e) => setDeliveryOption(e.target.value)}
-            >
-              <FormControlLabel
-                value="delivery"
-                control={<Radio />}
-                label="Delivery"
-              />
-              <FormControlLabel
-                value="pickup"
-                control={<Radio />}
-                label="Pickup"
-              />
-            </RadioGroup>
-          </FormControl>
-
-          <TextField
-            label="Address Line 1"
-            value={addressLine1}
-            onChange={(e) => setAddressLine1(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Address Line 2"
-            value={addressLine2}
-            onChange={(e) => setAddressLine2(e.target.value)}
-            fullWidth
-          />
-          <TextField
-            label="Postal Code"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            fullWidth
-            required
-          />
-
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Select Delivery or Pickup Date"
-              value={deliveryDate}
-              onChange={(newValue) => setDeliveryDate(newValue)}
-              renderInput={(params) => <TextField {...params} />}
-              disablePast
-              fullWidth
-              required
-            />
-          </LocalizationProvider>
+    <Box>
+      <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Checkout</DialogTitle>
+        <DialogContent>
           <Box
+            component="form"
             sx={{
               display: "flex",
               flexDirection: "column",
-              width: "100%",
-              mb: 2, // Add margin bottom to align with other fields
+              gap: "1rem",
+              mt: 2,
             }}
           >
-            <FormLabel sx={{ mb: 1 }}>Card Details</FormLabel>
+            {/* Form Fields */}
+            <TextField
+              label="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Phone Number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField label="Amount ($)" value={amount} fullWidth disabled />
+
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Delivery or Pickup</FormLabel>
+              <RadioGroup
+                row
+                value={deliveryOption}
+                onChange={(e) => setDeliveryOption(e.target.value)}
+              >
+                <FormControlLabel
+                  value="delivery"
+                  control={<Radio />}
+                  label="Delivery"
+                />
+                <FormControlLabel
+                  value="pickup"
+                  control={<Radio />}
+                  label="Pickup"
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <TextField
+              label="Address Line 1"
+              value={addressLine1}
+              onChange={(e) => setAddressLine1(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Address Line 2"
+              value={addressLine2}
+              onChange={(e) => setAddressLine2(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Postal Code"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              fullWidth
+              required
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Select Delivery or Pickup Date"
+                value={deliveryDate}
+                onChange={(newValue) => setDeliveryDate(newValue)}
+                renderInput={(params) => <TextField {...params} />}
+                disablePast
+                fullWidth
+                required
+              />
+            </LocalizationProvider>
             <Box
               sx={{
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                mb: 2, // Add margin bottom to align with other fields
               }}
             >
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      fontSize: "16px",
-                      color: "#424770",
-                      "::placeholder": {
-                        color: "#aab7c4",
+              <FormLabel sx={{ mb: 1 }}>Card Details</FormLabel>
+              <Box
+                sx={{
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                }}
+              >
+                <CardElement
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: "16px",
+                        color: "#424770",
+                        "::placeholder": {
+                          color: "#aab7c4",
+                        },
+                      },
+                      invalid: {
+                        color: "#9e2146",
                       },
                     },
-                    invalid: {
-                      color: "#9e2146",
-                    },
-                  },
-                }}
-              />
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
-        </Box>
-        {error && (
-          <Box color="error.main" mt={2}>
-            {error}
-          </Box>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={!stripe || loading}
-        >
-          {loading ? "Processing..." : "Confirm Payment"}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          {error && (
+            <Box color="error.main" mt={2}>
+              {error}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            disabled={!stripe || loading}
+          >
+            {loading ? "Processing..." : "Confirm Payment"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <SuccessModal
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+        // orderNumber={orderNumber}
+      />
+    </Box>
   );
 }
 
