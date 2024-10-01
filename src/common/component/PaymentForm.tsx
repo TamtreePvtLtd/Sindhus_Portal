@@ -89,7 +89,7 @@ function PaymentDialog({
       addressLine1: "",
       addressLine2: "",
       postalCode: "",
-      deliveryOption: "delivery",
+      deliveryOption: "Delivery",
       deliveryDate: null,
     },
   });
@@ -103,7 +103,9 @@ function PaymentDialog({
   const elements = useElements();
 
   useEffect(() => {
-    getLastOrderNumber();
+    if (open) {
+      getLastOrderNumber();
+    }
   }, [open]);
 
   const getLastOrderNumber = async () => {
@@ -158,61 +160,76 @@ function PaymentDialog({
     }
   };
 
-  const onSubmit = async (data: PaymentFormData) => {
-    if (!stripe || !elements) return;
+ const capitalizeFirstLetter = (string: string) => {
+   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+ };
 
-    setLoading(true);
-    const paymentData = {
-      ...data,
-      address: `${data.addressLine1}, ${data.addressLine2 || ""}`,
-      amount: parseFloat(amount) * 100,
-      orderedItems,
-      createdAt: new Date(),
-      orderNumber: orderNumber || "1000",
-    };
+ const onSubmit = async (data: PaymentFormData) => {
+   if (!stripe || !elements) return;
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
+   // Capitalize first and last names
+   const capitalizedData = {
+     ...data,
+     firstName: capitalizeFirstLetter(data.firstName),
+     lastName: capitalizeFirstLetter(data.lastName),
+   };
 
-      const { clientSecret } = response.data;
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: `${data.firstName} ${data.lastName}`,
-              email: data.email,
-              address: {
-                line1: data.addressLine1,
-                line2: data.addressLine2,
-                postal_code: data.postalCode,
-              },
-            },
-          },
-        }
-      );
+   setLoading(true);
+   const paymentData = {
+     ...capitalizedData,
+     address: `${capitalizedData.addressLine1}, ${
+       capitalizedData.addressLine2 || ""
+     }`,
+     amount: parseFloat(amount) * 100,
+     orderedItems,
+     createdAt: new Date(),
+     orderNumber: orderNumber || "1000",
+   };
 
-      if (error) {
-        console.error("Error during payment confirmation:", error);
-      } else if (paymentIntent.status === "succeeded") {
-        updateSnackBarState(true, "Payment Successful", "success");
-        clearCart();
-        saveCartItems(orderedItems, paymentData);
-        setOpenModal(true);
+   try {
+     const response = await axios.post(
+       "http://localhost:3000/payment/createPaymentIntent",
+       paymentData
+     );
 
-        closeDrawer();
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+     const { clientSecret } = response.data;
+     const { error, paymentIntent } = await stripe.confirmCardPayment(
+       clientSecret,
+       {
+         payment_method: {
+           card: elements.getElement(CardElement),
+           billing_details: {
+             name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
+             email: capitalizedData.email,
+             address: {
+               line1: capitalizedData.addressLine1,
+               line2: capitalizedData.addressLine2,
+               postal_code: capitalizedData.postalCode,
+             },
+           },
+         },
+       }
+     );
+
+     if (error) {
+       console.error("Error during payment confirmation:", error);
+     } else if (paymentIntent.status === "succeeded") {
+       updateSnackBarState(true, "Payment Successful", "success");
+       clearCart();
+       saveCartItems(orderedItems, paymentData);
+       console.log("Order Number:", orderNumber);
+       setOpenModal(true);
+       reset();
+       closeDrawer();
+       onClose();
+     }
+   } catch (error) {
+     console.error("Error creating payment intent:", error);
+   } finally {
+     setLoading(false);
+   }
+ };
+
 
   return (
     <Box>
@@ -298,12 +315,12 @@ function PaymentDialog({
                     onChange={(e) => field.onChange(e.target.value)}
                   >
                     <FormControlLabel
-                      value="delivery"
+                      value="Delivery"
                       control={<Radio />}
                       label="Delivery"
                     />
                     <FormControlLabel
-                      value="pickup"
+                      value="Pickup"
                       control={<Radio />}
                       label="Pickup"
                     />
@@ -424,7 +441,11 @@ function PaymentDialog({
           </Button>
         </DialogActions>
       </Dialog>
-      <SuccessModal open={openModal} handleClose={() => setOpenModal(false)} />
+      <SuccessModal
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+        orderNumber={orderNumber}
+      />
     </Box>
   );
 }
