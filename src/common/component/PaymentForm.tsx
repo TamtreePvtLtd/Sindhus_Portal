@@ -19,9 +19,45 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
 import dayjs from "dayjs";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
 
+// Define the interface for form data
+interface PaymentFormData {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  addressLine1: string;
+  addressLine2?: string;
+  postalCode: string;
+  deliveryOption: string;
+  deliveryDate: Date | null;
+}
+
+// Define the validation schema using Yup
+const schema = yup.object({
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  phoneNumber: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^[0-9]{10}$/, "Phone number must be 10 digits"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  addressLine1: yup.string().required("Address Line 1 is required"),
+  postalCode: yup
+    .string()
+    .required("Postal code is required")
+    .matches(/^[0-9]{6}$/, "Postal code must be 6 digits"),
+  deliveryOption: yup.string().required("Please select a delivery option"),
+  deliveryDate: yup
+    .date()
+    .nullable()
+    .required("Delivery or pickup date is required"),
+});
 
 function PaymentDialog({
   open,
@@ -30,19 +66,36 @@ function PaymentDialog({
   orderedItems,
   clearCart,
   closeDrawer,
+}: {
+  open: boolean;
+  onClose: () => void;
+  amount: number;
+  orderedItems: any[];
+  clearCart: () => void;
+  closeDrawer: () => void;
 }) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [addressLine1, setAddressLine1] = useState("");
-  const [addressLine2, setAddressLine2] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [deliveryOption, setDeliveryOption] = useState("delivery");
-  const [deliveryDate, setDeliveryDate] = useState(null);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<PaymentFormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      email: "",
+      addressLine1: "",
+      addressLine2: "",
+      postalCode: "",
+      deliveryOption: "Delivery",
+      deliveryDate: null,
+    },
+  });
+
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [orderNumber, setOrderNumber] = useState();
+  const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
 
@@ -50,17 +103,11 @@ function PaymentDialog({
   const elements = useElements();
 
   useEffect(() => {
-    console.log("useEffect called");
-    getLastOrderNumber();
+    if (open) {
+      getLastOrderNumber();
+    }
   }, [open]);
 
-  const validatePostalCode = (postalCode) => {
-    const postalCodePattern = /^[0-9]{6}$/; // Adjust the pattern based on your requirements
-    return postalCodePattern.test(postalCode);
-  };
-
-  // Function to fetch the last order number and generate a new one
-  // Function to fetch the last order number and generate a new one
   const getLastOrderNumber = async () => {
     try {
       const response = await fetch(
@@ -78,224 +125,111 @@ function PaymentDialog({
       }
 
       const orderNumberData = await response.json();
-      console.log("order no data", orderNumberData);
-
       let newOrderNumber;
 
-      // Check if there's any existing order number in the database
       if (orderNumberData) {
-        // Extract the numeric part from the order number and increment it
-        const numericOrderNumber = parseInt(orderNumberData.slice(1), 10) + 1;
-        newOrderNumber = `#${numericOrderNumber.toString()}`;
+        const numericOrderNumber = Number(orderNumberData) + 1;
+        newOrderNumber = numericOrderNumber.toString();
       } else {
-        // If no previous order exists, start with #1000
-        newOrderNumber = `#1000`;
+        newOrderNumber = `1000`;
       }
 
-      console.log("newOrderNumber", newOrderNumber);
-
-      // Set the generated new order number
       setOrderNumber(newOrderNumber);
-
-      return newOrderNumber;
     } catch (error) {
       console.error("Error fetching last order number:", error);
-      throw error;
     }
   };
 
-  // Function to save cart items and payment data
-  const saveCartItems = async (cartItems, paymentData) => {
+  const saveCartItems = async (cartItems: any[], paymentData: any) => {
     try {
-      // Call the getLastOrderNumber function to get the new order number
-      // const updatedCartItems = cartItems.map((item) => ({
-      //   ...item,
-      //   orderNumber: orderNumber,
-      // }));
-
       const data = {
         cartItems,
         paymentData,
-        orderNumber: orderNumber,
+        orderNumber: orderNumber || "1000",
       };
 
-      console.log("created cart item data", data);
-
-      // Save cart items and payment data with the new order number
-      const response = await fetch("http://localhost:3000/cart/cartItem", {
+      await fetch("http://localhost:3000/cart/cartItem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json(); // Add this to log the error details
-        console.error("Error response from server:", errorData);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const lastOrderData = await response.json();
-      console.log(lastOrderData.message);
     } catch (error) {
       console.error("Error saving cart items:", error);
     }
   };
 
-  // const saveCartItems = async (cartItems, paymentData) => {
-  //   try {
-  //     const lastItemresponse = await fetch(
-  //       "http://localhost:3000/payment/lasttransaction",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
+ const capitalizeFirstLetter = (string: string) => {
+   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+ };
 
-  //     if (!lastItemresponse.ok) {
-  //       throw new Error(`HTTP error! status: ${lastItemresponse.status}`);
-  //     }
+ const onSubmit = async (data: PaymentFormData) => {
+   if (!stripe || !elements) return;
 
-  //     const orderNumberdata = await lastItemresponse.json();
-  //     const numericOrderNumber =
-  //       parseInt(orderNumberdata.orderNumber.slice(1), 10) + 1;
-  //     const newOrderNumber = `#${numericOrderNumber.toString()}`;
+   // Capitalize first and last names
+   const capitalizedData = {
+     ...data,
+     firstName: capitalizeFirstLetter(data.firstName),
+     lastName: capitalizeFirstLetter(data.lastName),
+   };
 
-  //    const response = await fetch("http://localhost:3000/cart/cartItem", {
-  //      method: "POST",
-  //      headers: {
-  //        "Content-Type": "application/json",
-  //      },
-  //      body: JSON.stringify({
-  //        cartItems,
-  //        paymentData,
-  //        orderNumber: newOrderNumber,
-  //      }),
-  //    });
+   setLoading(true);
+   const paymentData = {
+     ...capitalizedData,
+     address: `${capitalizedData.addressLine1}, ${
+       capitalizedData.addressLine2 || ""
+     }`,
+     amount: parseFloat(amount) * 100,
+     orderedItems,
+     createdAt: new Date(),
+     orderNumber: orderNumber || "1000",
+   };
 
-  //    if (!response.ok) {
-  //      const errorData = await response.json(); // Add this to log the error details
-  //      console.error("Error response from server:", errorData);
-  //      throw new Error(`HTTP error! status: ${response.status}`);
-  //    }
+   try {
+     const response = await axios.post(
+       "http://localhost:3000/payment/createPaymentIntent",
+       paymentData
+     );
 
-  //    const lasOrderdata = await response.json();
-  //    console.log(lasOrderdata.message);
+     const { clientSecret } = response.data;
+     const { error, paymentIntent } = await stripe.confirmCardPayment(
+       clientSecret,
+       {
+         payment_method: {
+           card: elements.getElement(CardElement),
+           billing_details: {
+             name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
+             email: capitalizedData.email,
+             address: {
+               line1: capitalizedData.addressLine1,
+               line2: capitalizedData.addressLine2,
+               postal_code: capitalizedData.postalCode,
+             },
+           },
+         },
+       }
+     );
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
+     if (error) {
+       console.error("Error during payment confirmation:", error);
+     } else if (paymentIntent.status === "succeeded") {
+       updateSnackBarState(true, "Payment Successful", "success");
+       clearCart();
+       saveCartItems(orderedItems, paymentData);
+       console.log("Order Number:", orderNumber);
+       setOpenModal(true);
+       reset();
+       closeDrawer();
+       onClose();
+     }
+   } catch (error) {
+     console.error("Error creating payment intent:", error);
+   } finally {
+     setLoading(false);
+   }
+ };
 
-  //     const data = await response.json();
-  //     console.log(data.message);
-  //   } catch (error) {
-  //     console.error("Error saving cart items:", error);
-  //   }
-  // };
-
-  // Handle form submission
-  const handleSubmit = async () => {
-    if (!stripe || !elements || !deliveryDate) {
-      setError("Payment is incomplete. Please check all the fields.");
-      return;
-    }
-
-    // Validate postal code
-    if (!validatePostalCode(postalCode)) {
-      setError("Please enter a valid postal code.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const formattedDeliveryDate = dayjs(deliveryDate).isValid()
-        ? dayjs(deliveryDate).format("MM/DD/YYYY")
-        : null;
-
-      if (!formattedDeliveryDate) {
-        throw new Error("Invalid delivery date.");
-      }
-
-      const paymentData = {
-        firstName,
-        lastName,
-        address: `${addressLine1}, ${addressLine2}`,
-        phoneNumber,
-        email,
-        deliveryOption,
-        deliveryDate: formattedDeliveryDate,
-        amount: parseFloat(amount) * 100,
-        orderedItems,
-        postalCode,
-        createdAt: new Date(),
-        orderNumber: orderNumber,
-      };
-
-      // Create payment intent on the server
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
-
-      const { clientSecret } = response.data; // Get the orderNumber from the response
-
-      // Confirm card payment
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: `${firstName} ${lastName}`,
-              email,
-              address: {
-                line1: addressLine1,
-                line2: addressLine2,
-                postal_code: postalCode,
-              },
-            },
-          },
-        }
-      );
-
-      if (error) {
-        console.error("Error during payment confirmation:", error);
-        setError(error.message || "Payment failed.");
-      } else if (paymentIntent.status === "succeeded") {
-        updateSnackBarState(true, "Payment Successful", "success");
-        resetForm();
-        clearCart();
-
-        // Pass the orderNumber along with cart items and payment data
-        saveCartItems(orderedItems, paymentData);
-        setOpenModal(true);
-        closeDrawer();
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetForm = () => {
-    setFirstName("");
-    setLastName("");
-    setAddressLine1("");
-    setAddressLine2("");
-    setPhoneNumber("");
-    setEmail("");
-    setDeliveryOption("delivery");
-    setDeliveryDate(null);
-    setPostalCode("");
-    setError("");
-  };
 
   return (
     <Box>
@@ -311,87 +245,146 @@ function PaymentDialog({
               mt: 2,
             }}
           >
-            {/* Form Fields */}
-            <TextField
-              label="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              fullWidth
-              required
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="First Name"
+                  error={!!errors.firstName}
+                  helperText={errors.firstName?.message}
+                  fullWidth
+                  required
+                />
+              )}
             />
-            <TextField
-              label="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              fullWidth
-              required
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Last Name"
+                  error={!!errors.lastName}
+                  helperText={errors.lastName?.message}
+                  fullWidth
+                  required
+                />
+              )}
             />
-            <TextField
-              label="Phone Number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              fullWidth
-              required
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Phone Number"
+                  error={!!errors.phoneNumber}
+                  helperText={errors.phoneNumber?.message}
+                  fullWidth
+                  required
+                />
+              )}
             />
-            <TextField
-              label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-              required
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Email"
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  fullWidth
+                  required
+                />
+              )}
             />
             <TextField label="Amount ($)" value={amount} fullWidth disabled />
-
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Delivery or Pickup</FormLabel>
-              <RadioGroup
-                row
-                value={deliveryOption}
-                onChange={(e) => setDeliveryOption(e.target.value)}
-              >
-                <FormControlLabel
-                  value="delivery"
-                  control={<Radio />}
-                  label="Delivery"
+            <Controller
+              name="deliveryOption"
+              control={control}
+              render={({ field }) => (
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Delivery or Pickup</FormLabel>
+                  <RadioGroup
+                    {...field}
+                    row
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  >
+                    <FormControlLabel
+                      value="Delivery"
+                      control={<Radio />}
+                      label="Delivery"
+                    />
+                    <FormControlLabel
+                      value="Pickup"
+                      control={<Radio />}
+                      label="Pickup"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
+            <Controller
+              name="addressLine1"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Address Line 1"
+                  error={!!errors.addressLine1}
+                  helperText={errors.addressLine1?.message}
+                  fullWidth
+                  required
                 />
-                <FormControlLabel
-                  value="pickup"
-                  control={<Radio />}
-                  label="Pickup"
+              )}
+            />
+            <Controller
+              name="addressLine2"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Address Line 2" fullWidth />
+              )}
+            />
+            <Controller
+              name="postalCode"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Postal Code"
+                  error={!!errors.postalCode}
+                  helperText={errors.postalCode?.message}
+                  fullWidth
+                  required
                 />
-              </RadioGroup>
-            </FormControl>
-
-            <TextField
-              label="Address Line 1"
-              value={addressLine1}
-              onChange={(e) => setAddressLine1(e.target.value)}
-              fullWidth
-              required
+              )}
             />
-            <TextField
-              label="Address Line 2"
-              value={addressLine2}
-              onChange={(e) => setAddressLine2(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Postal Code"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              fullWidth
-              required
-            />
-
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Select Delivery or Pickup Date"
-                value={deliveryDate}
-                onChange={(newValue) => setDeliveryDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-                disablePast
-                fullWidth
-                required
+              <Controller
+                name="deliveryDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    label="Select Delivery or Pickup Date"
+                    {...field}
+                    value={field.value}
+                    onChange={(date) => field.onChange(date)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={!!errors.deliveryDate}
+                        helperText={errors.deliveryDate?.message}
+                      />
+                    )}
+                    disablePast
+                    fullWidth
+                    required
+                  />
+                )}
               />
             </LocalizationProvider>
             <Box
@@ -399,7 +392,7 @@ function PaymentDialog({
                 display: "flex",
                 flexDirection: "column",
                 width: "100%",
-                mb: 2, // Add margin bottom to align with other fields
+                mb: 2,
               }}
             >
               <FormLabel sx={{ mb: 1 }}>Card Details</FormLabel>
@@ -429,16 +422,18 @@ function PaymentDialog({
               </Box>
             </Box>
           </Box>
-          {error && (
+          {errors && (
             <Box color="error.main" mt={2}>
-              {error}
+              {Object.values(errors).map((error) => (
+                <div key={error.message}>{error.message}</div>
+              ))}
             </Box>
           )}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
           <Button
-            onClick={handleSubmit}
+            onClick={handleSubmit(onSubmit)}
             variant="contained"
             disabled={!stripe || loading}
           >
@@ -449,7 +444,7 @@ function PaymentDialog({
       <SuccessModal
         open={openModal}
         handleClose={() => setOpenModal(false)}
-        
+        orderNumber={orderNumber}
       />
     </Box>
   );
