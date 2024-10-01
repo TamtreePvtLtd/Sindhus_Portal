@@ -126,10 +126,10 @@ function PaymentDialog({
       let newOrderNumber;
 
       if (orderNumberData) {
-        const numericOrderNumber = parseInt(orderNumberData.slice(1), 10) + 1;
-        newOrderNumber = `#${numericOrderNumber.toString()}`;
+        const numericOrderNumber = Number(orderNumberData) + 1;
+        newOrderNumber = numericOrderNumber.toString();
       } else {
-        newOrderNumber = `#1000`;
+        newOrderNumber = `1000`;
       }
 
       setOrderNumber(newOrderNumber);
@@ -143,7 +143,7 @@ function PaymentDialog({
       const data = {
         cartItems,
         paymentData,
-        orderNumber,
+        orderNumber: orderNumber || "1000",
       };
 
       await fetch("http://localhost:3000/cart/cartItem", {
@@ -168,7 +168,7 @@ function PaymentDialog({
       amount: parseFloat(amount) * 100,
       orderedItems,
       createdAt: new Date(),
-      orderNumber,
+      orderNumber: orderNumber || "1000",
     };
 
     try {
@@ -203,7 +203,7 @@ function PaymentDialog({
         clearCart();
         saveCartItems(orderedItems, paymentData);
         setOpenModal(true);
-        
+
         closeDrawer();
         onClose();
       }
@@ -213,8 +213,6 @@ function PaymentDialog({
       setLoading(false);
     }
   };
-
- 
 
   return (
     <Box>
