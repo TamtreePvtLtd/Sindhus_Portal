@@ -29,10 +29,10 @@ export function PlacesAutocomplete() {
     if (!isLoaded) return <div>Loading Maps...</div>;
 
     // for US
-    // const origin = { lat: 33.176659, lng: -96.889610 };
+    const origin = { lat: 33.176659, lng: -96.889610 };
 
     // for namakkal
-    const origin = { lat: 11.229592, lng: 78.171158 };
+    // const origin = { lat: 11.229592, lng: 78.171158 };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
@@ -48,7 +48,7 @@ export function PlacesAutocomplete() {
         try {
             const service = new window.google.maps.places.AutocompleteService();
 
-            service.getPlacePredictions({ input }, (predictions, status) => {
+            service.getPlacePredictions({ input, componentRestrictions: { country: "us" } }, (predictions, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                     const results: AutocompleteResult[] = predictions
                         ? predictions.map((prediction) => ({
