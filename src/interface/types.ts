@@ -114,7 +114,7 @@ export interface ICategory {
   title: string;
   image?: string;
   products?: IProduct[];
-  }
+}
 export interface ICategoryTitleDispay {
   menuDatas: ICategory;
 }
@@ -279,6 +279,8 @@ export interface ICoupen {
   minAmount: number;
   maxAmount: number;
   availability: boolean;
+  startDateWithTime: string;
+  endDateWithTime: string;
 }
 
 export interface ICoupenResponse {

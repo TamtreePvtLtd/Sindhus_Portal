@@ -352,7 +352,7 @@ import {
   Badge,
   useMediaQuery,
 } from "@mui/material";
-import { useTheme,} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import CallIcon from "@mui/icons-material/Call";
 import React, { useState } from "react";
@@ -365,10 +365,9 @@ function NavBar() {
   const [appBarPosition, setAppBarPosition] = React.useState("static");
   const { cartCount } = useCart(); // Use cart context here
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-   const toggleDrawer = () => {
-     setIsDrawerOpen(!isDrawerOpen);
-   };
-
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -414,33 +413,41 @@ function NavBar() {
               flexGrow: 1,
             }}
           >
-            <img
-              src="assets/images/output-onlinepngtools (1).png"
-              alt="Logo"
-              style={{
-                height: "auto",
-                width: isBelowSMScreen ? "3.5rem" : "3rem",
-                marginRight: "6px",
-                paddingTop: isBelowSMScreen ? "7px" : "3px",
-                paddingLeft: isBelowSMScreen ? "10px" : "0px",
-                cursor: "pointer",
-              }}
-              loading="lazy"
-            />
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 600,
-                  color: "#038265",
-                  fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
-                  fontFamily: "clearface ts bold",
+            <a href="https://sindhuskitchen.com/">
+              <img
+                src="assets/images/output-onlinepngtools (1).png"
+                alt="Logo"
+                style={{
+                  height: "auto",
+                  width: isBelowSMScreen ? "3.5rem" : "3rem",
+                  marginRight: "6px",
+                  paddingTop: isBelowSMScreen ? "7px" : "3px",
+                  paddingLeft: isBelowSMScreen ? "10px" : "0px",
                   cursor: "pointer",
-                  marginTop: "3px",
-                  paddingTop: isBelowSMScreen ? "10px" : "3px",
                 }}
+                loading="lazy"
+              />
+            </a>
+            <Box>
+              <a
+                href="https://sindhuskitchen.com/"
+                style={{ textDecoration: "none" }}
               >
-                SINDHU&#8217;S
-              </Typography>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    color: "#038265",
+                    fontSize: isBelowSMScreen ? "1.5rem" : "2rem",
+                    fontFamily: "clearface ts bold",
+                    cursor: "pointer",
+                    marginTop: "3px",
+                    paddingTop: isBelowSMScreen ? "10px" : "3px",
+                  }}
+                >
+                  SINDHU&#8217;S
+                </Typography>
+              </a>
+
               {isBelowSMScreen && (
                 <Box
                   sx={{
@@ -492,7 +499,7 @@ function NavBar() {
                 justifyContent: "flex-end",
                 flexGrow: 1,
                 alignItems: "center",
-                marginTop:"10px"
+                marginTop: "10px",
               }}
             >
               <Badge
@@ -502,7 +509,6 @@ function NavBar() {
                   "& .MuiBadge-badge": {
                     backgroundColor: "#038265",
                     color: "#fff",
-                  
                   },
                 }}
               >
@@ -510,7 +516,7 @@ function NavBar() {
                   sx={{
                     color: "black",
                     marginRight: "5px",
-                    fontSize:"35px"
+                    fontSize: "35px",
                   }}
                   onClick={toggleDrawer}
                 />

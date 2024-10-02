@@ -28,13 +28,17 @@ function MybagDrawer({ isOpen, onClose }) {
   const { data: coupons, refetch } = useGetAllCoupens();
   console.log(coupons);
   const [couponInput, setCouponInput] = useState("");
+  const [expiryDate, setExpiryDate] = useState({
+    startDateWithTime: "",
+    endDateWithTime: "",
+  });
   const [discountValue, setDiscountValue] = useState(0);
   const [finalAmount, setFinalAmount] = useState(0);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    refetch();
-  }, []);
+    if (isOpen) refetch();
+  }, [isOpen]);
 
   const taxRate = 8.25 / 100; // Tax rate of 8.25%
 
@@ -90,13 +94,14 @@ function MybagDrawer({ isOpen, onClose }) {
   const taxAmount = discountedTotal * taxRate; // Calculate tax on discounted total
   const totalWithTax = discountedTotal + taxAmount; // Add tax to the discounted total
 
-
   const clearCart = () => {
     setCartItems([]); // Clear cart items after successful payment
   };
 
   const handleApplyCoupon = () => {
     // Prevent applying a second coupon
+    console.log("apply copon", couponInput);
+
     if (discountValue > 0) {
       setError("You have already applied a coupon.");
       return;
@@ -107,9 +112,21 @@ function MybagDrawer({ isOpen, onClose }) {
         coupen.coupenName.toLowerCase() === couponInput.toLowerCase() &&
         coupen.availability
     );
+    console.log("matchedCoupon apply after", matchedCoupon);
 
     if (!matchedCoupon) {
-      setError("Invalid Coupon.");
+      setError("Invalid Coupon");
+      setDiscountValue(0);
+      setFinalAmount(totalAmount);
+      return;
+    }
+    const currentDate = new Date();
+    const startDate = new Date(matchedCoupon.startDateWithTime);
+    const endDate = new Date(matchedCoupon.endDateWithTime);
+
+    // Check if current date is within the coupon's validity period
+    if (currentDate < startDate || currentDate > endDate) {
+      setError("This coupon is not valid at this time");
       setDiscountValue(0);
       setFinalAmount(totalAmount);
       return;
@@ -117,7 +134,9 @@ function MybagDrawer({ isOpen, onClose }) {
 
     // Check if totalAmount is greater than or equal to minAmount
     if (totalAmount < matchedCoupon.minAmount) {
-      setError(`Minimum purchase amount of $${matchedCoupon.minAmount} is required.`);
+      setError(
+        `Minimum purchase amount of $${matchedCoupon.minAmount} is required`
+      );
       setDiscountValue(0);
       setFinalAmount(totalAmount);
       return;
@@ -132,7 +151,7 @@ function MybagDrawer({ isOpen, onClose }) {
     }
 
     // Ensure the discount does not exceed the maxAmount
-    if (discount > matchedCoupon.maxAmount) {
+    if (matchedCoupon.maxAmount !== 0 && discount > matchedCoupon.maxAmount) {
       discount = matchedCoupon.maxAmount;
     }
 
@@ -140,8 +159,6 @@ function MybagDrawer({ isOpen, onClose }) {
     setFinalAmount(totalAmount - discount);
     setError(""); // Clear any previous error
   };
-
-
 
   useEffect(() => {
     // Initially set the final amount to totalAmount
@@ -155,7 +172,6 @@ function MybagDrawer({ isOpen, onClose }) {
     setFinalAmount(totalAmount); // Reset final amount to original total
     setError(""); // Clear any error messages
   };
-
 
   return (
     <>
@@ -301,85 +317,88 @@ function MybagDrawer({ isOpen, onClose }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-                <Box
-                  sx={{
-                    padding: 2,
-                    borderTop: "1px solid #ddd",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    gap: 1, // Adds space between the text fields
-                  }}
-                >
-                  <Typography variant="subtitle1">
-                    Total: ${totalAmount.toFixed(2)}
-                  </Typography>
-                  <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                    <TextField
-                      id="outlined-coupon-input"
-                      label="Apply coupon"
-                      type="text"
-                      autoComplete="off"
-                      value={couponInput}
-                      onChange={(e) => setCouponInput(e.target.value)}
-                      size="small"
-                      disabled={discountValue > 0} // Disable input if a coupon has been applied
-                    />
+              <Box
+                sx={{
+                  padding: 2,
+                  borderTop: "1px solid #ddd",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: 1, // Adds space between the text fields
+                }}
+              >
+                <Typography variant="subtitle1">
+                  Total: ${totalAmount.toFixed(2)}
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                  <TextField
+                    id="outlined-coupon-input"
+                    label="Apply coupon"
+                    type="text"
+                    autoComplete="off"
+                    value={couponInput}
+                    onChange={(e) => {
+                      setCouponInput(e.target.value);
+                      setError("");
+                    }}
+                    size="small"
+                    disabled={discountValue > 0} // Disable input if a coupon has been applied
+                  />
 
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ borderRadius: "4px" }}
-                      onClick={handleApplyCoupon}
-                      disabled={discountValue > 0} // Disable button if a coupon has been applied
-                    >
-                      Apply
-                    </Button>
-
-                    {discountValue > 0 && (
-                      <IconButton
-                        onClick={() => handleRemoveCoupon()}
-                        sx={{
-                          color: "red", // Red icon to indicate removal
-                          marginLeft: "-12px", // Adjust icon position if needed
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    )}
-                  </Box>
-
-
-                  {error && <Typography color="error">{error}</Typography>}
-                  {discountValue > 0 && (
-                    <>
-                      <Typography color="green">
-                        Discount: ${discountValue.toFixed(2)}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        Discounted Total: ${(totalAmount - discountValue).toFixed(2)}
-                      </Typography>
-                    </>
-                  )}
-                  <Typography variant="subtitle1">
-                    Estimated Tax (8.25%): ${taxAmount.toFixed(2)}
-                  </Typography>
-                  <Typography variant="h6" fontWeight="bold">
-                    Order Total: ${totalWithTax.toFixed(2)} {/* Updated to include discounted total + tax */}
-                  </Typography>
                   <Button
                     variant="contained"
                     color="primary"
-                    sx={{
-                      padding: "10px 20px",
-                      borderRadius: "4px",
-                    }}
-                    onClick={() => setIsPaymentDialogOpen(true)} // Open dialog
+                    sx={{ borderRadius: "4px" }}
+                    onClick={handleApplyCoupon}
+                    disabled={discountValue > 0} // Disable button if a coupon has been applied
                   >
-                    Proceed to Payment
+                    Apply
                   </Button>
+
+                  {discountValue > 0 && (
+                    <IconButton
+                      onClick={() => handleRemoveCoupon()}
+                      sx={{
+                        color: "red", // Red icon to indicate removal
+                        marginLeft: "-12px", // Adjust icon position if needed
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </Box>
 
+                {error && <Typography color="error">{error}</Typography>}
+                {discountValue > 0 && (
+                  <>
+                    <Typography color="green">
+                      Discount: ${discountValue.toFixed(2)}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Discounted Total: $
+                      {(totalAmount - discountValue).toFixed(2)}
+                    </Typography>
+                  </>
+                )}
+                <Typography variant="subtitle1">
+                  Estimated Tax (8.25%): ${taxAmount.toFixed(2)}
+                </Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  Order Total: ${totalWithTax.toFixed(2)}{" "}
+                  {/* Updated to include discounted total + tax */}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    padding: "10px 20px",
+                    borderRadius: "4px",
+                  }}
+                  onClick={() => setIsPaymentDialogOpen(true)} // Open dialog
+                >
+                  Proceed to Payment
+                </Button>
+              </Box>
             </>
           )}
         </Box>
