@@ -15,6 +15,7 @@ import {
   IMenuDatastype,
   menuWithProduct,
   ICoupenResponse,
+  DistanceBasedDeliveryCharge,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -265,8 +266,18 @@ const getAllCoupens = async () => {
     throw new Error(message);
   }
 };
+const getDistanceBasedDeliveryCharge = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<DistanceBasedDeliveryCharge[]>(
+      "/distance/getAllDistances")
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
+  getDistanceBasedDeliveryCharge,
   getAllMenus,
   fetchProductById,
   cateringfetchProductData,

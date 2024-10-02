@@ -12,6 +12,7 @@ import {
   getMenuType3,
   getAllMenusInCatering,
   getAllCoupens,
+  getDistanceBasedDeliveryCharge,
 } from "../services/api";
 import { IMenuDatas } from "../interface/types";
 
@@ -116,5 +117,13 @@ export const useGetAllCoupens = () => {
     queryFn: getAllCoupens,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+  });
+};
+
+export const useGetDistanceBasedDeliveryCharge = () => {
+  return useQuery({
+    queryKey: ["distance"],
+    queryFn: () => getDistanceBasedDeliveryCharge(),
+    refetchOnWindowFocus: false,
   });
 };

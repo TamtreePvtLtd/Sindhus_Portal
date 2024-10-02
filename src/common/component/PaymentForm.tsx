@@ -26,7 +26,7 @@ import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
-
+import { useGetAllCoupens } from "../../customRQHooks/Hooks";
 
 // Define the interface for form data
 interface PaymentFormData {
@@ -61,7 +61,6 @@ const schema = yup.object({
     .nullable()
     .required("Delivery or pickup date is required"),
 });
-
 
 function PaymentDialog({
   open,
@@ -102,6 +101,8 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
+
+  const { data: coupens, refetch } = useGetAllCoupens();
 
   // const libraries = ["places"];
 
@@ -174,76 +175,75 @@ function PaymentDialog({
     }
   };
 
- const capitalizeFirstLetter = (string: string) => {
-   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
- };
+  const capitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
 
- const onSubmit = async (data: PaymentFormData) => {
-   if (!stripe || !elements) return;
+  const onSubmit = async (data: PaymentFormData) => {
+    if (!stripe || !elements) return;
 
-   // Capitalize first and last names
-   const capitalizedData = {
-     ...data,
-     firstName: capitalizeFirstLetter(data.firstName),
-     lastName: capitalizeFirstLetter(data.lastName),
-   };
+    // Capitalize first and last names
+    const capitalizedData = {
+      ...data,
+      firstName: capitalizeFirstLetter(data.firstName),
+      lastName: capitalizeFirstLetter(data.lastName),
+    };
 
-   setLoading(true);
-   const paymentData = {
-     ...capitalizedData,
-     address: `${capitalizedData.addressLine1}, ${
-       capitalizedData.addressLine2 || ""
-     }`,
-     amount: parseFloat(amount) * 100,
-     orderedItems,
-     createdAt: new Date(),
-     orderNumber: orderNumber || "1000",
-   };
+    setLoading(true);
+    const paymentData = {
+      ...capitalizedData,
+      address: `${capitalizedData.addressLine1}, ${
+        capitalizedData.addressLine2 || ""
+      }`,
+      amount: parseFloat(amount) * 100,
+      orderedItems,
+      createdAt: new Date(),
+      orderNumber: orderNumber || "1000",
+    };
 
-   try {
-     const response = await axios.post(
-       "http://localhost:3000/payment/createPaymentIntent",
-       paymentData
-     );
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/payment/createPaymentIntent",
+        paymentData
+      );
 
-     const { clientSecret } = response.data;
-     const { error, paymentIntent } = await stripe.confirmCardPayment(
-       clientSecret,
-       {
-         payment_method: {
-           card: elements.getElement(CardElement),
-           billing_details: {
-             name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
-             email: capitalizedData.email,
-             address: {
-               line1: capitalizedData.addressLine1,
-               line2: capitalizedData.addressLine2,
-               postal_code: capitalizedData.postalCode,
-             },
-           },
-         },
-       }
-     );
+      const { clientSecret } = response.data;
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
+              email: capitalizedData.email,
+              address: {
+                line1: capitalizedData.addressLine1,
+                line2: capitalizedData.addressLine2,
+                postal_code: capitalizedData.postalCode,
+              },
+            },
+          },
+        }
+      );
 
-     if (error) {
-       console.error("Error during payment confirmation:", error);
-     } else if (paymentIntent.status === "succeeded") {
-       updateSnackBarState(true, "Payment Successful", "success");
-       clearCart();
-       saveCartItems(orderedItems, paymentData);
-       console.log("Order Number:", orderNumber);
-       setOpenModal(true);
-       reset();
-       closeDrawer();
-       onClose();
-     }
-   } catch (error) {
-     console.error("Error creating payment intent:", error);
-   } finally {
-     setLoading(false);
-   }
- };
-
+      if (error) {
+        console.error("Error during payment confirmation:", error);
+      } else if (paymentIntent.status === "succeeded") {
+        updateSnackBarState(true, "Payment Successful", "success");
+        clearCart();
+        saveCartItems(orderedItems, paymentData);
+        console.log("Order Number:", orderNumber);
+        setOpenModal(true);
+        reset();
+        closeDrawer();
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box>
@@ -342,7 +342,7 @@ function PaymentDialog({
                 </FormControl>
               )}
             />
-            <PlacesAutocomplete/>
+            <PlacesAutocomplete />
             {/* <Controller
               name="addressLine1"
               control={control}

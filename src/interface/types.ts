@@ -286,3 +286,9 @@ export interface ICoupen {
 export interface ICoupenResponse {
   items: ICoupen[];
 }
+
+export interface DistanceBasedDeliveryCharge {
+  _id?: string
+  amount: string;
+  uptoDistance: string;
+}
