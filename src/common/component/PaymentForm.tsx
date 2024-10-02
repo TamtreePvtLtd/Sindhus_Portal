@@ -24,6 +24,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
+import { PlacesAutocomplete } from "./PlacesAutocomplete";
+
 
 // Define the interface for form data
 interface PaymentFormData {
@@ -51,13 +54,14 @@ const schema = yup.object({
   postalCode: yup
     .string()
     .required("Postal code is required")
-    .matches(/^[0-9]{6}$/, "Postal code must be 6 digits"),
+    .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
   deliveryOption: yup.string().required("Please select a delivery option"),
   deliveryDate: yup
     .date()
     .nullable()
     .required("Delivery or pickup date is required"),
 });
+
 
 function PaymentDialog({
   open,
@@ -69,7 +73,7 @@ function PaymentDialog({
 }: {
   open: boolean;
   onClose: () => void;
-  amount: number;
+  amount: string;
   orderedItems: any[];
   clearCart: () => void;
   closeDrawer: () => void;
@@ -98,6 +102,16 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
+
+  // const libraries = ["places"];
+
+  // const { isLoaded, loadError } = useLoadScript({
+  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_LOCATION,
+  //   libraries,
+  // });
+
+  // if (loadError) return <div>Error loading maps</div>;
+  // if (!isLoaded) return <div>Loading Maps...</div>;
 
   const stripe = useStripe();
   const elements = useElements();
@@ -328,7 +342,8 @@ function PaymentDialog({
                 </FormControl>
               )}
             />
-            <Controller
+            <PlacesAutocomplete/>
+            {/* <Controller
               name="addressLine1"
               control={control}
               render={({ field }) => (
@@ -341,14 +356,14 @@ function PaymentDialog({
                   required
                 />
               )}
-            />
-            <Controller
+            /> */}
+            {/* <Controller
               name="addressLine2"
               control={control}
               render={({ field }) => (
                 <TextField {...field} label="Address Line 2" fullWidth />
               )}
-            />
+            /> */}
             <Controller
               name="postalCode"
               control={control}
