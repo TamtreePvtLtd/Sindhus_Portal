@@ -18,15 +18,13 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
-import dayjs from "dayjs";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
-import { Libraries, useLoadScript } from "@react-google-maps/api";
+
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
-import { useGetAllCoupens } from "../../customRQHooks/Hooks";
 
 // Define the interface for form data
 interface PaymentFormData {
@@ -48,7 +46,10 @@ const schema = yup.object({
   phoneNumber: yup
     .string()
     .required("Phone number is required")
-    .matches(/^[0-9]{10}$/, "Phone number must be 10 digits"),
+    .matches(
+      /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/,
+      "Phone number must be a valid US number"
+    ),
   email: yup.string().email("Invalid email").required("Email is required"),
   addressLine1: yup.string().required("Address Line 1 is required"),
   postalCode: yup
@@ -81,6 +82,7 @@ function PaymentDialog({
     control,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<PaymentFormData>({
     resolver: yupResolver(schema),
@@ -92,7 +94,7 @@ function PaymentDialog({
       addressLine1: "",
       addressLine2: "",
       postalCode: "",
-      deliveryOption: "Delivery",
+      deliveryOption: "Pickup",
       deliveryDate: null,
     },
   });
@@ -101,8 +103,8 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
-
-  const { data: coupens, refetch } = useGetAllCoupens();
+ const [isPickup, setIsPickup] = useState(true);
+  // const { data: coupens, refetch } = useGetAllCoupens();
 
   // const libraries = ["places"];
 
@@ -116,6 +118,11 @@ function PaymentDialog({
 
   const stripe = useStripe();
   const elements = useElements();
+
+ const deliveryOptionValue = watch("deliveryOption");
+
+ 
+
 
   useEffect(() => {
     if (open) {
@@ -315,7 +322,9 @@ function PaymentDialog({
                 />
               )}
             />
-            <TextField label="Amount ($)" value={amount} fullWidth disabled />
+            {deliveryOptionValue === "Pickup" && (
+              <TextField label="Amount ($)" value={amount} fullWidth disabled />
+            )}
             <Controller
               name="deliveryOption"
               control={control}
@@ -342,7 +351,7 @@ function PaymentDialog({
                 </FormControl>
               )}
             />
-            <PlacesAutocomplete />
+            {deliveryOptionValue === "Delivery" && <PlacesAutocomplete />}
             {/* <Controller
               name="addressLine1"
               control={control}
@@ -364,40 +373,43 @@ function PaymentDialog({
                 <TextField {...field} label="Address Line 2" fullWidth />
               )}
             /> */}
-            <Controller
-              name="postalCode"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Postal Code"
-                  error={!!errors.postalCode}
-                  helperText={errors.postalCode?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            />
+            {deliveryOptionValue === "Delivery" && (
+              <Controller
+                name="postalCode"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Postal Code"
+                    error={!!errors.postalCode}
+                    helperText={errors.postalCode?.message}
+                    fullWidth
+                    required
+                  />
+                )}
+              />
+            )}
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Controller
                 name="deliveryDate"
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                    label="Select Delivery or Pickup Date"
+                    label={
+                      deliveryOptionValue === "Pickup"
+                        ? "Pickup Date"
+                        : "Delivery Date"
+                    }
                     {...field}
-                    value={field.value}
                     onChange={(date) => field.onChange(date)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         error={!!errors.deliveryDate}
                         helperText={errors.deliveryDate?.message}
+                        fullWidth
                       />
                     )}
-                    disablePast
-                    fullWidth
-                    required
                   />
                 )}
               />

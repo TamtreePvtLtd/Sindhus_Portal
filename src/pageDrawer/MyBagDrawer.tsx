@@ -396,7 +396,7 @@ function MybagDrawer({ isOpen, onClose }) {
                   }}
                   onClick={() => setIsPaymentDialogOpen(true)} // Open dialog
                 >
-                  Proceed to Payment
+                  Proceed to Checkout
                 </Button>
               </Box>
             </>
