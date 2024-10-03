@@ -32,6 +32,7 @@ function PageBanner(props: IProps) {
               }}
               variant="h2"
               fontWeight={"medium"}
+              fontFamily={"Dancing Script, cursive"}
             >
               {content}
             </Typography>
