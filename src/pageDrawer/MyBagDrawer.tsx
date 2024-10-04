@@ -28,6 +28,7 @@ function MybagDrawer({ isOpen, onClose }) {
   const { data: coupons, refetch } = useGetAllCoupens();
   console.log(coupons);
   const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
   const [expiryDate, setExpiryDate] = useState({
     startDateWithTime: "",
     endDateWithTime: "",
@@ -120,6 +121,7 @@ function MybagDrawer({ isOpen, onClose }) {
       setFinalAmount(totalAmount);
       return;
     }
+    setAppliedCoupon(matchedCoupon?.coupenName);
     const currentDate = new Date();
     const startDate = new Date(matchedCoupon.startDateWithTime);
     const endDate = new Date(matchedCoupon.endDateWithTime);
@@ -411,6 +413,9 @@ function MybagDrawer({ isOpen, onClose }) {
         orderedItems={cartItems}
         clearCart={clearCart}
         closeDrawer={onClose}
+        totalWithoutCoupon={totalAmount}
+        totalAmountWithCoupon={discountedTotal}
+        couponName={couponInput}
       />
     </>
   );

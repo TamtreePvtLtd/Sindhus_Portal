@@ -119,6 +119,7 @@ export function PlacesAutocomplete({
             setAddressURL(addressURL);
             setSelectedPlace({ lat, lng });
             await calculateDistance(origin, { lat, lng });
+            setAddressError("");
           } else {
             console.error(
               "Geocode was not successful for the following reason:",

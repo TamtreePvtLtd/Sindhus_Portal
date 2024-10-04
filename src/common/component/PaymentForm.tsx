@@ -34,7 +34,7 @@ interface PaymentFormData {
   email: string;
   addressLine: string;
   // addressLine2?: string;
-  postalCode: string;
+  postalCode?: string;
   deliveryOption: string;
   deliveryDate: Date | null;
 }
@@ -52,10 +52,10 @@ const schema = yup.object({
     ),
   email: yup.string().email("Invalid email").required("Email is required"),
   // addressLine1: yup.string().required("Address Line 1 is required"),
-  postalCode: yup
-    .string()
-    .required("Postal code is required")
-    .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
+  // postalCode: yup
+  //   .string()
+  //   .required("Postal code is required")
+  //   .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
   deliveryOption: yup.string().required("Please select a delivery option"),
   deliveryDate: yup
     .date()
@@ -70,6 +70,9 @@ function PaymentDialog({
   orderedItems,
   clearCart,
   closeDrawer,
+  totalWithoutCoupon,
+  totalAmountWithCoupon,
+  couponName,
 }: {
   open: boolean;
   onClose: () => void;
@@ -77,6 +80,9 @@ function PaymentDialog({
   orderedItems: any[];
   clearCart: () => void;
   closeDrawer: () => void;
+  totalWithoutCoupon: number;
+  totalAmountWithCoupon: number;
+  couponName: string;
 }) {
   const {
     control,
@@ -124,6 +130,10 @@ function PaymentDialog({
   const elements = useElements();
 
   const deliveryOptionValue = watch("deliveryOption");
+
+  useEffect(() => {
+    if (deliveryOptionValue == "Pickup") setAddressError("");
+  }, [deliveryOptionValue]);
 
   useEffect(() => {
     if (open) {
@@ -206,6 +216,10 @@ function PaymentDialog({
       orderedItems,
       createdAt: new Date(),
       orderNumber: orderNumber || "1000",
+      couponName: couponName,
+      totalWithoutCoupon: totalWithoutCoupon,
+      totalWithCoupon: totalAmountWithCoupon,
+      addressURL: addressURL,
     };
 
     try {
@@ -234,6 +248,9 @@ function PaymentDialog({
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
+        setAddressURL("");
+        setAddress("");
+        setAddressError("");
         saveCartItems(orderedItems, paymentData);
         console.log("Order Number:", orderNumber);
         setOpenModal(true);
