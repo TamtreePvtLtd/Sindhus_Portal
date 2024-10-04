@@ -13,7 +13,7 @@ interface SelectedPlace {
   lng: number;
 }
 
-export function PlacesAutocomplete(orderAmountWithTax, addressErrorCallback) {
+export function PlacesAutocomplete(orderAmountWithTax, setAddressError) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
     null
@@ -151,8 +151,7 @@ export function PlacesAutocomplete(orderAmountWithTax, addressErrorCallback) {
     // Example validation logic: check if value is empty
     if (!value) {
       setError(true);
-      addressErrorCallback("Please select an address from the list."); // Call the callback with the error message
-
+      setAddressError("Please select an address from the list."); // Call the callback with the error message
       return false;
     }
     return true;

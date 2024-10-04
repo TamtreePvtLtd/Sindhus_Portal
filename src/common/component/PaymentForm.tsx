@@ -32,8 +32,8 @@ interface PaymentFormData {
   lastName: string;
   phoneNumber: string;
   email: string;
-  addressLine1: string;
-  addressLine2?: string;
+  addressLine: string;
+  // addressLine2?: string;
   postalCode: string;
   deliveryOption: string;
   deliveryDate: Date | null;
@@ -186,9 +186,9 @@ function PaymentDialog({
   };
 
   const onSubmit = async (data: PaymentFormData) => {
-    if (!stripe || !elements) return;
-
+    if (!stripe || !elements || addressError != "") return;
     // Capitalize first and last names
+
     const capitalizedData = {
       ...data,
       firstName: capitalizeFirstLetter(data.firstName),
@@ -198,9 +198,7 @@ function PaymentDialog({
     setLoading(true);
     const paymentData = {
       ...capitalizedData,
-      address: `${capitalizedData.addressLine1}, ${
-        capitalizedData.addressLine2 || ""
-      }`,
+      address: `${capitalizedData.addressLine}`,
       amount: parseFloat(amount) * 100,
       orderedItems,
       createdAt: new Date(),
@@ -223,8 +221,8 @@ function PaymentDialog({
               name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
               email: capitalizedData.email,
               address: {
-                line1: capitalizedData.addressLine1,
-                line2: capitalizedData.addressLine2,
+                line: capitalizedData.addressLine,
+
                 postal_code: capitalizedData.postalCode,
               },
             },
@@ -250,11 +248,6 @@ function PaymentDialog({
       setLoading(false);
     }
   };
-
-  const addressErrorCallback = (value) => {
-    setAddressError(value);
-  };
-  console.log("addressError,", addressError);
 
   return (
     <Box>
@@ -358,9 +351,10 @@ function PaymentDialog({
             {deliveryOptionValue === "Delivery" && (
               <PlacesAutocomplete
                 orderAmountWithTax={amount}
-                addressErrorCallback={addressErrorCallback}
+                setAddressError={setAddressError}
               />
             )}
+            {addressError && <p style={{ color: "red" }}>{addressError}</p>}
             {/* <Controller
               name="addressLine1"
               control={control}
