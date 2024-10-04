@@ -13,7 +13,19 @@ interface SelectedPlace {
   lng: number;
 }
 
-export function PlacesAutocomplete(orderAmountWithTax, setAddressError) {
+interface PlacesAutocompleteProps {
+  orderAmountWithTax: { orderAmountWithTax: string }; // Assuming it's a number
+  setAddressError: (error: string) => void; // Adjust type based on the actual error type
+  setAddress: (address: string) => void; // Adjust type based on your address type
+  setAddressURL: (address: string) => void; // Adjust type based on your address type
+}
+
+export function PlacesAutocomplete({
+  orderAmountWithTax,
+  setAddressError,
+  setAddress,
+  setAddressURL,
+}: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
     null
@@ -86,6 +98,7 @@ export function PlacesAutocomplete(orderAmountWithTax, setAddressError) {
   const handleSelect = async (address: AutocompleteResult) => {
     setValue(address.label);
     setSuggestions([]);
+    setAddress(address.label);
 
     try {
       const geocoder = new window.google.maps.Geocoder();
@@ -102,6 +115,8 @@ export function PlacesAutocomplete(orderAmountWithTax, setAddressError) {
             const latLng = results[0].geometry.location;
             const lat = latLng.lat();
             const lng = latLng.lng();
+            const addressURL = `https://maps.google.com/?q=${lat},${lng}`;
+            setAddressURL(addressURL);
             setSelectedPlace({ lat, lng });
             await calculateDistance(origin, { lat, lng });
           } else {

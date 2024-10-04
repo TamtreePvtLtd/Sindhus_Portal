@@ -105,6 +105,8 @@ function PaymentDialog({
   const [openModal, setOpenModal] = useState(false);
   const [isPickup, setIsPickup] = useState(true);
   const [addressError, setAddressError] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [addressURL, setAddressURL] = useState<string>("");
 
   // const { data: coupens, refetch } = useGetAllCoupens();
 
@@ -184,6 +186,7 @@ function PaymentDialog({
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
+  console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError != "") return;
@@ -198,7 +201,7 @@ function PaymentDialog({
     setLoading(true);
     const paymentData = {
       ...capitalizedData,
-      address: `${capitalizedData.addressLine}`,
+      address: `${address}`,
       amount: parseFloat(amount) * 100,
       orderedItems,
       createdAt: new Date(),
@@ -220,11 +223,7 @@ function PaymentDialog({
             billing_details: {
               name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
               email: capitalizedData.email,
-              address: {
-                line: capitalizedData.addressLine,
-
-                postal_code: capitalizedData.postalCode,
-              },
+              address: address,
             },
           },
         }
@@ -248,6 +247,7 @@ function PaymentDialog({
       setLoading(false);
     }
   };
+  console.log("address url", addressURL);
 
   return (
     <Box>
@@ -350,8 +350,10 @@ function PaymentDialog({
             />
             {deliveryOptionValue === "Delivery" && (
               <PlacesAutocomplete
-                orderAmountWithTax={amount}
+                orderAmountWithTax={{ orderAmountWithTax: amount }} // Wrap amount in an object
                 setAddressError={setAddressError}
+                setAddress={setAddress}
+                setAddressURL={setAddressURL}
               />
             )}
             {addressError && <p style={{ color: "red" }}>{addressError}</p>}
