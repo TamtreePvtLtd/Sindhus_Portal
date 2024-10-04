@@ -13,7 +13,7 @@ interface SelectedPlace {
   lng: number;
 }
 
-export function PlacesAutocomplete() {
+export function PlacesAutocomplete(orderAmountWithTax, addressErrorCallback) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
     null
@@ -21,25 +21,28 @@ export function PlacesAutocomplete() {
   const [distance, setDistance] = useState<number | null>(null);
   const [amount, setAmount] = useState<string | null>(null); // State to store the amount
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
+  const [error, setError] = useState(false); // State to handle error status
 
   const libraries: Libraries = ["places"];
+  console.log("orderAmountWithTax", orderAmountWithTax);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_LOCATION,
     libraries,
   });
 
-  const { data: nearestAmount, refetch } = useGetNearestGreaterDistance(
-    distance?.toString() ?? "" // Trigger refetch when distance is updated
+  //   if (selectedPlace) {
+  var { data: nearestAmount, refetch } = useGetNearestGreaterDistance(
+    distance?.toString() ?? ""
   );
+  //   }
 
-useEffect(() => {
-  if (distance !== null && nearestAmount) {
-    console.log("Nearest Amount:", nearestAmount); // Check if amount is inside nearestAmount
-    setAmount(nearestAmount.amount); // Adjust this based on actual data structure
-  }
-}, [distance, nearestAmount]);
-
+  useEffect(() => {
+    if (distance !== null && nearestAmount) {
+      console.log("Nearest Amount:", nearestAmount); // Check if amount is inside nearestAmount
+      setAmount(nearestAmount.amount); // Adjust this based on actual data structure
+    }
+  }, [distance, nearestAmount]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
@@ -132,7 +135,8 @@ useEffect(() => {
             const distanceInKilometers = distanceValue / 1000; // Convert meters to kilometers
             const distanceInMiles = distanceInKilometers * 0.621371; // Convert kilometers to miles
             setDistance(distanceInMiles);
-            refetch(); // Fetch the amount based on distance
+            // Just call refetch without passing any parameters
+            refetch();
           } else {
             console.error("Distance value is null");
           }
@@ -143,6 +147,16 @@ useEffect(() => {
     );
   };
 
+  const validateInput = () => {
+    // Example validation logic: check if value is empty
+    if (!value) {
+      setError(true);
+      addressErrorCallback("Please select an address from the list."); // Call the callback with the error message
+
+      return false;
+    }
+    return true;
+  };
   return (
     <div>
       <Autocomplete
@@ -152,13 +166,16 @@ useEffect(() => {
         onChange={(_e, value) => {
           if (value) {
             handleSelect(value); // When a value is selected
+            setError(false);
           } else {
             setDistance(0); // If the clear icon is clicked and value is empty
           }
         }}
         onClose={() => {
-          if (!value) {
-            setDistance(0); // This also ensures distance is 0 when the dropdown closes and the value is empty
+          // Validate when closing
+
+          if (!validateInput()) {
+            setDistance(0); // Reset distance if there's an error
           }
         }}
         fullWidth
@@ -170,6 +187,9 @@ useEffect(() => {
             onChange={handleInputChange}
             label="Type Address"
             variant="outlined"
+            required
+            error={error} // Show error if validation fails
+            helperText={error ? "Please select an address from the list." : ""} // Error message
           />
         )}
       />
@@ -185,17 +205,40 @@ useEffect(() => {
           margin="normal"
         />
       )}
+      {distance !== null &&
+        orderAmountWithTax &&
+        orderAmountWithTax.orderAmountWithTax != null &&
+        nearestAmount?.amount == "0" && (
+          <p style={{ color: "red" }}>
+            Distance is too far. Please choose the pickup option.
+          </p>
+        )}
 
-      {amount !== null && (
+      {distance !== null && nearestAmount?.amount != "0" && (
         <TextField
-          label="Amount"
-          value={`$${amount}`} // Ensure the amount is displayed correctly
+          label="Delivery Charge"
+          value={`$${Number(amount)}`}
           variant="outlined"
           disabled
           fullWidth
           margin="normal"
         />
       )}
+      {amount !== null &&
+        orderAmountWithTax.orderAmountWithTax != null &&
+        selectedPlace &&
+        nearestAmount?.amount != "0" && (
+          <TextField
+            label="Total Amount With Delivery Charge"
+            value={`$${
+              Number(amount) + Number(orderAmountWithTax.orderAmountWithTax)
+            }`}
+            variant="outlined"
+            disabled
+            fullWidth
+            margin="normal"
+          />
+        )}
     </div>
   );
 }

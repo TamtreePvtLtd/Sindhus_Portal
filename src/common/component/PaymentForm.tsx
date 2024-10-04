@@ -51,7 +51,7 @@ const schema = yup.object({
       "Phone number must be a valid US number"
     ),
   email: yup.string().email("Invalid email").required("Email is required"),
-  addressLine1: yup.string().required("Address Line 1 is required"),
+  // addressLine1: yup.string().required("Address Line 1 is required"),
   postalCode: yup
     .string()
     .required("Postal code is required")
@@ -103,7 +103,9 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
- const [isPickup, setIsPickup] = useState(true);
+  const [isPickup, setIsPickup] = useState(true);
+  const [addressError, setAddressError] = useState<string>("");
+
   // const { data: coupens, refetch } = useGetAllCoupens();
 
   // const libraries = ["places"];
@@ -119,10 +121,7 @@ function PaymentDialog({
   const stripe = useStripe();
   const elements = useElements();
 
- const deliveryOptionValue = watch("deliveryOption");
-
- 
-
+  const deliveryOptionValue = watch("deliveryOption");
 
   useEffect(() => {
     if (open) {
@@ -252,6 +251,11 @@ function PaymentDialog({
     }
   };
 
+  const addressErrorCallback = (value) => {
+    setAddressError(value);
+  };
+  console.log("addressError,", addressError);
+
   return (
     <Box>
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -351,7 +355,12 @@ function PaymentDialog({
                 </FormControl>
               )}
             />
-            {deliveryOptionValue === "Delivery" && <PlacesAutocomplete />}
+            {deliveryOptionValue === "Delivery" && (
+              <PlacesAutocomplete
+                orderAmountWithTax={amount}
+                addressErrorCallback={addressErrorCallback}
+              />
+            )}
             {/* <Controller
               name="addressLine1"
               control={control}
