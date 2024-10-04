@@ -32,9 +32,9 @@ interface PaymentFormData {
   lastName: string;
   phoneNumber: string;
   email: string;
-  addressLine1: string;
-  addressLine2?: string;
-  postalCode: string;
+  addressLine: string;
+  // addressLine2?: string;
+  postalCode?: string;
   deliveryOption: string;
   deliveryDate: Date | null;
 }
@@ -51,11 +51,11 @@ const schema = yup.object({
       "Phone number must be a valid US number"
     ),
   email: yup.string().email("Invalid email").required("Email is required"),
-  addressLine1: yup.string().required("Address Line 1 is required"),
-  postalCode: yup
-    .string()
-    .required("Postal code is required")
-    .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
+  // addressLine1: yup.string().required("Address Line 1 is required"),
+  // postalCode: yup
+  //   .string()
+  //   .required("Postal code is required")
+  //   .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
   deliveryOption: yup.string().required("Please select a delivery option"),
   deliveryDate: yup
     .date()
@@ -70,6 +70,9 @@ function PaymentDialog({
   orderedItems,
   clearCart,
   closeDrawer,
+  totalWithoutCoupon,
+  totalAmountWithCoupon,
+  couponName,
 }: {
   open: boolean;
   onClose: () => void;
@@ -77,6 +80,9 @@ function PaymentDialog({
   orderedItems: any[];
   clearCart: () => void;
   closeDrawer: () => void;
+  totalWithoutCoupon: number;
+  totalAmountWithCoupon: number;
+  couponName: string;
 }) {
   const {
     control,
@@ -103,7 +109,11 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
- const [isPickup, setIsPickup] = useState(true);
+  const [isPickup, setIsPickup] = useState(true);
+  const [addressError, setAddressError] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [addressURL, setAddressURL] = useState<string>("");
+
   // const { data: coupens, refetch } = useGetAllCoupens();
 
   // const libraries = ["places"];
@@ -119,10 +129,11 @@ function PaymentDialog({
   const stripe = useStripe();
   const elements = useElements();
 
- const deliveryOptionValue = watch("deliveryOption");
+  const deliveryOptionValue = watch("deliveryOption");
 
- 
-
+  useEffect(() => {
+    if (deliveryOptionValue == "Pickup") setAddressError("");
+  }, [deliveryOptionValue]);
 
   useEffect(() => {
     if (open) {
@@ -185,11 +196,12 @@ function PaymentDialog({
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
+  console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
-    if (!stripe || !elements) return;
-
+    if (!stripe || !elements || addressError != "") return;
     // Capitalize first and last names
+
     const capitalizedData = {
       ...data,
       firstName: capitalizeFirstLetter(data.firstName),
@@ -199,13 +211,15 @@ function PaymentDialog({
     setLoading(true);
     const paymentData = {
       ...capitalizedData,
-      address: `${capitalizedData.addressLine1}, ${
-        capitalizedData.addressLine2 || ""
-      }`,
+      address: `${address}`,
       amount: parseFloat(amount) * 100,
       orderedItems,
       createdAt: new Date(),
       orderNumber: orderNumber || "1000",
+      couponName: couponName,
+      totalWithoutCoupon: totalWithoutCoupon,
+      totalWithCoupon: totalAmountWithCoupon,
+      addressURL: addressURL,
     };
 
     try {
@@ -223,11 +237,7 @@ function PaymentDialog({
             billing_details: {
               name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
               email: capitalizedData.email,
-              address: {
-                line1: capitalizedData.addressLine1,
-                line2: capitalizedData.addressLine2,
-                postal_code: capitalizedData.postalCode,
-              },
+              address: address,
             },
           },
         }
@@ -238,6 +248,9 @@ function PaymentDialog({
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
+        setAddressURL("");
+        setAddress("");
+        setAddressError("");
         saveCartItems(orderedItems, paymentData);
         console.log("Order Number:", orderNumber);
         setOpenModal(true);
@@ -251,6 +264,7 @@ function PaymentDialog({
       setLoading(false);
     }
   };
+  console.log("address url", addressURL);
 
   return (
     <Box>
@@ -351,7 +365,15 @@ function PaymentDialog({
                 </FormControl>
               )}
             />
-            {deliveryOptionValue === "Delivery" && <PlacesAutocomplete />}
+            {deliveryOptionValue === "Delivery" && (
+              <PlacesAutocomplete
+                orderAmountWithTax={{ orderAmountWithTax: amount }} // Wrap amount in an object
+                setAddressError={setAddressError}
+                setAddress={setAddress}
+                setAddressURL={setAddressURL}
+              />
+            )}
+            {addressError && <p style={{ color: "red" }}>{addressError}</p>}
             {/* <Controller
               name="addressLine1"
               control={control}

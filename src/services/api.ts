@@ -276,7 +276,19 @@ const getDistanceBasedDeliveryCharge = async () => {
   }
 };
 
+const getNearestGreaterDistance = async (distance: string) => {
+  try {
+    const response =
+      await httpWithoutCredentials.get<DistanceBasedDeliveryCharge>(
+        `/distance/getNearestDistance/${distance}`
+      );
+    return response.data; // Extract only the relevant data from the response
+  } catch (error) {
+    throw error;
+  }
+};
 export {
+  getNearestGreaterDistance,
   getDistanceBasedDeliveryCharge,
   getAllMenus,
   fetchProductById,

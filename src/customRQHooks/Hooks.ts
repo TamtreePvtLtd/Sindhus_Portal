@@ -13,8 +13,9 @@ import {
   getAllMenusInCatering,
   getAllCoupens,
   getDistanceBasedDeliveryCharge,
+  getNearestGreaterDistance,
 } from "../services/api";
-import { IMenuDatas } from "../interface/types";
+
 
 export const useGetAllMenus = () => {
   return useQuery({
@@ -127,3 +128,13 @@ export const useGetDistanceBasedDeliveryCharge = () => {
     refetchOnWindowFocus: false,
   });
 };
+
+export const useGetNearestGreaterDistance = (distance: string) => {
+  return useQuery({
+    queryKey: ["distance", distance], // Include distance in the query key
+    queryFn: () => getNearestGreaterDistance(distance), // Corrected function name
+    refetchOnWindowFocus: false, // Prevent refetch on window focus
+    enabled: !!distance, // Ensure the query runs only when distance is available
+  });
+};
+
