@@ -297,7 +297,7 @@ const getLastTransaction = async () => {
       await httpWithoutCredentials.get<string>(
         `/payment/lasttransaction`
       );
-    return response.data; // Extract only the relevant data from the response
+    return response.data;
   } catch (error) {
     throw error;
   }
