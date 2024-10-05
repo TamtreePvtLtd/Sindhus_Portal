@@ -22,13 +22,24 @@ import { useCart } from "../context/CartContext";
 import PaymentDialog from "../common/component/PaymentForm";
 import { useGetAllCoupens } from "../customRQHooks/Hooks";
 
+interface Coupon {
+  coupenName: string;
+  coupenType: string;
+  discountAmount: number;
+  minAmount: number;
+  maxAmount: number;
+  availability: boolean;
+  startDateWithTime: string;
+  endDateWithTime: string;
+}
+
 function MybagDrawer({ isOpen, onClose }) {
   const { cartItems, setCartItems } = useCart();
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const { data: coupons, refetch } = useGetAllCoupens();
   console.log(coupons);
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [expiryDate, setExpiryDate] = useState({
     startDateWithTime: "",
     endDateWithTime: "",
@@ -91,18 +102,41 @@ function MybagDrawer({ isOpen, onClose }) {
   // const taxAmount = totalAmount * taxRate; // Calculate the tax amount
   // const totalWithTax = totalAmount + taxAmount; // Add tax to the total
 
-  const discountedTotal = totalAmount - discountValue; // Calculate total after applying discount
-  const taxAmount = discountedTotal * taxRate; // Calculate tax on discounted total
-  const totalWithTax = discountedTotal + taxAmount; // Add tax to the discounted total
+  const taxAmount = (totalAmount - discountValue) * taxRate;
+  const totalWithTax = totalAmount - discountValue + taxAmount;// Add tax to the discounted total
 
   const clearCart = () => {
     setCartItems([]); // Clear cart items after successful payment
   };
 
-  const handleApplyCoupon = () => {
-    // Prevent applying a second coupon
-    console.log("apply copon", couponInput);
+  const calculateDiscount = () => {
+    if (!appliedCoupon) return 0;
 
+    let discount = 0;
+
+    // Check if totalAmount is greater than or equal to minAmount
+    if (totalAmount < appliedCoupon.minAmount) {
+      setError(`Minimum purchase amount of $${appliedCoupon.minAmount} is required`);
+      return 0;
+    }
+
+    // Calculate discount based on coupon type
+    if (appliedCoupon.coupenType === "percentage") {
+      discount = (totalAmount * appliedCoupon.discountAmount) / 100;
+    } else {
+      discount = appliedCoupon.discountAmount;
+    }
+
+    // Ensure the discount does not exceed the maxAmount
+    if (appliedCoupon.maxAmount !== 0 && discount > appliedCoupon.maxAmount) {
+      discount = appliedCoupon.maxAmount;
+    }
+
+    setError(""); // Clear any error
+    return discount;
+  };
+
+  const handleApplyCoupon = () => {
     if (discountValue > 0) {
       setError("You have already applied a coupon.");
       return;
@@ -113,7 +147,6 @@ function MybagDrawer({ isOpen, onClose }) {
         coupen.coupenName.toLowerCase() === couponInput.toLowerCase() &&
         coupen.availability
     );
-    console.log("matchedCoupon apply after", matchedCoupon);
 
     if (!matchedCoupon) {
       setError("Invalid Coupon");
@@ -121,51 +154,32 @@ function MybagDrawer({ isOpen, onClose }) {
       setFinalAmount(totalAmount);
       return;
     }
-    setAppliedCoupon(matchedCoupon?.coupenName);
+
+    setAppliedCoupon(matchedCoupon);
     const currentDate = new Date();
     const startDate = new Date(matchedCoupon.startDateWithTime);
     const endDate = new Date(matchedCoupon.endDateWithTime);
 
-    // Check if current date is within the coupon's validity period
     if (currentDate < startDate || currentDate > endDate) {
       setError("This coupon is not valid at this time");
-      setDiscountValue(0);
-      setFinalAmount(totalAmount);
       return;
     }
 
-    // Check if totalAmount is greater than or equal to minAmount
-    if (totalAmount < matchedCoupon.minAmount) {
-      setError(
-        `Minimum purchase amount of $${matchedCoupon.minAmount} is required`
-      );
-      setDiscountValue(0);
-      setFinalAmount(totalAmount);
-      return;
-    }
-
-    // Calculate discount based on coupen type
-    let discount = 0;
-    if (matchedCoupon.coupenType === "percentage") {
-      discount = (totalAmount * matchedCoupon.discountAmount) / 100;
-    } else {
-      discount = matchedCoupon.discountAmount;
-    }
-
-    // Ensure the discount does not exceed the maxAmount
-    if (matchedCoupon.maxAmount !== 0 && discount > matchedCoupon.maxAmount) {
-      discount = matchedCoupon.maxAmount;
-    }
-
+    const discount = calculateDiscount();
     setDiscountValue(discount);
     setFinalAmount(totalAmount - discount);
-    setError(""); // Clear any previous error
   };
 
+  // Reapply the discount whenever totalAmount or appliedCoupon changes
   useEffect(() => {
-    // Initially set the final amount to totalAmount
-    setFinalAmount(totalAmount);
-  }, [totalAmount]);
+    if (appliedCoupon) {
+      const discount = calculateDiscount();
+      setDiscountValue(discount);
+      setFinalAmount(totalAmount - discount);
+    } else {
+      setFinalAmount(totalAmount);
+    }
+  }, [totalAmount, appliedCoupon]);
 
   const handleRemoveCoupon = () => {
     // Reset the coupon state
@@ -414,7 +428,7 @@ function MybagDrawer({ isOpen, onClose }) {
         clearCart={clearCart}
         closeDrawer={onClose}
         totalWithoutCoupon={totalAmount}
-        totalAmountWithCoupon={discountedTotal}
+        totalAmountWithCoupon={totalAmount - discountValue}
         couponName={couponInput}
       />
     </>
