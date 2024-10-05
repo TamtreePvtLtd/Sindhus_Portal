@@ -245,7 +245,7 @@ const getAllDailyMenus = async () => {
 const getMenuType3 = async (menuId?: string) => {
   try {
     const response = await httpWithoutCredentials.get<menuWithProduct>(
-      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ''}`
+      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ""}`
     );
 
     console.log(response.data);
@@ -259,7 +259,8 @@ const getMenuType3 = async (menuId?: string) => {
 const getAllCoupens = async () => {
   try {
     const response = await httpWithoutCredentials.get<ICoupenResponse>(
-      "/coupen/getAllCoupens",);
+      "/coupen/getAllCoupens"
+    );
 
     return response.data;
   } catch (error) {
@@ -269,8 +270,9 @@ const getAllCoupens = async () => {
 };
 const getDistanceBasedDeliveryCharge = async () => {
   try {
-    const response = await httpWithoutCredentials.get<DistanceBasedDeliveryCharge[]>(
-      "/distance/getAllDistances")
+    const response = await httpWithoutCredentials.get<
+      DistanceBasedDeliveryCharge[]
+    >("/distance/getAllDistances");
     return response.data;
   } catch (error) {
     throw error;
@@ -289,14 +291,11 @@ const getNearestGreaterDistance = async (distance: string) => {
   }
 };
 
-
-
 const getLastTransaction = async () => {
   try {
-    const response =
-      await httpWithoutCredentials.get<string>(
-        `/payment/lasttransaction`
-      );
+    const response = await httpWithoutCredentials.get<string>(
+      `/payment/lasttransaction`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -319,15 +318,13 @@ const createCartItem = async (formData) => {
 
 const createPaymentIntent = async (formData) => {
   try {
-    // Sending the formData to the backend to create a payment intent
-    const response = await httpWithoutCredentials.post("/payment/createPaymentIntent", formData);
+    const response = await httpWithoutCredentials.post(
+      "/payment/createPaymentIntent",
+      formData
+    );
 
     console.log("response", response.data);
 
-    // Assuming your backend response is structured like this:
-    // { clientSecret: '...', message: '...', orderNumber: '...' }
-
-    // Return the clientSecret from the response data
     return {
       clientSecret: response.data.clientSecret,
       message: response.data.message,
@@ -335,7 +332,7 @@ const createPaymentIntent = async (formData) => {
     };
   } catch (error) {
     console.error("Error creating payment intent:", error);
-    throw error; // Optionally, you can reformat the error or add additional handling here.
+    throw error;
   }
 };
 
@@ -361,5 +358,5 @@ export {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
-  getAllCoupens
+  getAllCoupens,
 };
