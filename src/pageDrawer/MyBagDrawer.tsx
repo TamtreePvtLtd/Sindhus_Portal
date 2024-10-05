@@ -103,7 +103,7 @@ function MybagDrawer({ isOpen, onClose }) {
   // const totalWithTax = totalAmount + taxAmount; // Add tax to the total
 
   const taxAmount = (totalAmount - discountValue) * taxRate;
-  const totalWithTax = totalAmount - discountValue + taxAmount;// Add tax to the discounted total
+  const totalWithTax = totalAmount - discountValue + taxAmount; // Add tax to the discounted total
 
   const clearCart = () => {
     setCartItems([]); // Clear cart items after successful payment
@@ -116,7 +116,9 @@ function MybagDrawer({ isOpen, onClose }) {
 
     // Check if totalAmount is greater than or equal to minAmount
     if (totalAmount < appliedCoupon.minAmount) {
-      setError(`Minimum purchase amount of $${appliedCoupon.minAmount} is required`);
+      setError(
+        `Minimum purchase amount of $${appliedCoupon.minAmount} is required`
+      );
       return 0;
     }
 
@@ -349,7 +351,7 @@ function MybagDrawer({ isOpen, onClose }) {
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <TextField
                     id="outlined-coupon-input"
-                    label="Apply coupon"
+                    label="Apply Coupon"
                     type="text"
                     autoComplete="off"
                     value={couponInput}

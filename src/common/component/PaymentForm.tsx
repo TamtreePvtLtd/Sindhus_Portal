@@ -195,7 +195,7 @@ function PaymentDialog({
     const paymentData = {
       ...capitalizedData,
       address: `${address}`,
-      amount: parseFloat(amount) * 100,
+      amount: parseFloat(parseFloat(amount).toFixed(2)) * 100,
       orderedItems,
       createdAt: new Date(),
       orderNumber: orderNumber || "1000",
