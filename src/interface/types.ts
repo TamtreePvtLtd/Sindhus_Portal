@@ -292,3 +292,27 @@ export interface DistanceBasedDeliveryCharge {
   amount: string;
   uptoDistance: string;
 }
+
+export interface PaymentData {
+  url: string;
+  quantity: string;
+  _id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  deliveryOption: string;
+  amount: number;
+  postalCode: number;
+  paymentId: string;
+  status: string;
+  deliveryDate: string;
+  createdAt: string;
+  orderNumber: string;
+  totalWithCoupon: string;
+  couponName: string;
+  totalWithoutCoupon: string;
+  addressURL: string;
+  __v: number;
+}

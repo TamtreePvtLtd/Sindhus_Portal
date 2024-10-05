@@ -25,6 +25,11 @@ import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
 
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
+import {
+  useCreateCartItem,
+  useCreatePaymentIntent,
+  useGetLastTransaction,
+} from "../../customRQHooks/Hooks";
 
 // Define the interface for form data
 interface PaymentFormData {
@@ -130,6 +135,22 @@ function PaymentDialog({
   const elements = useElements();
 
   const deliveryOptionValue = watch("deliveryOption");
+  const createPaymentMutation = useCreatePaymentIntent();
+  const { data: lasttransaction, refetch } = useGetLastTransaction();
+  const cartItemCreateMutation = useCreateCartItem();
+
+  useEffect(() => {
+    const orderNumberData = lasttransaction;
+    let newOrderNumber;
+
+    if (orderNumberData) {
+      const numericOrderNumber = Number(orderNumberData) + 1;
+      newOrderNumber = numericOrderNumber.toString();
+    } else {
+      newOrderNumber = `1000`;
+    }
+    setOrderNumber(newOrderNumber);
+  }, [lasttransaction]);
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");
@@ -137,41 +158,9 @@ function PaymentDialog({
 
   useEffect(() => {
     if (open) {
-      getLastOrderNumber();
+      refetch();
     }
   }, [open]);
-
-  const getLastOrderNumber = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/payment/lasttransaction",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const orderNumberData = await response.json();
-      let newOrderNumber;
-
-      if (orderNumberData) {
-        const numericOrderNumber = Number(orderNumberData) + 1;
-        newOrderNumber = numericOrderNumber.toString();
-      } else {
-        newOrderNumber = `1000`;
-      }
-
-      setOrderNumber(newOrderNumber);
-    } catch (error) {
-      console.error("Error fetching last order number:", error);
-    }
-  };
 
   const saveCartItems = async (cartItems: any[], paymentData: any) => {
     try {
@@ -181,13 +170,7 @@ function PaymentDialog({
         orderNumber: orderNumber || "1000",
       };
 
-      await fetch("http://localhost:3000/cart/cartItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      await cartItemCreateMutation.mutateAsync(data);
     } catch (error) {
       console.error("Error saving cart items:", error);
     }
@@ -223,17 +206,20 @@ function PaymentDialog({
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
+      // const response = await axios.post(
+      //   "http://localhost:3000/payment/createPaymentIntent",
+      //   paymentData
+      // );
+      const { clientSecret, orderNumber } =
+        await createPaymentMutation.mutateAsync(paymentData);
 
-      const { clientSecret } = response.data;
+      const cardElement = elements.getElement(CardElement);
+
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
           payment_method: {
-            card: elements.getElement(CardElement),
+            card: cardElement,
             billing_details: {
               name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
               email: capitalizedData.email,
@@ -264,7 +250,6 @@ function PaymentDialog({
       setLoading(false);
     }
   };
-  console.log("address url", addressURL);
 
   return (
     <Box>
