@@ -25,6 +25,7 @@ import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
 
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
+import { useCreatePaymentIntent } from "../../customRQHooks/Hooks";
 
 // Define the interface for form data
 interface PaymentFormData {
@@ -130,6 +131,7 @@ function PaymentDialog({
   const elements = useElements();
 
   const deliveryOptionValue = watch("deliveryOption");
+  const createPaymentMutation = useCreatePaymentIntent();
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");
@@ -223,10 +225,11 @@ function PaymentDialog({
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/payment/createPaymentIntent",
-        paymentData
-      );
+      // const response = await axios.post(
+      //   "http://localhost:3000/payment/createPaymentIntent",
+      //   paymentData
+      // );
+      const response = await createPaymentMutation.mutateAsync(paymentData);
 
       const { clientSecret } = response.data;
       const { error, paymentIntent } = await stripe.confirmCardPayment(

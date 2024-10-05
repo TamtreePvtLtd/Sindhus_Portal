@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   cateringfetchProductData,
   getAllMenus,
@@ -14,7 +14,9 @@ import {
   getAllCoupens,
   getDistanceBasedDeliveryCharge,
   getNearestGreaterDistance,
+  createPaymentIntent,
 } from "../services/api";
+import { queryClient } from "../App";
 
 
 export const useGetAllMenus = () => {
@@ -106,6 +108,7 @@ export const usegetAllSpecials = () => {
     refetchOnMount: false,
   });
 };
+
 export const useGetAllMenuType3 = (menuId: string) => {
   return useQuery(["products", menuId], () => getMenuType3(menuId), {
     refetchOnWindowFocus: false,
@@ -138,3 +141,14 @@ export const useGetNearestGreaterDistance = (distance: string) => {
   });
 };
 
+export const useCreatePaymentIntent = () => {
+  return useMutation({
+    mutationFn: createPaymentIntent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

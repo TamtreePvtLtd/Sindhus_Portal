@@ -16,6 +16,7 @@ import {
   menuWithProduct,
   ICoupenResponse,
   DistanceBasedDeliveryCharge,
+  PaymentData,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -287,7 +288,22 @@ const getNearestGreaterDistance = async (distance: string) => {
     throw error;
   }
 };
+
+const createPaymentIntent = async (formData) => {
+  try {
+    const response = await httpWithoutCredentials.post<string[]>(
+      "/payment/createPaymentIntent",
+      formData
+    );
+    console.log("response", response.data);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export {
+  createPaymentIntent,
   getNearestGreaterDistance,
   getDistanceBasedDeliveryCharge,
   getAllMenus,
