@@ -289,10 +289,24 @@ const getNearestGreaterDistance = async (distance: string) => {
   }
 };
 
-const createPaymentIntent = async (formData) => {
+
+
+const getLastTransaction = async () => {
+  try {
+    const response =
+      await httpWithoutCredentials.get<string>(
+        `/payment/lasttransaction`
+      );
+    return response.data; // Extract only the relevant data from the response
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createCartItem = async (formData) => {
   try {
     const response = await httpWithoutCredentials.post<string[]>(
-      "/payment/createPaymentIntent",
+      "/cart/cartItem",
       formData
     );
     console.log("response", response.data);
@@ -302,7 +316,32 @@ const createPaymentIntent = async (formData) => {
     throw error;
   }
 };
+
+const createPaymentIntent = async (formData) => {
+  try {
+    // Sending the formData to the backend to create a payment intent
+    const response = await httpWithoutCredentials.post("/payment/createPaymentIntent", formData);
+
+    console.log("response", response.data);
+
+    // Assuming your backend response is structured like this:
+    // { clientSecret: '...', message: '...', orderNumber: '...' }
+
+    // Return the clientSecret from the response data
+    return {
+      clientSecret: response.data.clientSecret,
+      message: response.data.message,
+      orderNumber: response.data.orderNumber,
+    };
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    throw error; // Optionally, you can reformat the error or add additional handling here.
+  }
+};
+
 export {
+  createCartItem,
+  getLastTransaction,
   createPaymentIntent,
   getNearestGreaterDistance,
   getDistanceBasedDeliveryCharge,

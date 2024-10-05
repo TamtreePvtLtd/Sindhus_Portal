@@ -15,6 +15,8 @@ import {
   getDistanceBasedDeliveryCharge,
   getNearestGreaterDistance,
   createPaymentIntent,
+  getLastTransaction,
+  createCartItem,
 } from "../services/api";
 import { queryClient } from "../App";
 
@@ -141,11 +143,31 @@ export const useGetNearestGreaterDistance = (distance: string) => {
   });
 };
 
+export const useGetLastTransaction = () => {
+  return useQuery({
+    queryKey: ["transaction"], // Include distance in the query key
+    queryFn: () => getLastTransaction()
+    , // Corrected function name
+    refetchOnWindowFocus: false, // Prevent refetch on window focus
+  });
+};
 export const useCreatePaymentIntent = () => {
   return useMutation({
     mutationFn: createPaymentIntent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useCreateCartItem = () => {
+  return useMutation({
+    mutationFn: createCartItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cartItem"] });
     },
     onError: (error) => {
       console.log(error);
