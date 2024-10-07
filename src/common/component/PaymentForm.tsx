@@ -118,6 +118,7 @@ function PaymentDialog({
   const [addressError, setAddressError] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [addressURL, setAddressURL] = useState<string>("");
+  const [email, setEmail] = useState<string | undefined>();
 
   // const { data: coupens, refetch } = useGetAllCoupens();
 
@@ -183,7 +184,6 @@ function PaymentDialog({
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError != "") return;
-    // Capitalize first and last names
 
     const capitalizedData = {
       ...data,
@@ -206,10 +206,6 @@ function PaymentDialog({
     };
 
     try {
-      // const response = await axios.post(
-      //   "http://localhost:3000/payment/createPaymentIntent",
-      //   paymentData
-      // );
       const { clientSecret, orderNumber } =
         await createPaymentMutation.mutateAsync(paymentData);
 
@@ -234,6 +230,7 @@ function PaymentDialog({
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
+        setEmail(data.email);
         setAddressURL("");
         setAddress("");
         setAddressError("");
@@ -359,27 +356,6 @@ function PaymentDialog({
               />
             )}
             {addressError && <p style={{ color: "red" }}>{addressError}</p>}
-            {/* <Controller
-              name="addressLine1"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Address Line 1"
-                  error={!!errors.addressLine1}
-                  helperText={errors.addressLine1?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            /> */}
-            {/* <Controller
-              name="addressLine2"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Address Line 2" fullWidth />
-              )}
-            /> */}
             {deliveryOptionValue === "Delivery" && (
               <Controller
                 name="postalCode"
@@ -479,6 +455,7 @@ function PaymentDialog({
         open={openModal}
         handleClose={() => setOpenModal(false)}
         orderNumber={orderNumber}
+        email={email}
       />
     </Box>
   );

@@ -33,18 +33,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
     }
-
-    // Clear local storage on page refresh
-    window.addEventListener("beforeunload", () => {
-      localStorage.removeItem("cartItems");
-    });
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("beforeunload", () => {
-        localStorage.removeItem("cartItems");
-      });
-    };
   }, []);
 
   useEffect(() => {

@@ -16,11 +16,14 @@ import {
   Paper,
   IconButton,
   TextField,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 import { useCart } from "../context/CartContext";
 import PaymentDialog from "../common/component/PaymentForm";
 import { useGetAllCoupens } from "../customRQHooks/Hooks";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
 interface Coupon {
   coupenName: string;
@@ -47,6 +50,9 @@ function MybagDrawer({ isOpen, onClose }) {
   const [discountValue, setDiscountValue] = useState(0);
   const [finalAmount, setFinalAmount] = useState(0);
   const [error, setError] = useState("");
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Check if screen is small (mobile)
 
   useEffect(() => {
     if (isOpen) refetch();
@@ -123,7 +129,7 @@ function MybagDrawer({ isOpen, onClose }) {
     }
 
     // Calculate discount based on coupon type
-    if (appliedCoupon.coupenType === "percentage") {
+    if (appliedCoupon.coupenType === "Percentage") {
       discount = (totalAmount * appliedCoupon.discountAmount) / 100;
     } else {
       discount = appliedCoupon.discountAmount;
@@ -199,8 +205,8 @@ function MybagDrawer({ isOpen, onClose }) {
         onClose={onClose}
         PaperProps={{
           sx: {
-            width: "50%",
-            maxWidth: "50vw",
+            width: isMobile ? "100%" : "50%",
+            maxWidth: isMobile ? "100vw" : "50vw",
             backgroundColor: "#fff",
           },
         }}
@@ -232,7 +238,26 @@ function MybagDrawer({ isOpen, onClose }) {
           }}
         >
           {cartItems.length === 0 ? (
-            <Typography>Your bag is empty.</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                // justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <Typography>Your bag is empty.</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: 2 }}
+                onClick={onClose}
+                startIcon={<ArrowBack />}
+              >
+                Back to Shop
+              </Button>
+            </Box>
           ) : (
             <>
               <TableContainer component={Paper}>
