@@ -232,7 +232,7 @@ export function PlacesAutocomplete({
       {distance !== null && nearestAmount?.amount != "0" && (
         <TextField
           label="Delivery Charge"
-          value={`$${Number(amount)}`}
+          value={`$${Number(amount).toFixed(2)}`}
           variant="outlined"
           disabled
           fullWidth
@@ -245,9 +245,9 @@ export function PlacesAutocomplete({
         nearestAmount?.amount != "0" && (
           <TextField
             label="Total Amount With Delivery Charge"
-            value={`$${
+            value={`$${(
               Number(amount) + Number(orderAmountWithTax.orderAmountWithTax)
-            }`}
+            ).toFixed(2)}`}
             variant="outlined"
             disabled
             fullWidth

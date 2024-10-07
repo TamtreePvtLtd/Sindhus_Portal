@@ -499,7 +499,9 @@ function NavBar() {
                 justifyContent: "flex-end",
                 flexGrow: 1,
                 alignItems: "center",
-                marginTop: "10px",
+                // marginTop: "5px",
+                marginRight: "50px",
+                marginTop: "20px",
               }}
             >
               <Badge
@@ -515,8 +517,9 @@ function NavBar() {
                 <ShoppingBagIcon
                   sx={{
                     color: "black",
-                    marginRight: "5px",
-                    fontSize: "35px",
+                    marginRight: "6px",
+                    fontSize: "40px",
+                    cursor:"pointer"
                   }}
                   onClick={toggleDrawer}
                 />

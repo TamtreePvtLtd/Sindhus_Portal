@@ -5,7 +5,6 @@ import { fetchProductById } from "../../services/api";
 import { IProduct } from "../../interface/types";
 import { useSnackBar } from "../../context/SnackBarContext";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
@@ -13,7 +12,6 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
@@ -97,16 +95,17 @@ function ProductDetail() {
       updatedItems[existingItemIndex] = {
         ...existingItem,
         quantity: existingItem.quantity + 1,
-        // Calculate the total price based on the updated quantity
+
         totalPrice: (existingItem.quantity + 1) * existingItem.price,
       };
     } else {
-      // Add the item to the cart
+     
       const newCartItem: CartItem = {
-        id: productId, // cast productId to string here
+        id: productId, 
         title: menuDetail.title,
         size: selectedSize,
         price: selectedPrice,
+        imageUrl: menuDetail.images[0] || "",
         quantity: 1,
         totalPrice: selectedPrice,
       };
