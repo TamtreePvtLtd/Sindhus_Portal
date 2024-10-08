@@ -187,10 +187,10 @@ export function PlacesAutocomplete({
           }
         }}
         onClose={() => {
-          // Validate when closing
+          
 
           if (!validateInput()) {
-            setDistance(0); // Reset distance if there's an error
+            setDistance(0); 
           }
         }}
         fullWidth
