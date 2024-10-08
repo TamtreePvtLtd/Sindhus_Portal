@@ -19,7 +19,7 @@ const SuccessModal = ({ open, handleClose, orderNumber, email }) => {
         <p>Your Order Number :{orderNumber}</p>
         <p>For any assistance, please contact our store at +1 (940) 279-2536</p>
         <p>
-          Please check your email for further details: <strong>{email}</strong>
+          Please check your email for Order details: <strong>{email}</strong>
         </p>
         <Button onClick={handleClose} variant="contained" color="primary">
           Ok

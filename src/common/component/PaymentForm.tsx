@@ -12,6 +12,7 @@ import {
   RadioGroup,
   FormControl,
   FormLabel,
+  Typography,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -42,6 +43,7 @@ interface PaymentFormData {
   postalCode?: string;
   deliveryOption: string;
   deliveryDate: Date | null;
+  notes?: string;
 }
 
 // Define the validation schema using Yup
@@ -66,6 +68,7 @@ const schema = yup.object({
     .date()
     .nullable()
     .required("Delivery or pickup date is required"),
+  notes: yup.string().optional(),
 });
 
 function PaymentDialog({
@@ -203,6 +206,7 @@ function PaymentDialog({
       totalWithoutCoupon: totalWithoutCoupon,
       totalWithCoupon: totalAmountWithCoupon,
       addressURL: addressURL,
+      notes: data.notes,
     };
 
     try {
@@ -397,6 +401,22 @@ function PaymentDialog({
                 )}
               />
             </LocalizationProvider>
+            <Controller
+              name="notes"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Notes"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Add any special instructions or notes"
+                />
+              )}
+            />
+
             <Box
               sx={{
                 display: "flex",
