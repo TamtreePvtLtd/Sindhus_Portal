@@ -122,7 +122,11 @@ function PaymentDialog({
   const [address, setAddress] = useState<string>("");
   const [addressURL, setAddressURL] = useState<string>("");
   const [email, setEmail] = useState<string | undefined>();
+  const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null);
 
+  const handleDeliveryChargeUpdate = (charge: number) => {
+    setDeliveryCharge(charge);
+  };
   // const { data: coupens, refetch } = useGetAllCoupens();
 
   // const libraries = ["places"];
@@ -187,6 +191,10 @@ function PaymentDialog({
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError != "") return;
+    if (deliveryOptionValue === "Delivery" && !address) {
+      setAddressError("Address is required for delivery");
+      return;
+    }
 
     const capitalizedData = {
       ...data,
@@ -194,11 +202,14 @@ function PaymentDialog({
       lastName: capitalizeFirstLetter(data.lastName),
     };
 
-    setLoading(true);
+    const finalAmount =
+      deliveryOptionValue === "Delivery"
+        ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100) // Amount in cents for delivery
+        : Math.round(parseFloat(amount) * 100);
     const paymentData = {
       ...capitalizedData,
       address: `${address}`,
-      amount: parseFloat(parseFloat(amount).toFixed(2)) * 100,
+      amount: finalAmount,
       orderedItems,
       createdAt: new Date(),
       orderNumber: orderNumber || "1000",
@@ -251,6 +262,7 @@ function PaymentDialog({
       setLoading(false);
     }
   };
+  console.log("delivery charge", deliveryCharge);
 
   return (
     <Box>
@@ -357,6 +369,7 @@ function PaymentDialog({
                 setAddressError={setAddressError}
                 setAddress={setAddress}
                 setAddressURL={setAddressURL}
+                setDeliveryCharge={handleDeliveryChargeUpdate} // Pass the callback
               />
             )}
             {addressError && <p style={{ color: "red" }}>{addressError}</p>}
@@ -388,6 +401,15 @@ function PaymentDialog({
                         : "Delivery Date"
                     }
                     {...field}
+                    minDate={
+                      deliveryOptionValue === "Pickup"
+                        ? new Date().getFullYear() === 2024 &&
+                          new Date().getMonth() === 9 &&
+                          new Date().getDate() === 26
+                          ? new Date() // If today is Oct 26, 2024, set minDate to today
+                          : new Date(2024, 9, 26) // Otherwise, set minDate to Oct 26, 2024
+                        : new Date() // For other options, set minDate to current date
+                    }
                     onChange={(date) => field.onChange(date)}
                     renderInput={(params) => (
                       <TextField

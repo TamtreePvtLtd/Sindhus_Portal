@@ -18,6 +18,7 @@ interface PlacesAutocompleteProps {
   setAddressError: (error: string) => void; // Adjust type based on the actual error type
   setAddress: (address: string) => void; // Adjust type based on your address type
   setAddressURL: (address: string) => void; // Adjust type based on your address type
+  setDeliveryCharge: (charge: number) => void; // Add this prop for passing the delivery charge
 }
 
 export function PlacesAutocomplete({
@@ -25,6 +26,7 @@ export function PlacesAutocomplete({
   setAddressError,
   setAddress,
   setAddressURL,
+  setDeliveryCharge,
 }: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
@@ -48,6 +50,13 @@ export function PlacesAutocomplete({
     distance?.toString() ?? ""
   );
   //   }
+
+  useEffect(() => {
+    if (amount !== null) {
+      // Call the parent's handler with the delivery charge when it's available
+      setDeliveryCharge(Number(amount));
+    }
+  }, [amount, setDeliveryCharge]);
 
   useEffect(() => {
     if (distance !== null && nearestAmount) {
@@ -187,10 +196,8 @@ export function PlacesAutocomplete({
           }
         }}
         onClose={() => {
-          
-
           if (!validateInput()) {
-            setDistance(0); 
+            setDistance(0);
           }
         }}
         fullWidth
@@ -224,9 +231,14 @@ export function PlacesAutocomplete({
         orderAmountWithTax &&
         orderAmountWithTax.orderAmountWithTax != null &&
         nearestAmount?.amount == "0" && (
-          <p style={{ color: "red" }}>
-            Distance is too far. Please choose the pickup option.
-          </p>
+          <>
+            {/* <p style={{ color: "red" }}>
+              Distance is too far. Please choose the pickup option.
+            </p> */}
+            {setAddressError(
+              "Distance is too far. Please choose the pickup option."
+            )}
+          </>
         )}
 
       {distance !== null && nearestAmount?.amount != "0" && (
