@@ -110,6 +110,7 @@ function PaymentDialog({
       postalCode: "",
       deliveryOption: "Pickup",
       deliveryDate: null,
+      notes: "",
     },
   });
 
@@ -195,6 +196,7 @@ function PaymentDialog({
       setAddressError("Address is required for delivery");
       return;
     }
+    setLoading(true);
 
     const capitalizedData = {
       ...data,
@@ -206,6 +208,7 @@ function PaymentDialog({
       deliveryOptionValue === "Delivery"
         ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100) // Amount in cents for delivery
         : Math.round(parseFloat(amount) * 100);
+
     const paymentData = {
       ...capitalizedData,
       address: `${address}`,

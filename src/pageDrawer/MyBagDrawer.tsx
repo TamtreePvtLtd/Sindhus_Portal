@@ -56,6 +56,8 @@ function MybagDrawer({ isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen) refetch();
+    setCouponInput("");
+    setError("");
   }, [isOpen]);
 
   const taxRate = 8.25 / 100; // Tax rate of 8.25%
