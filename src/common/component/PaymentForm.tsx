@@ -191,22 +191,21 @@ function PaymentDialog({
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError != "") return;
+    if (deliveryOptionValue === "Delivery" && !address) {
+      setAddressError("Address is required for delivery");
+      return;
+    }
 
     const capitalizedData = {
       ...data,
       firstName: capitalizeFirstLetter(data.firstName),
       lastName: capitalizeFirstLetter(data.lastName),
     };
-    // const finalAmount =
-    //   deliveryOptionValue === "Delivery"
-    //     ? parseFloat((parseFloat(amount) + (deliveryCharge || 0)).toFixed(2)) *
-    //       100
-    //     : parseFloat(parseFloat(amount).toFixed(2)) * 100;
-    // setLoading(true);
-     const finalAmount =
-       deliveryOptionValue === "Delivery"
-         ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100) // Amount in cents for delivery
-         : Math.round(parseFloat(amount) * 100);
+
+    const finalAmount =
+      deliveryOptionValue === "Delivery"
+        ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100) // Amount in cents for delivery
+        : Math.round(parseFloat(amount) * 100);
     const paymentData = {
       ...capitalizedData,
       address: `${address}`,

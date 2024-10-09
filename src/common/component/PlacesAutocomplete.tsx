@@ -231,9 +231,14 @@ export function PlacesAutocomplete({
         orderAmountWithTax &&
         orderAmountWithTax.orderAmountWithTax != null &&
         nearestAmount?.amount == "0" && (
-          <p style={{ color: "red" }}>
-            Distance is too far. Please choose the pickup option.
-          </p>
+          <>
+            {/* <p style={{ color: "red" }}>
+              Distance is too far. Please choose the pickup option.
+            </p> */}
+            {setAddressError(
+              "Distance is too far. Please choose the pickup option."
+            )}
+          </>
         )}
 
       {distance !== null && nearestAmount?.amount != "0" && (
