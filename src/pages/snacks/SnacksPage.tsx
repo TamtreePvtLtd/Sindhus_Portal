@@ -26,9 +26,9 @@ function SnacksPage() {
     <>
       <Box>
         <PageBanner
-          imageUrl="public/assets/snacksPage-newBanner.jpg"
-          content="Snacks"
-          description="Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!"
+          imageUrl="public/assets/snacks-2.jpg"
+          content=""
+          description=""
         />
       </Box>
       <Container
@@ -44,8 +44,8 @@ function SnacksPage() {
         ></SnacksMenuItem>
         <Box sx={{ mt: 3 }}>
           {snacksPageData &&
-            snacksPageData.products &&
-            snacksPageData.products.length > 0 ? (
+          snacksPageData.products &&
+          snacksPageData.products.length > 0 ? (
             <Grid container spacing={5}>
               {snacksPageData.products.map((product) => (
                 <Grid item xs={12} sm={4} md={3} lg={2.4} key={product._id}>

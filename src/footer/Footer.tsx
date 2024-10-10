@@ -45,9 +45,9 @@ function Footer() {
     { day: "Monday", timing: "11AM - 9PM" },
     { day: "Tuesday", timing: "Closed" },
     { day: "Wednesday", timing: "11AM - 9PM" },
-    { day: "Thursday", timing: "11AM - 10PM" },
-    { day: "Friday", timing: "11AM - 10PM" },
-    { day: "Saturday", timing: "11AM - 10PM" },
+    { day: "Thursday", timing: "11AM - 9PM" },
+    { day: "Friday", timing: "11AM - 9PM" },
+    { day: "Saturday", timing: "11AM - 9PM" },
     { day: "Sunday", timing: "11AM - 9PM" },
   ];
 
