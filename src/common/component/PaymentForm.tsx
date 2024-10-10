@@ -171,6 +171,33 @@ function PaymentDialog({
     }
   }, [open]);
 
+  const handleStripeErrors = (error: any) => {
+    const errorMessages: string[] = [];
+    const errorCodeMap: Record<string, string> = {
+      card_declined: "Your card was declined. Please try a different card.",
+      expired_card: "Your card has expired. Please use a valid card.",
+      incorrect_cvc: "The CVC code is incorrect. Please check and try again.",
+      processing_error:
+        "An error occurred while processing the payment. Please try again.",
+      insufficient_funds: "There are insufficient amount on your card.",
+    };
+
+     if (error.code && errorCodeMap[error.code]) {
+      errorMessages.push(errorCodeMap[error.code]);
+    } else if (error.message) {
+      errorMessages.push(error.message);
+    } else {
+      errorMessages.push("An unknown error occurred. Please try again.");
+    }
+
+    // Display all error messages
+    errorMessages.forEach((message) => {
+      updateSnackBarState(true, message, "error");
+    });
+
+    console.error("Stripe error details:", error);
+  };
+
   const saveCartItems = async (cartItems: any[], paymentData: any) => {
     try {
       const data = {
@@ -191,7 +218,7 @@ function PaymentDialog({
   console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
-    if (!stripe || !elements || addressError != "") return;
+    if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
       setAddressError("Address is required for delivery");
       return;
@@ -206,7 +233,7 @@ function PaymentDialog({
 
     const finalAmount =
       deliveryOptionValue === "Delivery"
-        ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100) // Amount in cents for delivery
+        ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
         : Math.round(parseFloat(amount) * 100);
 
     const paymentData = {
@@ -244,7 +271,7 @@ function PaymentDialog({
       );
 
       if (error) {
-        console.error("Error during payment confirmation:", error);
+        handleStripeErrors(error); // Call a helper function to handle multiple errors
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
@@ -261,10 +288,12 @@ function PaymentDialog({
       }
     } catch (error) {
       console.error("Error creating payment intent:", error);
+      updateSnackBarState(true, "Failed to create payment", "error");
     } finally {
       setLoading(false);
     }
   };
+
   console.log("delivery charge", deliveryCharge);
 
   return (
