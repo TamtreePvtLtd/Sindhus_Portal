@@ -62,7 +62,13 @@ function SnacksMenuItem({
           justifyContent={"center"}
           alignItems={"center"}
           columnGap={4}
-          padding={"15px"}
+          sx={{
+            padding: {
+              xs: 0, // no padding for mobile screens
+              sm: "15px", // padding for tablet and larger screens
+              // md:"20px"
+            },
+          }}
         >
           <Box>
             <Typography
