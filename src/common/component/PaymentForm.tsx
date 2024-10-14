@@ -56,13 +56,18 @@ const schema = yup.object({
     .matches(
       /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/,
       "Phone number must be a valid US number"
+    )
+    .test(
+      "is-complete-phone-number",
+      "Phone number must be a valid US number",
+      function (value) {
+        if (!value) return false;
+        const digitsOnly = value.replace(/\D/g, ""); 
+        return digitsOnly.length === 10;
+      }
     ),
+
   email: yup.string().email("Invalid email").required("Email is required"),
-  // addressLine1: yup.string().required("Address Line 1 is required"),
-  // postalCode: yup
-  //   .string()
-  //   .required("Postal code is required")
-  //   .matches(/^[0-9]{5}$/, "Postal code must be 5 digits"),
   deliveryOption: yup.string().required("Please select a delivery option"),
   deliveryDate: yup
     .date()
