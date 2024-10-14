@@ -23,36 +23,21 @@ function SnacksPage() {
 
   return (
     <>
-      <Box
-        sx={{
-          backgroundImage: `url("public/assets/snacks-banner-2.jpg")`,
-          backgroundSize: {
-            xs: "contain", 
-            sm: "contain", 
-            md: "cover", 
-          },
-
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "none",
-          width: {
-            xs: "100%", // full width for mobile
-            sm: "100%", // full width for tablets
-            md: "100%", // 80% width for medium screens
-            lg: "100%", // full width for larger screens
-          },
-          height: {
-            xs: "250px", // adjust height for mobile (50% of viewport height)
-            sm: "410px", // adjust height for tablets
-            md: "125vh", // adjust height for medium screens
-            lg: "125vh", // height for larger screens
-          },
-          // display: "flex", // if you want to align content inside the banner
-          // justifyContent: "center",
-          // alignItems: "center",
-          margin: "0 auto", // center the box when not full width
-          zIndex: 99,
+      <Grid
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          overflow: "hidden",
         }}
-      />
+      >
+        <img
+          src="public/assets/snacks-banner-2.jpg"
+          alt="Snacks Banner"
+          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+        />
+      </Grid>
 
       <Container
         sx={{
