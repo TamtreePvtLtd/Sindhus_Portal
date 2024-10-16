@@ -17,6 +17,7 @@ import {
   createPaymentIntent,
   getLastTransaction,
   createCartItem,
+  createClientSecret,
 } from "../services/api";
 import { queryClient } from "../App";
 
@@ -163,6 +164,17 @@ export const useCreatePaymentIntent = () => {
   });
 };
 
+export const usecreateClientSecret = () => {
+  return useMutation({
+    mutationFn: createClientSecret,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
 export const useCreateCartItem = () => {
   return useMutation({
     mutationFn: createCartItem,

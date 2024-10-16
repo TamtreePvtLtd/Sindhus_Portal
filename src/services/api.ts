@@ -335,8 +335,28 @@ const createPaymentIntent = async (formData) => {
     throw error;
   }
 };
+const createClientSecret = async (amount) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/payment/createClientSecret",
+      amount
+    );
+
+    console.log("response", response.data);
+
+    return {
+      clientSecret: response.data.clientSecret,
+      message: response.data.message,
+      paymentIntent: response.data,
+    };
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    throw error;
+  }
+};
 
 export {
+  createClientSecret,
   createCartItem,
   getLastTransaction,
   createPaymentIntent,

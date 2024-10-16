@@ -28,6 +28,7 @@ import SuccessModal from "./SuccessModel";
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
 import {
   useCreateCartItem,
+  usecreateClientSecret,
   useCreatePaymentIntent,
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
@@ -62,7 +63,7 @@ const schema = yup.object({
       "Phone number must be a valid US number",
       function (value) {
         if (!value) return false;
-        const digitsOnly = value.replace(/\D/g, ""); 
+        const digitsOnly = value.replace(/\D/g, "");
         return digitsOnly.length === 10;
       }
     ),
@@ -150,6 +151,7 @@ function PaymentDialog({
 
   const deliveryOptionValue = watch("deliveryOption");
   const createPaymentMutation = useCreatePaymentIntent();
+  const createClientSecret = usecreateClientSecret();
   const { data: lasttransaction, refetch } = useGetLastTransaction();
   const cartItemCreateMutation = useCreateCartItem();
 
@@ -187,7 +189,7 @@ function PaymentDialog({
       insufficient_funds: "There are insufficient amount on your card.",
     };
 
-     if (error.code && errorCodeMap[error.code]) {
+    if (error.code && errorCodeMap[error.code]) {
       errorMessages.push(errorCodeMap[error.code]);
     } else if (error.message) {
       errorMessages.push(error.message);
@@ -241,26 +243,15 @@ function PaymentDialog({
         ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
         : Math.round(parseFloat(amount) * 100);
 
-    const paymentData = {
-      ...capitalizedData,
-      address: `${address}`,
-      amount: finalAmount,
-      orderedItems,
-      createdAt: new Date(),
-      orderNumber: orderNumber || "1000",
-      couponName: couponName,
-      totalWithoutCoupon: totalWithoutCoupon,
-      totalWithCoupon: totalAmountWithCoupon,
-      addressURL: addressURL,
-      notes: data.notes,
-    };
-
     try {
-      const { clientSecret, orderNumber } =
-        await createPaymentMutation.mutateAsync(paymentData);
+      // Get client secret for payment
+      const { clientSecret } = await createClientSecret.mutateAsync(
+        finalAmount
+      );
 
       const cardElement = elements.getElement(CardElement);
 
+      // Confirm card payment
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
@@ -276,28 +267,47 @@ function PaymentDialog({
       );
 
       if (error) {
-        handleStripeErrors(error); // Call a helper function to handle multiple errors
-      } else if (paymentIntent.status === "succeeded") {
+        handleStripeErrors(error); // Helper function to manage errors
+      } else if (paymentIntent?.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
+
+        // Prepare payment data for backend
+        const paymentData = {
+          ...capitalizedData,
+          address: `${address}`,
+          amount: finalAmount,
+          orderedItems,
+          createdAt: new Date(),
+          orderNumber: orderNumber || "1000",
+          couponName: couponName,
+          totalWithoutCoupon: totalWithoutCoupon,
+          totalWithCoupon: totalAmountWithCoupon,
+          addressURL: addressURL,
+          notes: data.notes,
+          status: paymentIntent?.status,
+          paymentId: paymentIntent?.id,
+        };
+
+        // Save payment information in backend
+        await createPaymentMutation.mutateAsync(paymentData);
         clearCart();
         setEmail(data.email);
         setAddressURL("");
         setAddress("");
         setAddressError("");
-        saveCartItems(orderedItems, paymentData);
-        console.log("Order Number:", orderNumber);
         setOpenModal(true);
         reset();
         closeDrawer();
         onClose();
       }
     } catch (error) {
-      console.error("Error creating payment intent:", error);
+      console.error("Error processing payment:", error);
       updateSnackBarState(true, "Failed to create payment", "error");
     } finally {
       setLoading(false);
     }
   };
+
 
   console.log("delivery charge", deliveryCharge);
 
