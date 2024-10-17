@@ -151,6 +151,14 @@ export const useGetLastTransaction = () => {
     refetchOnWindowFocus: false, // Prevent refetch on window focus
   });
 };
+
+export const getOrderNumber = () => {
+  return useQuery({
+    queryKey: ["orderNumber"], // Include distance in the query key
+    queryFn: () => getOrderNumber(), // Corrected function name
+    refetchOnWindowFocus: false, // Prevent refetch on window focus
+  });
+};
 export const useCreatePaymentIntent = () => {
   return useMutation({
     mutationFn: createPaymentIntent,
