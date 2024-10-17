@@ -62,7 +62,7 @@ const schema = yup.object({
       "Phone number must be a valid US number",
       function (value) {
         if (!value) return false;
-        const digitsOnly = value.replace(/\D/g, ""); 
+        const digitsOnly = value.replace(/\D/g, "");
         return digitsOnly.length === 10;
       }
     ),
@@ -154,27 +154,18 @@ function PaymentDialog({
   const cartItemCreateMutation = useCreateCartItem();
 
   useEffect(() => {
-    const orderNumberData = lasttransaction;
-    let newOrderNumber;
-
-    if (orderNumberData) {
-      const numericOrderNumber = Number(orderNumberData) + 1;
-      newOrderNumber = numericOrderNumber.toString();
-    } else {
-      newOrderNumber = `1000`;
-    }
-    setOrderNumber(newOrderNumber);
+    setOrderNumber(lasttransaction);
   }, [lasttransaction]);
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");
   }, [deliveryOptionValue]);
 
-  useEffect(() => {
-    if (open) {
-      refetch();
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (open) {
+  //     refetch();
+  //   }
+  // }, [open]);
 
   const handleStripeErrors = (error: any) => {
     const errorMessages: string[] = [];
@@ -187,7 +178,7 @@ function PaymentDialog({
       insufficient_funds: "There are insufficient amount on your card.",
     };
 
-     if (error.code && errorCodeMap[error.code]) {
+    if (error.code && errorCodeMap[error.code]) {
       errorMessages.push(errorCodeMap[error.code]);
     } else if (error.message) {
       errorMessages.push(error.message);
@@ -223,6 +214,7 @@ function PaymentDialog({
   console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
+    refetch();
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
       setAddressError("Address is required for delivery");
