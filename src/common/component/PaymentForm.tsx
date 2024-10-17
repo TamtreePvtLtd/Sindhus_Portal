@@ -155,17 +155,11 @@ function PaymentDialog({
 
   useEffect(() => {
     setOrderNumber(lasttransaction);
-  }, [lasttransaction]);
+  }, [lasttransaction, orderNumber]);
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");
   }, [deliveryOptionValue]);
-
-  // useEffect(() => {
-  //   if (open) {
-  //     refetch();
-  //   }
-  // }, [open]);
 
   const handleStripeErrors = (error: any) => {
     const errorMessages: string[] = [];
@@ -195,11 +189,15 @@ function PaymentDialog({
   };
 
   const saveCartItems = async (cartItems: any[], paymentData: any) => {
+    console.log("paymentData saveCartItems", paymentData);
+    console.log("cartItems saveCartItems", cartItems);
+    console.log("orderNumber saveCartItems", orderNumber);
+
     try {
       const data = {
         cartItems,
         paymentData,
-        orderNumber: orderNumber || "1000",
+        orderNumber: orderNumber,
       };
 
       await cartItemCreateMutation.mutateAsync(data);
@@ -215,6 +213,7 @@ function PaymentDialog({
 
   const onSubmit = async (data: PaymentFormData) => {
     refetch();
+
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
       setAddressError("Address is required for delivery");
@@ -239,7 +238,7 @@ function PaymentDialog({
       amount: finalAmount,
       orderedItems,
       createdAt: new Date(),
-      orderNumber: orderNumber || "1000",
+      orderNumber: orderNumber,
       couponName: couponName,
       totalWithoutCoupon: totalWithoutCoupon,
       totalWithCoupon: totalAmountWithCoupon,
@@ -248,8 +247,9 @@ function PaymentDialog({
     };
 
     try {
-      const { clientSecret, orderNumber } =
-        await createPaymentMutation.mutateAsync(paymentData);
+      const { clientSecret } = await createPaymentMutation.mutateAsync(
+        paymentData
+      );
 
       const cardElement = elements.getElement(CardElement);
 
