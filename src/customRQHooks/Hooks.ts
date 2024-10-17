@@ -123,6 +123,7 @@ export const useGetAllCoupens = () => {
     queryFn: getAllCoupens,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    enabled: false, // Disable fetching on component mount
   });
 };
 
@@ -149,16 +150,12 @@ export const useGetLastTransaction = () => {
     queryFn: () => getLastTransaction()
     , // Corrected function name
     refetchOnWindowFocus: false, // Prevent refetch on window focus
+    enabled: false, // Disable fetching on component mount
+
   });
 };
 
-export const getOrderNumber = () => {
-  return useQuery({
-    queryKey: ["orderNumber"], // Include distance in the query key
-    queryFn: () => getOrderNumber(), // Corrected function name
-    refetchOnWindowFocus: false, // Prevent refetch on window focus
-  });
-};
+
 export const useCreatePaymentIntent = () => {
   return useMutation({
     mutationFn: createPaymentIntent,

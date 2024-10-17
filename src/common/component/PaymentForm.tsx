@@ -151,11 +151,13 @@ function PaymentDialog({
   const deliveryOptionValue = watch("deliveryOption");
   const createPaymentMutation = useCreatePaymentIntent();
   const { data: lasttransaction, refetch } = useGetLastTransaction();
+  console.log("lasttransaction", lasttransaction);
+
   const cartItemCreateMutation = useCreateCartItem();
 
   useEffect(() => {
     setOrderNumber(lasttransaction);
-  }, [lasttransaction, orderNumber]);
+  }, [lasttransaction]);
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");

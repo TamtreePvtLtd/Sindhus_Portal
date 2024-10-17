@@ -302,16 +302,7 @@ const getLastTransaction = async () => {
   }
 };
 
-const getOrderNumber = async () => {
-  try {
-    const response = await httpWithoutCredentials.get<string>(
-      `/payment/order`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 
 const createCartItem = async (formData) => {
   try {
@@ -348,7 +339,6 @@ const createPaymentIntent = async (formData) => {
 };
 
 export {
-  getOrderNumber,
   createCartItem,
   getLastTransaction,
   createPaymentIntent,
