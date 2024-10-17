@@ -250,28 +250,28 @@ function PaymentDialog({
 
     try {
       const { clientSecret } = await createPaymentMutation.mutateAsync(
-        paymentData
-      );
+          paymentData
+        );
 
       const cardElement = elements.getElement(CardElement);
 
       const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: cardElement,
-            billing_details: {
-              name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
-              email: capitalizedData.email,
-              address: address,
+          clientSecret,
+          {
+            payment_method: {
+              card: cardElement,
+              billing_details: {
+                name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
+                email: capitalizedData.email,
+                address: address,
+              },
             },
-          },
-        }
-      );
+          }
+        );
 
       if (error) {
         handleStripeErrors(error); // Call a helper function to handle multiple errors
-      } else if (paymentIntent.status === "succeeded") {
+      } else if (paymentIntent?.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
         setEmail(data.email);
