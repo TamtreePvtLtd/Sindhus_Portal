@@ -202,7 +202,6 @@ function PaymentDialog({
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
-  console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
@@ -229,7 +228,7 @@ function PaymentDialog({
 
       const paymentData = {
         ...capitalizedData,
-        address: `${address}`,
+        address: deliveryOptionValue === "Pickup" ? "" : address,
         amount: finalAmount,
         orderedItems,
         createdAt: new Date(),
@@ -237,7 +236,7 @@ function PaymentDialog({
         couponName: couponName,
         totalWithoutCoupon: totalWithoutCoupon,
         totalWithCoupon: totalAmountWithCoupon,
-        addressURL: addressURL,
+        addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
         notes: data.notes,
       };
       const { clientSecret, orderNumber } =
