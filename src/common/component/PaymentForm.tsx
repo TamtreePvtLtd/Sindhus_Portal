@@ -12,13 +12,11 @@ import {
   RadioGroup,
   FormControl,
   FormLabel,
-  Typography,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import axios from "axios";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -123,7 +121,6 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
-  const [isPickup, setIsPickup] = useState(true);
   const [addressError, setAddressError] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [addressURL, setAddressURL] = useState<string>("");
@@ -151,8 +148,6 @@ function PaymentDialog({
   const deliveryOptionValue = watch("deliveryOption");
   const createPaymentMutation = useCreatePaymentIntent();
   const { data: lasttransaction, refetch } = useGetLastTransaction();
-  console.log("lasttransaction", lasttransaction);
-
   const cartItemCreateMutation = useCreateCartItem();
 
   useEffect(() => {
@@ -191,15 +186,11 @@ function PaymentDialog({
   };
 
   const saveCartItems = async (cartItems: any[], paymentData: any) => {
-    console.log("paymentData saveCartItems", paymentData);
-    console.log("cartItems saveCartItems", cartItems);
-    console.log("orderNumber saveCartItems", orderNumber);
-
     try {
       const data = {
         cartItems,
         paymentData,
-        orderNumber: orderNumber,
+        orderNumber: paymentData.orderNumber,
       };
 
       await cartItemCreateMutation.mutateAsync(data);
@@ -214,8 +205,6 @@ function PaymentDialog({
   console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
-    refetch();
-
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
       setAddressError("Address is required for delivery");
@@ -234,51 +223,55 @@ function PaymentDialog({
         ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
         : Math.round(parseFloat(amount) * 100);
 
-    const paymentData = {
-      ...capitalizedData,
-      address: `${address}`,
-      amount: finalAmount,
-      orderedItems,
-      createdAt: new Date(),
-      orderNumber: orderNumber,
-      couponName: couponName,
-      totalWithoutCoupon: totalWithoutCoupon,
-      totalWithCoupon: totalAmountWithCoupon,
-      addressURL: addressURL,
-      notes: data.notes,
-    };
-
     try {
-      const { clientSecret } = await createPaymentMutation.mutateAsync(
-          paymentData
-        );
+      const { data: transactionData } = await refetch();
+      const updatedOrderNumber = transactionData || "1000";
+
+      const paymentData = {
+        ...capitalizedData,
+        address: `${address}`,
+        amount: finalAmount,
+        orderedItems,
+        createdAt: new Date(),
+        orderNumber: updatedOrderNumber,
+        couponName: couponName,
+        totalWithoutCoupon: totalWithoutCoupon,
+        totalWithCoupon: totalAmountWithCoupon,
+        addressURL: addressURL,
+        notes: data.notes,
+      };
+      const { clientSecret, orderNumber } =
+        await createPaymentMutation.mutateAsync(paymentData);
 
       const cardElement = elements.getElement(CardElement);
 
       const { error, paymentIntent } = await stripe.confirmCardPayment(
-          clientSecret,
-          {
-            payment_method: {
-              card: cardElement,
-              billing_details: {
-                name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
-                email: capitalizedData.email,
-                address: address,
-              },
+        clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
+              email: capitalizedData.email,
+              address: address,
             },
-          }
-        );
+          },
+        }
+      );
 
       if (error) {
         handleStripeErrors(error); // Call a helper function to handle multiple errors
-      } else if (paymentIntent?.status === "succeeded") {
+      } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
         setEmail(data.email);
         setAddressURL("");
         setAddress("");
         setAddressError("");
-        saveCartItems(orderedItems, paymentData);
+        await saveCartItems(orderedItems, {
+          ...paymentData,
+          orderNumber: updatedOrderNumber,
+        });
         console.log("Order Number:", orderNumber);
         setOpenModal(true);
         reset();
