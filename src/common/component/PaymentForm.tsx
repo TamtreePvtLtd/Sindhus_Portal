@@ -22,6 +22,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
+import { addDays } from "date-fns";
 
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
 import {
@@ -424,15 +425,7 @@ function PaymentDialog({
                         : "Delivery Date"
                     }
                     {...field}
-                    minDate={
-                      deliveryOptionValue === "Pickup"
-                        ? new Date().getFullYear() === 2024 &&
-                          new Date().getMonth() === 9 &&
-                          new Date().getDate() === 26
-                          ? new Date() // If today is Oct 26, 2024, set minDate to today
-                          : new Date(2024, 9, 26) // Otherwise, set minDate to Oct 26, 2024
-                        : new Date() // For other options, set minDate to current date
-                    }
+                    minDate={addDays(new Date(), 5)} // Set minDate to 4 days from the current date
                     onChange={(date) => field.onChange(date)}
                     renderInput={(params) => (
                       <TextField
