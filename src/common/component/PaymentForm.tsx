@@ -12,18 +12,17 @@ import {
   RadioGroup,
   FormControl,
   FormLabel,
-  Typography,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import axios from "axios";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
+import { addDays } from "date-fns";
 
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
 import {
@@ -62,7 +61,7 @@ const schema = yup.object({
       "Phone number must be a valid US number",
       function (value) {
         if (!value) return false;
-        const digitsOnly = value.replace(/\D/g, ""); 
+        const digitsOnly = value.replace(/\D/g, "");
         return digitsOnly.length === 10;
       }
     ),
@@ -123,7 +122,6 @@ function PaymentDialog({
   const [orderNumber, setOrderNumber] = useState<string | undefined>();
   const { updateSnackBarState } = useSnackBar();
   const [openModal, setOpenModal] = useState(false);
-  const [isPickup, setIsPickup] = useState(true);
   const [addressError, setAddressError] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [addressURL, setAddressURL] = useState<string>("");
@@ -154,27 +152,12 @@ function PaymentDialog({
   const cartItemCreateMutation = useCreateCartItem();
 
   useEffect(() => {
-    const orderNumberData = lasttransaction;
-    let newOrderNumber;
-
-    if (orderNumberData) {
-      const numericOrderNumber = Number(orderNumberData) + 1;
-      newOrderNumber = numericOrderNumber.toString();
-    } else {
-      newOrderNumber = `1000`;
-    }
-    setOrderNumber(newOrderNumber);
+    setOrderNumber(lasttransaction);
   }, [lasttransaction]);
 
   useEffect(() => {
     if (deliveryOptionValue == "Pickup") setAddressError("");
   }, [deliveryOptionValue]);
-
-  useEffect(() => {
-    if (open) {
-      refetch();
-    }
-  }, [open]);
 
   const handleStripeErrors = (error: any) => {
     const errorMessages: string[] = [];
@@ -187,7 +170,7 @@ function PaymentDialog({
       insufficient_funds: "There are insufficient amount on your card.",
     };
 
-     if (error.code && errorCodeMap[error.code]) {
+    if (error.code && errorCodeMap[error.code]) {
       errorMessages.push(errorCodeMap[error.code]);
     } else if (error.message) {
       errorMessages.push(error.message);
@@ -208,7 +191,7 @@ function PaymentDialog({
       const data = {
         cartItems,
         paymentData,
-        orderNumber: orderNumber || "1000",
+        orderNumber: paymentData.orderNumber,
       };
 
       await cartItemCreateMutation.mutateAsync(data);
@@ -220,7 +203,6 @@ function PaymentDialog({
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
-  console.log("address", address);
 
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
@@ -241,21 +223,23 @@ function PaymentDialog({
         ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
         : Math.round(parseFloat(amount) * 100);
 
-    const paymentData = {
-      ...capitalizedData,
-      address: `${address}`,
-      amount: finalAmount,
-      orderedItems,
-      createdAt: new Date(),
-      orderNumber: orderNumber || "1000",
-      couponName: couponName,
-      totalWithoutCoupon: totalWithoutCoupon,
-      totalWithCoupon: totalAmountWithCoupon,
-      addressURL: addressURL,
-      notes: data.notes,
-    };
-
     try {
+      const { data: transactionData } = await refetch();
+      const updatedOrderNumber = transactionData || "1000";
+
+      const paymentData = {
+        ...capitalizedData,
+        address: deliveryOptionValue === "Pickup" ? "" : address,
+        amount: finalAmount,
+        orderedItems,
+        createdAt: new Date(),
+        orderNumber: updatedOrderNumber,
+        couponName: couponName,
+        totalWithoutCoupon: totalWithoutCoupon,
+        totalWithCoupon: totalAmountWithCoupon,
+        addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
+        notes: data.notes,
+      };
       const { clientSecret, orderNumber } =
         await createPaymentMutation.mutateAsync(paymentData);
 
@@ -284,7 +268,10 @@ function PaymentDialog({
         setAddressURL("");
         setAddress("");
         setAddressError("");
-        saveCartItems(orderedItems, paymentData);
+        await saveCartItems(orderedItems, {
+          ...paymentData,
+          orderNumber: updatedOrderNumber,
+        });
         console.log("Order Number:", orderNumber);
         setOpenModal(true);
         reset();
@@ -438,15 +425,7 @@ function PaymentDialog({
                         : "Delivery Date"
                     }
                     {...field}
-                    minDate={
-                      deliveryOptionValue === "Pickup"
-                        ? new Date().getFullYear() === 2024 &&
-                          new Date().getMonth() === 9 &&
-                          new Date().getDate() === 26
-                          ? new Date() // If today is Oct 26, 2024, set minDate to today
-                          : new Date(2024, 9, 26) // Otherwise, set minDate to Oct 26, 2024
-                        : new Date() // For other options, set minDate to current date
-                    }
+                    minDate={addDays(new Date(), 5)} // Set minDate to 4 days from the current date
                     onChange={(date) => field.onChange(date)}
                     renderInput={(params) => (
                       <TextField

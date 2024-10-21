@@ -123,6 +123,7 @@ export const useGetAllCoupens = () => {
     queryFn: getAllCoupens,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    enabled: false, // Disable fetching on component mount
   });
 };
 
@@ -149,8 +150,12 @@ export const useGetLastTransaction = () => {
     queryFn: () => getLastTransaction()
     , // Corrected function name
     refetchOnWindowFocus: false, // Prevent refetch on window focus
+    enabled: false, // Disable fetching on component mount
+
   });
 };
+
+
 export const useCreatePaymentIntent = () => {
   return useMutation({
     mutationFn: createPaymentIntent,
