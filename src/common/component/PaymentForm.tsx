@@ -128,7 +128,7 @@ function PaymentDialog({
   const [email, setEmail] = useState<string | undefined>();
   const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null);
   const [isPaymentDisabled, setIsPaymentDisabled] = useState<boolean>(false);
-
+const [cardComplete, setCardComplete] = useState(false);
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
   };
@@ -287,7 +287,9 @@ function PaymentDialog({
     }
   };
 
-  console.log("delivery charge", deliveryCharge);
+const onCardChange = (event: any) => {
+  setCardComplete(event.complete); 
+};
 
   return (
     <Box>
@@ -488,6 +490,7 @@ function PaymentDialog({
                       },
                     },
                   }}
+                  onChange={onCardChange}
                 />
               </Box>
             </Box>
@@ -505,7 +508,13 @@ function PaymentDialog({
           <Button
             onClick={handleSubmit(onSubmit)}
             variant="contained"
-            disabled={!stripe || loading || !isValid || addressError !== ""}
+            disabled={
+              !stripe ||
+              loading ||
+              !isValid ||
+              addressError !== "" ||
+              !cardComplete
+            }
           >
             {loading ? "Processing..." : "Confirm Payment"}
           </Button>
