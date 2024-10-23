@@ -31,7 +31,6 @@ import {
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
 
-// Define the interface for form data
 interface PaymentFormData {
   firstName: string;
   lastName: string;
@@ -101,9 +100,10 @@ function PaymentDialog({
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<PaymentFormData>({
     resolver: yupResolver(schema),
+    mode: "onChange",
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -127,6 +127,7 @@ function PaymentDialog({
   const [addressURL, setAddressURL] = useState<string>("");
   const [email, setEmail] = useState<string | undefined>();
   const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null);
+  const [isPaymentDisabled, setIsPaymentDisabled] = useState<boolean>(false);
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
@@ -394,6 +395,7 @@ function PaymentDialog({
                 setAddress={setAddress}
                 setAddressURL={setAddressURL}
                 setDeliveryCharge={handleDeliveryChargeUpdate} // Pass the callback
+                setIsPaymentDisabled={setIsPaymentDisabled}
               />
             )}
             {addressError && <p style={{ color: "red" }}>{addressError}</p>}
@@ -503,7 +505,7 @@ function PaymentDialog({
           <Button
             onClick={handleSubmit(onSubmit)}
             variant="contained"
-            disabled={!stripe || loading}
+            disabled={!stripe || loading || !isValid || addressError !== ""}
           >
             {loading ? "Processing..." : "Confirm Payment"}
           </Button>

@@ -19,6 +19,7 @@ interface PlacesAutocompleteProps {
   setAddress: (address: string) => void; // Adjust type based on your address type
   setAddressURL: (address: string) => void; // Adjust type based on your address type
   setDeliveryCharge: (charge: number) => void; // Add this prop for passing the delivery charge
+  setIsPaymentDisabled: (disabled: boolean) => void;
 }
 
 export function PlacesAutocomplete({
@@ -27,6 +28,7 @@ export function PlacesAutocomplete({
   setAddress,
   setAddressURL,
   setDeliveryCharge,
+  setIsPaymentDisabled,
 }: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
@@ -36,6 +38,7 @@ export function PlacesAutocomplete({
   const [amount, setAmount] = useState<string | null>(null); // State to store the amount
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
   const [error, setError] = useState(false); // State to handle error status
+  
 
   const libraries: Libraries = ["places"];
   console.log("orderAmountWithTax", orderAmountWithTax);
@@ -58,12 +61,22 @@ export function PlacesAutocomplete({
     }
   }, [amount, setDeliveryCharge]);
 
-  useEffect(() => {
-    if (distance !== null && nearestAmount) {
-      console.log("Nearest Amount:", nearestAmount); // Check if amount is inside nearestAmount
-      setAmount(nearestAmount.amount); // Adjust this based on actual data structure
-    }
-  }, [distance, nearestAmount]);
+   useEffect(() => {
+     if (distance !== null && nearestAmount) {
+       setAmount(nearestAmount.amount);
+
+       // If distance is too far, disable payment and set error
+       if (nearestAmount?.amount === "0") {
+         setAddressError(
+           "Distance is too far. Please choose the pickup option."
+         );
+         setIsPaymentDisabled(true); // Disable confirm payment button
+       } else {
+         setAddressError("");
+         setIsPaymentDisabled(false); // Enable confirm payment button
+       }
+     }
+   }, [distance, nearestAmount, setAddressError, setIsPaymentDisabled]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
