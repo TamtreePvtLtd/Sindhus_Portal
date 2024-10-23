@@ -23,7 +23,7 @@ function CustomSnackBar() {
         position="top-center"
         reverseOrder={false}
         toastOptions={{
-          duration: 2000,
+          duration: 3000,
         }}
       />
     </>
