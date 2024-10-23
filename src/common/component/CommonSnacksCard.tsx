@@ -167,6 +167,7 @@ import { CartItem, useCart } from "../../context/CartContext";
 import { paths } from "../../routes/path";
 import { useSnackBar } from "../../context/SnackBarContext";
 
+
 interface IProps {
   product: IProductCardList;
 }
@@ -177,6 +178,7 @@ function CommonSnacksCard(props: IProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const { cartItems, setCartItems, setCartCount } = useCart();
   const { updateSnackBarState } = useSnackBar();
+
   useEffect(() => {
     if (product.itemSizeWithPrice && product.itemSizeWithPrice.length > 0) {
       const initialPrice = product.itemSizeWithPrice[0]?.price || null;
@@ -215,7 +217,6 @@ function CommonSnacksCard(props: IProps) {
         updatedItems[existingItemIndex] = {
           ...existingItem,
           quantity: existingItem.quantity + 1,
-          // Calculate the total price based on the updated quantity
           totalPrice: (existingItem.quantity + 1) * existingItem.price,
         };
       } else {
@@ -229,20 +230,16 @@ function CommonSnacksCard(props: IProps) {
             size: selectedSize,
             price: selectedPrice,
             quantity: 1,
-            // Calculate the total price for the new item
             totalPrice: selectedPrice,
           },
         ];
         updateSnackBarState(true, "Item added to cart", "success");
       }
 
-      // Update the cart state and local storage
       setCartItems(updatedItems);
       setCartCount(
         updatedItems.reduce((count, item) => count + item.quantity, 0)
       );
-
-      console.log("Added to cart:", product.title, selectedSize, selectedPrice);
     }
   };
 
@@ -337,23 +334,50 @@ function CommonSnacksCard(props: IProps) {
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "center", m: 1 }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#038265",
-              color: "#fff",
-              width: "70%",
-              borderRadius: "10px",
-              height: "30px",
-              fontWeight: 500,
-              "&:hover": {
-                backgroundColor: "#025e46",
-              },
-            }}
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </Button>
+          {product.availability === "true" ? (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#038265",
+                color: "#fff",
+                width: "70%",
+                borderRadius: "10px",
+                height: "30px",
+                fontWeight: 500,
+                "&:hover": {
+                  backgroundColor: "#025e46",
+                },
+              }}
+              onClick={handleAddToCart}
+            >
+              Add to Cart
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              // disabled
+              sx={{
+                backgroundColor: "#ff6666",
+                color: "#fff",
+                width: "70%",
+                borderRadius: "10px",
+                height: "30px",
+                fontWeight: 500,
+                "&:hover": {
+                  backgroundColor: "#ff6666",
+                },
+              }}
+              // onClick={() =>
+              //   updateSnackBarState(
+              //     true,
+              //     "The product is not available",
+              //     "error"
+              //   )
+              // }
+            >
+              Sold Out
+            </Button>
+          )}
         </Box>
       </CardContent>
     </Card>
@@ -361,3 +385,4 @@ function CommonSnacksCard(props: IProps) {
 }
 
 export default CommonSnacksCard;
+

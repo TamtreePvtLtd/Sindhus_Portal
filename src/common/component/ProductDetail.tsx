@@ -110,6 +110,7 @@ function ProductDetail() {
         totalPrice: selectedPrice,
       };
       updatedItems = [...updatedItems, newCartItem];
+      updateSnackBarState(true, "Item added to cart", "success");
     }
 
     // Update cart items
@@ -119,7 +120,7 @@ function ProductDetail() {
     setCartCount(updatedItems.length);
 
     // Show confirmation
-    updateSnackBarState(true, "Item added to cart", "success");
+    
   };
 
   useEffect(() => {
@@ -441,24 +442,52 @@ function ProductDetail() {
               )}
             </>
             <Box>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#038265",
-                  color: "#fff",
-                  width: "30%",
-                  mt: "10px",
-                  borderRadius: "10px",
-                  height: "35px", // Adjusted height
-                  fontWeight: 500,
-                  "&:hover": {
-                    backgroundColor: "#025e46",
-                  },
-                }}
-                onClick={handleAddToCart}
-              >
-                Add to Cart
-              </Button>
+              {menuDetail?.availability === "true" ? (
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#038265",
+                    color: "#fff",
+                    width: "30%",
+                    mt: "10px",
+                    borderRadius: "10px",
+                    height: "35px",
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "#025e46",
+                    },
+                  }}
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  // disabled
+                  sx={{
+                    backgroundColor: "#ff6666",
+                    color: "#fff",
+                    width: "30%",
+                    borderRadius: "10px",
+                    mt: "10px",
+                    height: "35px",
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "#ff6666",
+                    },
+                  }}
+                  // onClick={() =>
+                  //   updateSnackBarState(
+                  //     true,
+                  //     "The product is not available",
+                  //     "error"
+                  //   )
+                  // }
+                >
+                  Sold Out
+                </Button>
+              )}
             </Box>
           </Grid>
         </Grid>

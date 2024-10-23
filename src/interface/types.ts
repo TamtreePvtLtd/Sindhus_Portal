@@ -23,6 +23,7 @@ export interface IProductCardList {
   netWeight?: number;
   itemSizeWithPrice: itemSizeWithPrice[] | null;
   dailyMenuSizeWithPrice: DailyMenuSizeWithPrice[] | null;
+  availability: string;
 }
 
 export interface DailyMenuSizeWithPrice {
@@ -74,6 +75,7 @@ export interface IProduct {
   netWeight?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  availability?: string;
 }
 
 export interface IPrice {
