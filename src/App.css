@@ -4,7 +4,7 @@
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-   padding-top: 300px;
+  padding-top: 210px;
   padding-bottom: 200px;
   /* background-attachment: fixed; */
 }
@@ -14,29 +14,26 @@
   content: "";
   height: 100%;
   width: 100%;
-  /* background-color: #000000; */
+  background-color: #000000;
   left: 0;
   right: 0;
   top: 0;
   z-index: -1;
   opacity: 0.2;
 }
-.page-banner-content h2 {
-  color: "white";
-  margin-bottom: 20px;
-  font-size: 40px;
-  line-height: 1;
-}
+
 .page-banner-content {
   text-align: center;
   color: #ffffff;
+  position: absolute;
+  top: 20px; /* Adjust this value as needed */
+  width: 100%;
 }
-.page-banner-description h6 {
-  color: #ffffff;
-  margin-top: 20px;
-  font-size: 30px;
-  line-height: 1;
-}
+
 .page-banner-description {
   text-align: center;
+  color: #ffffff;
+  position: absolute;
+  top: 80px; /* Adjust this value as needed */
+  width: 100%;
 }
