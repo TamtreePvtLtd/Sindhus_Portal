@@ -45,26 +45,26 @@ const bannerImages = [
       "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
   },
   {
-    url: "assets/images/mysorepak.jpg",
-    content: "Snacks",
+    url: "assets/images/laddu-newbanner.jpg",
+    content: "",
     description:
-      "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
+      "",
   },
   {
-    url: "assets/images/mixure-banner.jpg",
-    content: "Snacks",
+    url: "assets/images/mixture-newbanner.jpg",
+    content: "",
     description:
-      "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
+      "",
   },
   {
-    url: "assets/images/laddu-banner.jpg",
-    content: "Taste the Tradition",
-    description: "Discover traditional snacks with a modern twist!",
+    url: "assets/images/mysorpak-newbanner.jpg",
+    content: "",
+    description: "",
   },
   {
-    url: "assets/images/ribbonpakkaoda-banner.jpg",
-    content: "Taste the Tradition",
-    description: "Discover traditional snacks with a modern twist!",
+    url: "assets/images/ribonpakkoda-newbanner.jpg",
+    content: "",
+    description: "",
   },
   // Add more images as needed
 ];
@@ -104,14 +104,15 @@ const bannerImages = [
                 // bgcolor="rgba(0, 0, 0, 0.3)"
                 fontFamily="Yeseva One"
                 fontWeight="bold"
-                // py={2}
               >
-                {/* <Box >
+                <Box>
                   <Typography variant="h3" gutterBottom>
                     {banner.content}
                   </Typography>
-                  <Typography variant="h6">{banner.description}</Typography>
-                </Box> */}
+                  <Typography variant="h6" paddingBottom={1}>
+                    {banner.description}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           ))}
