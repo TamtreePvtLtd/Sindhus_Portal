@@ -6,6 +6,10 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CommonSnacksCard from "../../common/component/CommonSnacksCard";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Typography } from "@mui/material";
 
 function SnacksPage() {
   const [selectedSubMenuId, setSelectedSubMenuId] = useState<string>("");
@@ -21,27 +25,101 @@ function SnacksPage() {
     setSelectedSubMenuId(subMenuId);
   };
 
+const sliderSettings = {
+  dots: true,
+  // infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 3000,
+  arrows:false
+};
+
+const bannerImages = [
+  {
+    url: "assets/snacksPage-newBanner.jpg",
+    content: "Snacks",
+    description:
+      "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
+  },
+  {
+    url: "assets/images/laddu-newbanner.jpg",
+    content: "",
+    description:
+      "",
+  },
+  {
+    url: "assets/images/mixture-newbanner.jpg",
+    content: "",
+    description:
+      "",
+  },
+  {
+    url: "assets/images/mysorpak-newbanner.jpg",
+    content: "",
+    description: "",
+  },
+  {
+    url: "assets/images/ribonpakkoda-newbanner.jpg",
+    content: "",
+    description: "",
+  },
+];
+
+
   return (
     <>
-      <Grid
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-      >
-        <img
-          src="public/assets/snacks-banner-2.jpg"
-          alt="Snacks Banner"
-          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+      {/* <Box>
+        {" "}
+        <PageBanner
+          imageUrl="public/assets/snacksPage-newBanner.jpg"
+          content="Snacks"
+          description="Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!"
         />
-      </Grid>
+      </Box> */}
+      <Box>
+        <Slider {...sliderSettings}>
+          {bannerImages.map((banner, index) => (
+            <Box key={index} position="relative">
+              <img
+                src={banner.url}
+                alt={banner.content}
+                style={{ width: "100%", height: "auto" }}
+              />
+              <Box
+                position="absolute"
+                bottom="0"
+                left="0"
+                width="100%"
+                height="auto"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="flex-end"
+                color="white"
+                textAlign="center"
+                // bgcolor="rgba(0, 0, 0, 0.3)"
+                fontFamily="Yeseva One"
+                fontWeight="bold"
+              >
+                <Box>
+                  <Typography variant="h3" gutterBottom>
+                    {banner.content}
+                  </Typography>
+                  <Typography variant="h6" paddingBottom={1}>
+                    {banner.description}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          ))}
+        </Slider>
+      </Box>
 
       <Container
         sx={{
-          marginTop: "none",
+          marginTop: "10px",
           p: 2,
         }}
       >

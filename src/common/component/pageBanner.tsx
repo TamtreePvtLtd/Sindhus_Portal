@@ -30,9 +30,9 @@ function PageBanner(props: IProps) {
                 textTransform: "uppercase",
                 marginBottom: "0 !important",
               }}
-              variant="h2"
-              fontWeight={"medium"}
-              fontFamily={"Dancing Script, cursive"}
+              variant="h3"
+              fontWeight={"bold"}
+              fontFamily={"Yeseva One"}
             >
               {content}
             </Typography>
@@ -46,9 +46,9 @@ function PageBanner(props: IProps) {
                   // textTransform: "uppercase",
                   marginBottom: "0 !important",
                 }}
-                variant="h6"
-                fontFamily={"Dancing Script, cursive"}
-                fontWeight={"small"}
+                variant="h5"
+                fontFamily={"Yeseva One"}
+                fontWeight={"bold"}
               >
                 {description}
               </Typography>
