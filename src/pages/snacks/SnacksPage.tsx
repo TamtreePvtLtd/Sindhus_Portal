@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CommonSnacksCard from "../../common/component/CommonSnacksCard";
-import PageBanner from "../../common/component/pageBanner";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -66,7 +65,6 @@ const bannerImages = [
     content: "",
     description: "",
   },
-  // Add more images as needed
 ];
 
 
