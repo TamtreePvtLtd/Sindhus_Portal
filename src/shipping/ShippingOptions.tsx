@@ -105,7 +105,7 @@ const ShippingOptions = ({ shipmentData }: any) => {
                         label={attr}
                         size="small"
                         sx={{
-                          fontSize: 11,
+                          fontSize: 10,
                           backgroundColor: "black",
                           color: "#fff",
                         }}
