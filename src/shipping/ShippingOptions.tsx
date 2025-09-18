@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -26,9 +26,29 @@ const getRandomColor = () => {
   return color;
 };
 
-const ShippingOptions = ({ shipmentData }: any) => {
+const ShippingOptions = ({
+  shipmentData,
+  selectedRate,
+  onSelectRate,
+}: ShippingOptionsProps) => {
   const [selectedRateObj, setSelectedRateObj] =
     useState<CreateShipmentTransactionPayload | null>(null);
+
+  useEffect(() => {
+    if (selectedRate) {
+      const rate = shipmentData.rates.find(
+        (r: any) => r.object_id === selectedRate
+      );
+      if (rate) {
+        const selectedObj: CreateShipmentTransactionPayload = {
+          rateObjId: rate.object_id,
+          carrierAccount: rate.carrier_account,
+        };
+        setSelectedRateObj(selectedObj);
+        console.log("Selected Rate Details:", selectedObj);
+      }
+    }
+  }, [selectedRate, shipmentData]);
 
   if (!shipmentData?.rates || shipmentData.rates.length === 0) {
     return (
@@ -44,13 +64,14 @@ const ShippingOptions = ({ shipmentData }: any) => {
       carrierAccount: rate.carrierAccount,
     };
     setSelectedRateObj(selectedObj);
+    onSelectRate(rate.object_id);
     console.log("Selected Shipping Option:", selectedObj);
   };
 
   return (
     <Box sx={{ p: 2, overflowX: "auto" }}>
       <RadioGroup
-        value={selectedRateObj?.rateObjId || ""}
+        value={selectedRate || ""}
         onChange={(e) => {
           const selectedRate = shipmentData.rates.find(
             (r: any) => r.objectId === e.target.value
@@ -73,6 +94,11 @@ const ShippingOptions = ({ shipmentData }: any) => {
                   : "1px solid #ddd",
               borderRadius: 2,
               cursor: "pointer",
+              transition: "all 0.2s ease",
+              "&:hover": {
+                boxShadow: 2,
+                transform: "translateY(-2px)",
+              },
             }}
           >
             <CardMedia

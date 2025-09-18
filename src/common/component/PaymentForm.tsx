@@ -220,6 +220,11 @@ function PaymentDialog({
       const amount = Number(selectedRateData.amount) || 0;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
+      console.log("Selected rate details:", {
+        object_id: selectedRateData.object_id,
+        carrier_account: selectedRateData.carrier_account,
+        amount: amount,
+      });
     }
   };
 
@@ -651,10 +656,8 @@ function PaymentDialog({
                     <Typography variant="body2">
                       {deliveryOptionValue === "Delivery"
                         ? selectedRate
-                          ? `$${(Number(selectedShippingAmount) || 0).toFixed(
-                              2
-                            )}`
-                          : "Calculating..."
+                          ? `$${selectedShippingAmount.toFixed(2)}`
+                          : "Select shipping option"
                         : "Free"}
                     </Typography>
                   </Box>
