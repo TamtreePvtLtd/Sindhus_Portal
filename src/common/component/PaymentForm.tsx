@@ -12,6 +12,11 @@ import {
   RadioGroup,
   FormControl,
   FormLabel,
+  Grid,
+  useTheme,
+  useMediaQuery,
+  Typography,
+  Divider,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -23,28 +28,27 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useSnackBar } from "../../context/SnackBarContext";
 import SuccessModal from "./SuccessModel";
 import { addDays } from "date-fns";
-
+import ShippingOptions from "../../shipping/ShippingOptions";
 import { PlacesAutocomplete } from "./PlacesAutocomplete";
 import {
   useCreateCartItem,
   useCreatePaymentIntent,
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
+import shipmentJson from "../../../sample-shipment.json";
 
 interface PaymentFormData {
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
-  addressLine: string;
-  // addressLine2?: string;
+  addressLine?: string;
   postalCode?: string;
   deliveryOption: string;
   deliveryDate: Date | null;
   notes?: string;
 }
 
-// Define the validation schema using Yup
 const schema = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -64,7 +68,6 @@ const schema = yup.object({
         return digitsOnly.length === 10;
       }
     ),
-
   email: yup.string().email("Invalid email").required("Email is required"),
   deliveryOption: yup.string().required("Please select a delivery option"),
   deliveryDate: yup
@@ -109,8 +112,7 @@ function PaymentDialog({
       lastName: "",
       phoneNumber: "",
       email: "",
-      addressLine1: "",
-      addressLine2: "",
+      addressLine: "",
       postalCode: "",
       deliveryOption: "Pickup",
       deliveryDate: null,
@@ -128,21 +130,16 @@ function PaymentDialog({
   const [email, setEmail] = useState<string | undefined>();
   const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null);
   const [isPaymentDisabled, setIsPaymentDisabled] = useState<boolean>(false);
-const [cardComplete, setCardComplete] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
   };
-  // const { data: coupens, refetch } = useGetAllCoupens();
-
-  // const libraries = ["places"];
-
-  // const { isLoaded, loadError } = useLoadScript({
-  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_LOCATION,
-  //   libraries,
-  // });
-
-  // if (loadError) return <div>Error loading maps</div>;
-  // if (!isLoaded) return <div>Loading Maps...</div>;
+  const [selectedRate, setSelectedRate] = useState<string | null>(null);
+  const [selectedShippingAmount, setSelectedShippingAmount] =
+    useState<number>(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -157,7 +154,7 @@ const [cardComplete, setCardComplete] = useState(false);
   }, [lasttransaction]);
 
   useEffect(() => {
-    if (deliveryOptionValue == "Pickup") setAddressError("");
+    if (deliveryOptionValue === "Pickup") setAddressError("");
   }, [deliveryOptionValue]);
 
   const handleStripeErrors = (error: any) => {
@@ -179,7 +176,6 @@ const [cardComplete, setCardComplete] = useState(false);
       errorMessages.push("An unknown error occurred. Please try again.");
     }
 
-    // Display all error messages
     errorMessages.forEach((message) => {
       updateSnackBarState(true, message, "error");
     });
@@ -205,33 +201,66 @@ const [cardComplete, setCardComplete] = useState(false);
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
 
+  const onCardChange = (event: any) => {
+    setCardComplete(event.complete);
+  };
+
+  const handleSelectRate = (rateId: string) => {
+    setSelectedRate(rateId);
+    const selectedRateData = shipmentJson?.rates?.find(
+      (r: any) => r.object_id === rateId
+    );
+    if (selectedRateData) {
+      const amount = Number(selectedRateData.amount) || 0;
+      setSelectedShippingAmount(amount);
+      setDeliveryCharge(amount);
+    }
+  };
+
+  const subtotal = parseFloat(amount);
+  const shippingCost =
+    deliveryOptionValue === "Delivery"
+      ? selectedRate
+        ? Number(selectedShippingAmount) || 0
+        : 0
+      : 0;
+  const orderTotal = subtotal + shippingCost;
+  const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
       setAddressError("Address is required for delivery");
       return;
     }
+    if (deliveryOptionValue === "Delivery" && !selectedRate) {
+      updateSnackBarState(true, "Please select a shipping option", "error");
+      return;
+    }
     setLoading(true);
-
-    const capitalizedData = {
-      ...data,
-      firstName: capitalizeFirstLetter(data.firstName),
-      lastName: capitalizeFirstLetter(data.lastName),
-    };
-
-    const finalAmount =
-      deliveryOptionValue === "Delivery"
-        ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
-        : Math.round(parseFloat(amount) * 100);
-
     try {
       const { data: transactionData } = await refetch();
       const updatedOrderNumber = transactionData || "1000";
+
+      const selectedRateData = shipmentJson?.rates?.find(
+        (r: any) => r.object_id === selectedRate
+      );
+
+      const capitalizedData = {
+        ...data,
+        firstName: capitalizeFirstLetter(data.firstName),
+        lastName: capitalizeFirstLetter(data.lastName),
+      };
+
+      const finalAmount =
+        deliveryOptionValue === "Delivery"
+          ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
+          : Math.round(parseFloat(amount) * 100);
 
       const paymentData = {
         ...capitalizedData,
         address: deliveryOptionValue === "Pickup" ? "" : address,
         amount: finalAmount,
+        shippingOption: selectedRateData,
         orderedItems,
         createdAt: new Date(),
         orderNumber: updatedOrderNumber,
@@ -250,18 +279,21 @@ const [cardComplete, setCardComplete] = useState(false);
         clientSecret,
         {
           payment_method: {
-            card: cardElement,
+            card: cardElement!,
             billing_details: {
               name: `${capitalizedData.firstName} ${capitalizedData.lastName}`,
               email: capitalizedData.email,
-              address: address,
+              address: {
+                line1: address || "",
+                postal_code: data.postalCode || "",
+              },
             },
           },
         }
       );
 
       if (error) {
-        handleStripeErrors(error); // Call a helper function to handle multiple errors
+        handleStripeErrors(error);
       } else if (paymentIntent.status === "succeeded") {
         updateSnackBarState(true, "Payment Successful", "success");
         clearCart();
@@ -286,223 +318,324 @@ const [cardComplete, setCardComplete] = useState(false);
       setLoading(false);
     }
   };
-
-const onCardChange = (event: any) => {
-  setCardComplete(event.complete); 
-};
-
   return (
     <Box>
-      <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Checkout</DialogTitle>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            maxHeight: "100vh",
+          },
+        }}
+      >
+        <DialogTitle sx={{paddingBottom:"5px"}}>Checkout</DialogTitle>
         <DialogContent>
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              mt: 2,
-            }}
-          >
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="First Name"
-                  error={!!errors.firstName}
-                  helperText={errors.firstName?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            />
-            <Controller
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Last Name"
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            />
-            <Controller
-              name="phoneNumber"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Phone Number"
-                  error={!!errors.phoneNumber}
-                  helperText={errors.phoneNumber?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            />
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Email"
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                  fullWidth
-                  required
-                />
-              )}
-            />
-            {deliveryOptionValue === "Pickup" && (
-              <TextField label="Amount ($)" value={amount} fullWidth disabled />
-            )}
-            <Controller
-              name="deliveryOption"
-              control={control}
-              render={({ field }) => (
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Delivery or Pickup</FormLabel>
-                  <RadioGroup
-                    {...field}
-                    row
-                    value={field.value}
-                    onChange={(e) => field.onChange(e.target.value)}
-                  >
-                    <FormControlLabel
-                      value="Delivery"
-                      control={<Radio />}
-                      label="Delivery"
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Box
+                component="form"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+
+                  maxHeight: 500,
+                  overflowY: "auto",
+                  pr: 1, 
+                }}
+              >
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="First Name"
+                      error={!!errors.firstName}
+                      helperText={errors.firstName?.message}
+                      fullWidth
+                      required
                     />
-                    <FormControlLabel
-                      value="Pickup"
-                      control={<Radio />}
-                      label="Pickup"
+                  )}
+                />
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Last Name"
+                      error={!!errors.lastName}
+                      helperText={errors.lastName?.message}
+                      fullWidth
+                      required
                     />
-                  </RadioGroup>
-                </FormControl>
-              )}
-            />
-            {deliveryOptionValue === "Delivery" && (
-              <PlacesAutocomplete
-                orderAmountWithTax={{ orderAmountWithTax: amount }} // Wrap amount in an object
-                setAddressError={setAddressError}
-                setAddress={setAddress}
-                setAddressURL={setAddressURL}
-                setDeliveryCharge={handleDeliveryChargeUpdate} // Pass the callback
-                setIsPaymentDisabled={setIsPaymentDisabled}
-              />
-            )}
-            {addressError && <p style={{ color: "red" }}>{addressError}</p>}
-            {deliveryOptionValue === "Delivery" && (
-              <Controller
-                name="postalCode"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Postal Code"
-                    error={!!errors.postalCode}
-                    helperText={errors.postalCode?.message}
-                    fullWidth
-                    required
+                  )}
+                />
+                <Controller
+                  name="phoneNumber"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Phone Number"
+                      error={!!errors.phoneNumber}
+                      helperText={errors.phoneNumber?.message}
+                      fullWidth
+                      required
+                    />
+                  )}
+                />
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Email"
+                      error={!!errors.email}
+                      helperText={errors.email?.message}
+                      fullWidth
+                      required
+                    />
+                  )}
+                />
+                <Controller
+                  name="deliveryOption"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl component="fieldset">
+                      <FormLabel component="legend">
+                        Delivery or Pickup
+                      </FormLabel>
+                      <RadioGroup
+                        {...field}
+                        row
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      >
+                        <FormControlLabel
+                          value="Delivery"
+                          control={<Radio />}
+                          label="Delivery"
+                        />
+                        <FormControlLabel
+                          value="Pickup"
+                          control={<Radio />}
+                          label="Pickup"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  )}
+                />
+                {deliveryOptionValue === "Delivery" && (
+                  <PlacesAutocomplete
+                    orderAmountWithTax={{ orderAmountWithTax: amount }}
+                    setAddressError={setAddressError}
+                    setAddress={setAddress}
+                    setAddressURL={setAddressURL}
+                    setDeliveryCharge={handleDeliveryChargeUpdate}
+                    setIsPaymentDisabled={setIsPaymentDisabled}
                   />
                 )}
-              />
-            )}
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Controller
-                name="deliveryDate"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    label={
-                      deliveryOptionValue === "Pickup"
-                        ? "Pickup Date"
-                        : "Delivery Date"
-                    }
-                    {...field}
-                    minDate={addDays(new Date(), 5)} // Set minDate to 4 days from the current date
-                    onChange={(date) => field.onChange(date)}
-                    renderInput={(params) => (
+                {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {deliveryOptionValue === "Delivery" && (
+                  <Controller
+                    name="postalCode"
+                    control={control}
+                    render={({ field }) => (
                       <TextField
-                        {...params}
-                        error={!!errors.deliveryDate}
-                        helperText={errors.deliveryDate?.message}
+                        {...field}
+                        label="Postal Code"
+                        error={!!errors.postalCode}
+                        helperText={errors.postalCode?.message}
                         fullWidth
+                        required
                       />
                     )}
                   />
                 )}
-              />
-            </LocalizationProvider>
-            <Controller
-              name="notes"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Notes"
-                  multiline
-                  rows={3}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Add any special instructions or notes"
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Controller
+                    name="deliveryDate"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        label={
+                          deliveryOptionValue === "Pickup"
+                            ? "Pickup Date"
+                            : "Delivery Date"
+                        }
+                        {...field}
+                        minDate={addDays(new Date(), 5)}
+                        onChange={(date) => field.onChange(date)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            error={!!errors.deliveryDate}
+                            helperText={errors.deliveryDate?.message}
+                            fullWidth
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <Controller
+                  name="notes"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Notes"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Add any special instructions or notes"
+                    />
+                  )}
                 />
-              )}
-            />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    mb: 2,
+                  }}
+                >
+                  <FormLabel sx={{ mb: 1 }}>Card Details</FormLabel>
+                  <Box
+                    sx={{
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <CardElement
+                      options={{
+                        style: {
+                          base: {
+                            fontSize: "16px",
+                            color: "#424770",
+                            "::placeholder": {
+                              color: "#aab7c4",
+                            },
+                          },
+                          invalid: {
+                            color: "#9e2146",
+                          },
+                        },
+                      }}
+                      onChange={onCardChange}
+                    />
+                  </Box>
+                </Box>
+              </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                mb: 2,
-              }}
-            >
-              <FormLabel sx={{ mb: 1 }}>Card Details</FormLabel>
+              {errors && (
+                <Box color="error.main" mt={2}>
+                  {Object.values(errors).map((error) => (
+                    <div key={error.message}>{error.message}</div>
+                  ))}
+                </Box>
+              )}
+            </Grid>
+
+            <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  padding: "10px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
+                  borderLeft: isSmallScreen ? "none" : "1px solid #ddd",
+                  borderTop: isSmallScreen ? "1px solid #ddd" : "none",
+                  pt: isSmallScreen ? 2 : 0,
+                  pl: isSmallScreen ? 0 : 2,
                 }}
               >
-                <CardElement
-                  options={{
-                    style: {
-                      base: {
-                        fontSize: "16px",
-                        color: "#424770",
-                        "::placeholder": {
-                          color: "#aab7c4",
-                        },
-                      },
-                      invalid: {
-                        color: "#9e2146",
-                      },
-                    },
-                  }}
-                  onChange={onCardChange}
-                />
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Shipping Options
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      maxHeight: 300, 
+                      overflowY: "auto",
+                      pr: 1, 
+                    }}
+                  >
+                    {deliveryOptionValue === "Delivery" ? (
+                      <ShippingOptions
+                        shipmentData={shipmentJson}
+                        selectedRate={selectedRate}
+                        onSelectRate={handleSelectRate}
+                      />
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        Choose Delivery option to see the shipping options
+                      </Typography>
+                    )}
+                  </Box>
+                  <Divider sx={{m:3}}/>
+                </Box>
+
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="h6" gutterBottom>
+                    Order Summary
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography variant="body2">Subtotal</Typography>
+                    <Typography variant="body2">
+                      ${subtotal.toFixed(2)}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography variant="body2">Shipping</Typography>
+                    <Typography variant="body2">
+                      {deliveryOptionValue === "Delivery"
+                        ? selectedRate
+                          ? `$${(Number(selectedShippingAmount) || 0).toFixed(
+                              2
+                            )}`
+                          : "Calculating..."
+                        : "Free"}
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: 1 }} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography variant="body1" fontWeight="bold">
+                      Order Total
+                    </Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                      ${orderTotal.toFixed(2)}
+                    </Typography>
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-          </Box>
-          {errors && (
-            <Box color="error.main" mt={2}>
-              {Object.values(errors).map((error) => (
-                <div key={error.message}>{error.message}</div>
-              ))}
-            </Box>
-          )}
+            </Grid>
+          </Grid>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
           <Button
@@ -513,6 +646,7 @@ const onCardChange = (event: any) => {
               loading ||
               !isValid ||
               addressError !== "" ||
+              (deliveryOptionValue === "Delivery" && !selectedRate) ||
               !cardComplete
             }
           >
@@ -520,6 +654,7 @@ const onCardChange = (event: any) => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <SuccessModal
         open={openModal}
         handleClose={() => setOpenModal(false)}
