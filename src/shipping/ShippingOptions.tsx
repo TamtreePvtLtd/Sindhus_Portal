@@ -26,23 +26,19 @@ const getRandomColor = () => {
   return color;
 };
 
-const ShippingOptions = ({
-  shipmentData,
-  selectedRate,
-  onSelectRate,
-}: ShippingOptionsProps) => {
+const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
   const [selectedRateObj, setSelectedRateObj] =
     useState<CreateShipmentTransactionPayload | null>(null);
 
   useEffect(() => {
     if (selectedRate) {
       const rate = shipmentData.rates.find(
-        (r: any) => r.object_id === selectedRate
+        (r: any) => r.objectId === selectedRate
       );
       if (rate) {
         const selectedObj: CreateShipmentTransactionPayload = {
-          rateObjId: rate.object_id,
-          carrierAccount: rate.carrier_account,
+          rateObjId: rate.objectId,
+          carrierAccount: rate.carrierAccount,
         };
         setSelectedRateObj(selectedObj);
         console.log("Selected Rate Details:", selectedObj);
@@ -64,7 +60,7 @@ const ShippingOptions = ({
       carrierAccount: rate.carrierAccount,
     };
     setSelectedRateObj(selectedObj);
-    onSelectRate(rate.object_id);
+    onSelectRate(rate.objectId);
     console.log("Selected Shipping Option:", selectedObj);
   };
 

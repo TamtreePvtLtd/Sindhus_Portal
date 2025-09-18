@@ -345,10 +345,7 @@ function PaymentDialog({
             toAddress
           );
 
-          console.log("addressValidationResponse", addressValidationResponse);
-
           if (addressValidationResponse?.validationResults?.isValid) {
-            debugger;
             var shipmentResponse: any = await createShipment(toAddress);
 
             if (shipmentResponse?.status == "SUCCESS") {
