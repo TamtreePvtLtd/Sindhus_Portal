@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -11,6 +12,11 @@ import {
   Stack,
 } from "@mui/material";
 
+export interface CreateShipmentTransactionPayload {
+  rateObjId: string;
+  carrierAccount: string;
+}
+
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -20,7 +26,10 @@ const getRandomColor = () => {
   return color;
 };
 
-const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
+const ShippingOptions = ({ shipmentData }: any) => {
+  const [selectedRateObj, setSelectedRateObj] =
+    useState<CreateShipmentTransactionPayload | null>(null);
+
   if (!shipmentData?.rates || shipmentData.rates.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
@@ -29,11 +38,27 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
     );
   }
 
+  const handleSelectRate = (rate: any) => {
+    const selectedObj: CreateShipmentTransactionPayload = {
+      rateObjId: rate.object_id,
+      carrierAccount: rate.carrier_account,
+    };
+    setSelectedRateObj(selectedObj);
+    console.log("Selected Shipping Option:", selectedObj);
+  };
+
   return (
     <Box sx={{ p: 2, overflowX: "auto" }}>
       <RadioGroup
-        value={selectedRate}
-        onChange={(e) => onSelectRate(e.target.value)}
+        value={selectedRateObj?.rateObjId || ""}
+        onChange={(e) => {
+          const selectedRate = shipmentData.rates.find(
+            (r: any) => r.object_id === e.target.value
+          );
+          if (selectedRate) {
+            handleSelectRate(selectedRate);
+          }
+        }}
       >
         {shipmentData.rates.map((rate: any) => (
           <Card
@@ -42,9 +67,8 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
               display: "flex",
               alignItems: "center",
               mb: 1.5,
-              padding: "-5px",
               border:
-                selectedRate === rate.object_id
+                selectedRateObj?.rateObjId === rate.object_id
                   ? "2px solid #1976d2"
                   : "1px solid #ddd",
               borderRadius: 2,
