@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TextField, Autocomplete } from "@mui/material";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { useGetNearestGreaterDistance } from "../../customRQHooks/Hooks";
+import { ParsedAddress } from "../../interface/types";
 
 interface AutocompleteResult {
   label: string;
@@ -12,6 +13,7 @@ interface SelectedPlace {
   lat: number;
   lng: number;
 }
+
 
 interface PlacesAutocompleteProps {
   orderAmountWithTax: { orderAmountWithTax: string }; // Assuming it's a number
@@ -32,6 +34,9 @@ export function PlacesAutocomplete({
 }: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
+    null
+  );
+  const [selectedAddress, setSelectedAddress] = useState<ParsedAddress | null>(
     null
   );
   const [distance, setDistance] = useState<number | null>(null);
@@ -117,6 +122,33 @@ export function PlacesAutocomplete({
     }
   };
 
+  const parseAddressComponents = (components: any[]): ParsedAddress | null => {
+    if(components.length <= 0) return null;
+    const componentByType = (type: string) =>
+      components.find((c) => c.types.includes(type));
+
+    const streetNumber = componentByType("street_number")?.long_name || "";
+    const route = componentByType("route")?.long_name || "";
+    const city =
+      componentByType("locality")?.long_name ||
+      componentByType("sublocality")?.long_name ||
+      componentByType("administrative_area_level_2")?.long_name ||
+      "";
+    const state = componentByType("administrative_area_level_1")?.short_name || "";
+    const zip = componentByType("postal_code")?.long_name || "";
+    const country = componentByType("country")?.short_name || "";
+
+    const street1 = [streetNumber, route].filter(Boolean).join(" ");
+
+    return {
+      street1,
+      city,
+      state,
+      zip,
+      country,
+    };
+  };
+
   const handleSelect = async (address: AutocompleteResult) => {
     setValue(address.label);
     setSuggestions([]);
@@ -140,6 +172,18 @@ export function PlacesAutocomplete({
             const addressURL = `https://maps.google.com/?q=${lat},${lng}`;
             setAddressURL(addressURL);
             setSelectedPlace({ lat, lng });
+            // Parse and store structured address object
+            try {
+              const components = results[0].address_components || [];
+              const parsedAddress: ParsedAddress | null = parseAddressComponents(components);
+              setSelectedAddress(parsedAddress);
+              console.log("parsedAddress", parsedAddress);
+              
+            } catch (e) {
+              setSelectedAddress(null)
+              // If parsing fails, keep existing flow intact
+              console.error("Failed to parse address components", e);
+            }
             await calculateDistance(origin, { lat, lng });
             setAddressError("");
           } else {

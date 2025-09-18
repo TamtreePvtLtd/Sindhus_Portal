@@ -318,3 +318,22 @@ export interface PaymentData {
   addressURL: string;
   __v: number;
 }
+
+export interface ParsedAddress {
+  street1: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+
+export interface ToAddressPayload extends ParsedAddress {
+  name: string;
+  email: string;
+}
+
+export interface CreateShipmentTransactionPayload{
+  rateObjId:string;
+  carrierAccount:string;
+}
