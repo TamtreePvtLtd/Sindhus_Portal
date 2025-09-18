@@ -79,7 +79,7 @@ const ShippingOptions = ({ shipmentData }: any) => {
               component="img"
               image={rate.providerImage75}
               alt={rate.provider}
-              sx={{ width: 60, height: 40, objectFit: "contain", p: 1 }}
+              sx={{ width: 80, height: 40, objectFit: "contain", p: 1 }}
             />
 
             <CardContent
