@@ -214,6 +214,11 @@ function PaymentDialog({
       const amount = Number(selectedRateData.amount) || 0;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
+      console.log("Selected rate details:", {
+        object_id: selectedRateData.object_id,
+        carrier_account: selectedRateData.carrier_account,
+        amount: amount,
+      });
     }
   };
 
@@ -331,7 +336,7 @@ function PaymentDialog({
           },
         }}
       >
-        <DialogTitle sx={{paddingBottom:"5px"}}>Checkout</DialogTitle>
+        <DialogTitle sx={{ paddingBottom: "5px" }}>Checkout</DialogTitle>
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -344,7 +349,7 @@ function PaymentDialog({
 
                   maxHeight: 500,
                   overflowY: "auto",
-                  pr: 1, 
+                  pr: 1,
                 }}
               >
                 <Controller
@@ -561,9 +566,9 @@ function PaymentDialog({
 
                   <Box
                     sx={{
-                      maxHeight: 300, 
+                      maxHeight: 300,
                       overflowY: "auto",
-                      pr: 1, 
+                      pr: 1,
                     }}
                   >
                     {deliveryOptionValue === "Delivery" ? (
@@ -578,7 +583,7 @@ function PaymentDialog({
                       </Typography>
                     )}
                   </Box>
-                  <Divider sx={{m:3}}/>
+                  <Divider sx={{ m: 3 }} />
                 </Box>
 
                 <Box sx={{ mb: 3 }}>
@@ -608,10 +613,8 @@ function PaymentDialog({
                     <Typography variant="body2">
                       {deliveryOptionValue === "Delivery"
                         ? selectedRate
-                          ? `$${(Number(selectedShippingAmount) || 0).toFixed(
-                              2
-                            )}`
-                          : "Calculating..."
+                          ? `$${selectedShippingAmount.toFixed(2)}`
+                          : "Select shipping option"
                         : "Free"}
                     </Typography>
                   </Box>
