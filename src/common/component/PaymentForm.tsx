@@ -35,7 +35,8 @@ import {
   useCreatePaymentIntent,
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
-import shipmentJson from "../../../sample-shipment.json";
+import { ParsedAddress, ToAddressPayload } from "../../interface/types";
+import { createShipment, validateAddressApi } from "../../services/api";
 
 interface PaymentFormData {
   firstName: string;
@@ -103,9 +104,10 @@ function PaymentDialog({
     handleSubmit,
     reset,
     watch,
+    getValues,
     formState: { errors, isValid },
   } = useForm<PaymentFormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     mode: "onChange",
     defaultValues: {
       firstName: "",
@@ -133,6 +135,10 @@ function PaymentDialog({
   const [cardComplete, setCardComplete] = useState(false);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [selectedAddress, setSelectedAddress] = useState<ParsedAddress | null>(
+    null
+  );
+  const [shipmentJson, setShipmentJson] = useState<any>({});
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
@@ -318,6 +324,40 @@ function PaymentDialog({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const validateAddress = async () => {
+      if (selectedAddress) {
+        const toAddress = {
+          ...selectedAddress,
+          name: getValues("firstName"),
+          email: email,
+          phone: getValues("phoneNumber"),
+        } as ToAddressPayload;
+
+        try {
+          const addressValidationResponse: any = await validateAddressApi(
+            toAddress
+          );
+
+          console.log("addressValidationResponse", addressValidationResponse);
+
+          if (addressValidationResponse?.validationResults?.isValid) {
+            debugger;
+            var shipmentResponse: any = await createShipment(toAddress);
+
+            if (shipmentResponse?.status == "SUCCESS") {
+              setShipmentJson(shipmentResponse);
+            }
+          }
+        } catch (error) {
+          console.error("Address validation failed:", error);
+        }
+      }
+    };
+    validateAddress();
+  }, [selectedAddress]);
+
   return (
     <Box>
       <Dialog
@@ -331,7 +371,7 @@ function PaymentDialog({
           },
         }}
       >
-        <DialogTitle sx={{paddingBottom:"5px"}}>Checkout</DialogTitle>
+        <DialogTitle sx={{ paddingBottom: "5px" }}>Checkout</DialogTitle>
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -344,7 +384,7 @@ function PaymentDialog({
 
                   maxHeight: 500,
                   overflowY: "auto",
-                  pr: 1, 
+                  pr: 1,
                 }}
               >
                 <Controller
@@ -439,6 +479,9 @@ function PaymentDialog({
                     setAddressURL={setAddressURL}
                     setDeliveryCharge={handleDeliveryChargeUpdate}
                     setIsPaymentDisabled={setIsPaymentDisabled}
+                    onAddressSelected={(address) => {
+                      setSelectedAddress({ ...address } as ParsedAddress);
+                    }}
                   />
                 )}
                 {addressError && <p style={{ color: "red" }}>{addressError}</p>}
@@ -561,9 +604,9 @@ function PaymentDialog({
 
                   <Box
                     sx={{
-                      maxHeight: 300, 
+                      maxHeight: 300,
                       overflowY: "auto",
-                      pr: 1, 
+                      pr: 1,
                     }}
                   >
                     {deliveryOptionValue === "Delivery" ? (
@@ -578,7 +621,7 @@ function PaymentDialog({
                       </Typography>
                     )}
                   </Box>
-                  <Divider sx={{m:3}}/>
+                  <Divider sx={{ m: 3 }} />
                 </Box>
 
                 <Box sx={{ mb: 3 }}>

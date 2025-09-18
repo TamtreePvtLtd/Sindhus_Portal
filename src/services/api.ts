@@ -304,8 +304,6 @@ const getLastTransaction = async () => {
   }
 };
 
-
-
 const createCartItem = async (formData) => {
   try {
     const response = await httpWithoutCredentials.post<string[]>(
@@ -322,7 +320,7 @@ const createCartItem = async (formData) => {
 
 const createPaymentIntent = async (formData) => {
   try {
-    const response:any = await httpWithoutCredentials.post(
+    const response: any = await httpWithoutCredentials.post(
       "/payment/createPaymentIntent",
       formData
     );
@@ -352,7 +350,9 @@ const createShipment = async (ShipmentPayload: ToAddressPayload) => {
   }
 };
 
-const createShipmentTransaction = async (payload: CreateShipmentTransactionPayload) => {
+const createShipmentTransaction = async (
+  payload: CreateShipmentTransactionPayload
+) => {
   try {
     const response = await httpWithoutCredentials.post(
       "/shipment/createTransaction",
@@ -364,7 +364,7 @@ const createShipmentTransaction = async (payload: CreateShipmentTransactionPaylo
   }
 };
 
-const validateAddress = async (payload: ToAddressPayload) => {
+const validateAddressApi = async (payload: ToAddressPayload) => {
   try {
     const response = await httpWithoutCredentials.post(
       "/shipment/validateAddress",
@@ -401,5 +401,5 @@ export {
   getAllCoupens,
   createShipment,
   createShipmentTransaction,
-  validateAddress
+  validateAddressApi,
 };

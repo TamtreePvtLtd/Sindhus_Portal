@@ -40,8 +40,8 @@ const ShippingOptions = ({ shipmentData }: any) => {
 
   const handleSelectRate = (rate: any) => {
     const selectedObj: CreateShipmentTransactionPayload = {
-      rateObjId: rate.object_id,
-      carrierAccount: rate.carrier_account,
+      rateObjId: rate.objectId,
+      carrierAccount: rate.carrierAccount,
     };
     setSelectedRateObj(selectedObj);
     console.log("Selected Shipping Option:", selectedObj);
@@ -53,7 +53,7 @@ const ShippingOptions = ({ shipmentData }: any) => {
         value={selectedRateObj?.rateObjId || ""}
         onChange={(e) => {
           const selectedRate = shipmentData.rates.find(
-            (r: any) => r.object_id === e.target.value
+            (r: any) => r.objectId === e.target.value
           );
           if (selectedRate) {
             handleSelectRate(selectedRate);
@@ -62,13 +62,13 @@ const ShippingOptions = ({ shipmentData }: any) => {
       >
         {shipmentData.rates.map((rate: any) => (
           <Card
-            key={rate.object_id}
+            key={rate.objectId}
             sx={{
               display: "flex",
               alignItems: "center",
               mb: 1.5,
               border:
-                selectedRateObj?.rateObjId === rate.object_id
+                selectedRateObj?.rateObjId === rate.objectId
                   ? "2px solid #1976d2"
                   : "1px solid #ddd",
               borderRadius: 2,
@@ -77,24 +77,28 @@ const ShippingOptions = ({ shipmentData }: any) => {
           >
             <CardMedia
               component="img"
-              image={rate.provider_image_75}
+              image={rate.providerImage75}
               alt={rate.provider}
               sx={{ width: 60, height: 40, objectFit: "contain", p: 1 }}
             />
 
-            <CardContent sx={{ flex: 1, py: 1, "&:last-child": { pb: 1 } }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                flexWrap="wrap"
-              >
-                <Typography variant="body1" fontWeight="bold">
-                  {rate.servicelevel.display_name || rate.servicelevel.name}
-                </Typography>
-
+            <CardContent
+              sx={{
+                flex: 1,
+                py: 1,
+                "&:last-child": { pb: 1 },
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box>
                 {rate.attributes && rate.attributes.length > 0 && (
-                  <Stack direction="row" spacing={0.5}>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  >
                     {rate.attributes.map((attr: string, idx: number) => (
                       <Chip
                         key={idx}
@@ -102,30 +106,46 @@ const ShippingOptions = ({ shipmentData }: any) => {
                         size="small"
                         sx={{
                           fontSize: 11,
-                          backgroundColor: getRandomColor(),
+                          backgroundColor: "black",
                           color: "#fff",
                         }}
                       />
                     ))}
                   </Stack>
                 )}
-              </Stack>
+              </Box>
+              <Box display={"flex"} justifyContent={"space-between"}>
+                <Box display={"flex"} flexDirection={"column"}>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    flexWrap="wrap"
+                  >
+                    <Typography variant="body1" fontWeight="bold">
+                      {rate.servicelevel?.displayName ??
+                        rate.servicelevel?.name}
+                    </Typography>
+                  </Stack>
 
-              <Typography variant="body2" color="text.secondary">
-                {rate.duration_terms || `Estimated ${rate.estimated_days} days`}
-              </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {rate.durationTerms ||
+                      `Estimated ${rate.estimatedDays} days`}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ pl: 1, display: "flex", alignItems: "center" }}>
+                  <Typography variant="body1" sx={{ mr: 1 }}>
+                    ${Number(rate.amount).toFixed(2)}
+                  </Typography>
+                  <FormControlLabel
+                    value={rate.objectId}
+                    control={<Radio />}
+                    label=""
+                  />
+                </Box>
+              </Box>
             </CardContent>
-
-            <Box sx={{ px: 2, display: "flex", alignItems: "center" }}>
-              <Typography variant="body1" sx={{ mr: 1 }}>
-                ${Number(rate.amount).toFixed(2)}
-              </Typography>
-              <FormControlLabel
-                value={rate.object_id}
-                control={<Radio />}
-                label=""
-              />
-            </Box>
           </Card>
         ))}
       </RadioGroup>

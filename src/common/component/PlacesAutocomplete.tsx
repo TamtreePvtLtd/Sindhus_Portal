@@ -3,6 +3,7 @@ import { TextField, Autocomplete } from "@mui/material";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { useGetNearestGreaterDistance } from "../../customRQHooks/Hooks";
 import { ParsedAddress } from "../../interface/types";
+import { validateAddressApi } from "../../services/api";
 
 interface AutocompleteResult {
   label: string;
@@ -14,7 +15,6 @@ interface SelectedPlace {
   lng: number;
 }
 
-
 interface PlacesAutocompleteProps {
   orderAmountWithTax: { orderAmountWithTax: string }; // Assuming it's a number
   setAddressError: (error: string) => void; // Adjust type based on the actual error type
@@ -22,6 +22,7 @@ interface PlacesAutocompleteProps {
   setAddressURL: (address: string) => void; // Adjust type based on your address type
   setDeliveryCharge: (charge: number) => void; // Add this prop for passing the delivery charge
   setIsPaymentDisabled: (disabled: boolean) => void;
+  onAddressSelected?: (toAddress: ParsedAddress | null) => void;
 }
 
 export function PlacesAutocomplete({
@@ -31,19 +32,17 @@ export function PlacesAutocomplete({
   setAddressURL,
   setDeliveryCharge,
   setIsPaymentDisabled,
+  onAddressSelected,
 }: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
     null
   );
-  const [selectedAddress, setSelectedAddress] = useState<ParsedAddress | null>(
-    null
-  );
+
   const [distance, setDistance] = useState<number | null>(null);
   const [amount, setAmount] = useState<string | null>(null); // State to store the amount
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
   const [error, setError] = useState(false); // State to handle error status
-  
 
   const libraries: Libraries = ["places"];
   console.log("orderAmountWithTax", orderAmountWithTax);
@@ -66,22 +65,22 @@ export function PlacesAutocomplete({
     }
   }, [amount, setDeliveryCharge]);
 
-   useEffect(() => {
-     if (distance !== null && nearestAmount) {
-       setAmount(nearestAmount.amount);
+  useEffect(() => {
+    if (distance !== null && nearestAmount) {
+      setAmount(nearestAmount.amount);
 
-       // If distance is too far, disable payment and set error
-       if (nearestAmount?.amount === "0") {
-         setAddressError(
-           "Distance is too far. Please choose the pickup option."
-         );
-         setIsPaymentDisabled(true); // Disable confirm payment button
-       } else {
-         setAddressError("");
-         setIsPaymentDisabled(false); // Enable confirm payment button
-       }
-     }
-   }, [distance, nearestAmount, setAddressError, setIsPaymentDisabled]);
+      // If distance is too far, disable payment and set error
+      if (nearestAmount?.amount === "0") {
+        setAddressError(
+          "Distance is too far. Please choose the pickup option."
+        );
+        setIsPaymentDisabled(true); // Disable confirm payment button
+      } else {
+        setAddressError("");
+        setIsPaymentDisabled(false); // Enable confirm payment button
+      }
+    }
+  }, [distance, nearestAmount, setAddressError, setIsPaymentDisabled]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
@@ -123,7 +122,7 @@ export function PlacesAutocomplete({
   };
 
   const parseAddressComponents = (components: any[]): ParsedAddress | null => {
-    if(components.length <= 0) return null;
+    if (components.length <= 0) return null;
     const componentByType = (type: string) =>
       components.find((c) => c.types.includes(type));
 
@@ -134,7 +133,8 @@ export function PlacesAutocomplete({
       componentByType("sublocality")?.long_name ||
       componentByType("administrative_area_level_2")?.long_name ||
       "";
-    const state = componentByType("administrative_area_level_1")?.short_name || "";
+    const state =
+      componentByType("administrative_area_level_1")?.short_name || "";
     const zip = componentByType("postal_code")?.long_name || "";
     const country = componentByType("country")?.short_name || "";
 
@@ -175,16 +175,18 @@ export function PlacesAutocomplete({
             // Parse and store structured address object
             try {
               const components = results[0].address_components || [];
-              const parsedAddress: ParsedAddress | null = parseAddressComponents(components);
-              setSelectedAddress(parsedAddress);
+              const parsedAddress: ParsedAddress | null =
+                parseAddressComponents(components);
+
               console.log("parsedAddress", parsedAddress);
-              
+
+              if (parsedAddress != null && onAddressSelected)
+                onAddressSelected({ ...parsedAddress });
             } catch (e) {
-              setSelectedAddress(null)
               // If parsing fails, keep existing flow intact
               console.error("Failed to parse address components", e);
             }
-            await calculateDistance(origin, { lat, lng });
+            //await calculateDistance(origin, { lat, lng });
             setAddressError("");
           } else {
             console.error(

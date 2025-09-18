@@ -132,7 +132,7 @@ export interface IMenuDatas {
   products?: IProductDinnigOut[];
 }
 export interface menuWithProduct {
-  menus: IMenuDatas[],
+  menus: IMenuDatas[];
   MenusWithProduct: { title: string; products: IProduct[] }[];
 }
 
@@ -290,7 +290,7 @@ export interface ICoupenResponse {
 }
 
 export interface DistanceBasedDeliveryCharge {
-  _id?: string
+  _id?: string;
   amount: string;
   uptoDistance: string;
 }
@@ -327,13 +327,13 @@ export interface ParsedAddress {
   country: string;
 }
 
-
 export interface ToAddressPayload extends ParsedAddress {
   name: string;
-  email: string;
+  email?: string;
+  phone: string;
 }
 
-export interface CreateShipmentTransactionPayload{
-  rateObjId:string;
-  carrierAccount:string;
+export interface CreateShipmentTransactionPayload {
+  rateObjId: string;
+  carrierAccount: string;
 }
