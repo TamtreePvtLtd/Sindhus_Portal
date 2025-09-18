@@ -214,17 +214,12 @@ function PaymentDialog({
   const handleSelectRate = (rateId: string) => {
     setSelectedRate(rateId);
     const selectedRateData = shipmentJson?.rates?.find(
-      (r: any) => r.object_id === rateId
+      (r: any) => r.objectId === rateId
     );
     if (selectedRateData) {
       const amount = Number(selectedRateData.amount) || 0;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
-      console.log("Selected rate details:", {
-        object_id: selectedRateData.object_id,
-        carrier_account: selectedRateData.carrier_account,
-        amount: amount,
-      });
     }
   };
 
@@ -253,7 +248,7 @@ function PaymentDialog({
       const updatedOrderNumber = transactionData || "1000";
 
       const selectedRateData = shipmentJson?.rates?.find(
-        (r: any) => r.object_id === selectedRate
+        (r: any) => r.objectId === selectedRate
       );
 
       const capitalizedData = {
