@@ -17,15 +17,6 @@ export interface CreateShipmentTransactionPayload {
   carrierAccount: string;
 }
 
-const getRandomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
 const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
   const [selectedRateObj, setSelectedRateObj] =
     useState<CreateShipmentTransactionPayload | null>(null);
@@ -49,25 +40,24 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
   if (!shipmentData?.rates || shipmentData.rates.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        No shipping options available.
+        No shipping options available. Contact Support
       </Typography>
     );
   }
 
- const handleSelectRate = (rate: any) => {
-   const selectedObj: CreateShipmentTransactionPayload = {
-     rateObjId: rate.objectId,
-     carrierAccount: rate.carrierAccount,
-   };
-   setSelectedRateObj(selectedObj);
-   onSelectRate(selectedObj); // ✅ Pass the full object instead of just objectId
-   console.log("Selected Shipping Option:", selectedObj);
- };
+  const handleSelectRate = (rate: any) => {
+    const selectedObj: CreateShipmentTransactionPayload = {
+      rateObjId: rate.objectId,
+      carrierAccount: rate.carrierAccount,
+    };
+    setSelectedRateObj(selectedObj);
+    onSelectRate(selectedObj);
+  };
 
   return (
     <Box sx={{ p: 2, overflowX: "auto" }}>
       <RadioGroup
-        value={selectedRate || ""}
+        value={selectedRateObj?.rateObjId || ""}
         onChange={(e) => {
           const selectedRate = shipmentData.rates.find(
             (r: any) => r.objectId === e.target.value
