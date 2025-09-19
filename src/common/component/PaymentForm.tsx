@@ -165,6 +165,7 @@ function PaymentDialog({
       addressLine2: "",
       city: "",
       postalCode: "",
+      state:"",
       county: "",
       country: "United Kingdom",
     },
@@ -294,10 +295,8 @@ function PaymentDialog({
     if (selectedAddress) {
       resetAddress({
         addressLine1: selectedAddress.street1 || "",
-        addressLine2: selectedAddress.street2 || "",
         city: selectedAddress.city || "",
         postalCode: selectedAddress.zip || "",
-        county: selectedAddress.county || "",
         state: selectedAddress.state || "",
         country: selectedAddress.country || "United Kingdom",
       });
@@ -356,11 +355,9 @@ function PaymentDialog({
     // Create a parsed address object
     const parsedAddress: ParsedAddress = {
       street1: data.addressLine1,
-      street2: data.addressLine2,
       city: data.city,
       state: data.state,
       zip: data.postalCode,
-      county: data.county,
       country: data.country,
     };
 
@@ -638,24 +635,25 @@ function PaymentDialog({
                       justifyContent="space-between"
                     >
                       <Typography variant="body1">Address</Typography>
-                      <Box>
-                        {address ? (
-                          <IconButton
-                            color="primary"
-                            onClick={handleEditAddressClick}
-                            size="small"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        ) : null}
-                        <IconButton
-                          color="primary"
-                          onClick={handleAddAddressClick}
+                      {address ? (
+                        <Button
+                          onClick={handleEditAddressClick}
+                          startIcon={<EditIcon />}
                           size="small"
+                          variant="contained"
                         >
-                          <AddIcon />
-                        </IconButton>
-                      </Box>
+                          Edit Address
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleAddAddressClick}
+                          startIcon={<AddIcon />}
+                          size="small"
+                          variant="contained"
+                        >
+                          Add Address
+                        </Button>
+                      )}
                     </Box>
 
                     {address && (
@@ -672,7 +670,7 @@ function PaymentDialog({
                     )}
                   </>
                 )}
-                {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
                 {deliveryOptionValue === "Delivery" && (
                   <Controller
                     name="postalCode"
@@ -688,7 +686,43 @@ function PaymentDialog({
                       />
                     )}
                   />
-                )}
+                )} */}
+                {/* {address && (
+                      <Box
+                        sx={{ p: 1, border: "1px solid #ccc", borderRadius: 1 }}
+                      >
+                        <PlacesAutocomplete
+                          orderAmountWithTax={{ orderAmountWithTax: amount }}
+                          setAddressError={setAddressError}
+                          setAddress={setAddress}
+                          setAddressURL={setAddressURL}
+                          setDeliveryCharge={handleDeliveryChargeUpdate}
+                          setIsPaymentDisabled={setIsPaymentDisabled}
+                          onAddressSelected={(address) => {
+                            setSelectedAddress({ ...address } as ParsedAddress);
+                          }}
+                        />
+                      </Box>
+                    )} */}
+                  {/* </> */}
+                {/* )} */}
+                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {deliveryOptionValue === "Delivery" && (
+                  <Controller
+                    name="postalCode"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Postal Code"
+                        error={!!errors.postalCode}
+                        helperText={errors.postalCode?.message}
+                        fullWidth
+                        required
+                      />
+                    )}
+                  />
+                )} */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Controller
                     name="deliveryDate"
@@ -932,8 +966,6 @@ function PaymentDialog({
               )}
             />
 
-
-
             <Controller
               name="city"
               control={addressControl}
@@ -972,7 +1004,7 @@ function PaymentDialog({
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Postal Code *"
+                  label="Postal Code"
                   placeholder="Enter Code"
                   error={!!addressErrors.postalCode}
                   helperText={addressErrors.postalCode?.message}
@@ -982,15 +1014,13 @@ function PaymentDialog({
               )}
             />
 
-            
-
             <Controller
               name="country"
               control={addressControl}
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Country *"
+                  label="Country"
                   placeholder="Enter Country"
                   error={!!addressErrors.country}
                   helperText={addressErrors.country?.message}
