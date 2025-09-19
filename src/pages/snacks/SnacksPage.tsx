@@ -38,33 +38,31 @@ const sliderSettings = {
 
 const bannerImages = [
   {
-    url: "assets/snacksPage-newBanner.jpg",
-    content: "Snacks",
-    description:
-      "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
-  },
-  {
-    url: "assets/images/laddu-newbanner.jpg",
-    content: "",
-    description:
-      "",
-  },
-  {
-    url: "assets/images/mixture-newbanner.jpg",
-    content: "",
-    description:
-      "",
-  },
-  {
-    url: "assets/images/mysorpak-newbanner.jpg",
+    url: "assets/images/banner1_19_09_25.jpg",
     content: "",
     description: "",
   },
   {
-    url: "assets/images/ribonpakkoda-newbanner.jpg",
+    url: "assets/images/banner2_19_09_25.jpg",
     content: "",
     description: "",
   },
+  // {
+  //   url: "assets/images/mixture-newbanner.jpg",
+  //   content: "",
+  //   description:
+  //     "",
+  // },
+  // {
+  //   url: "assets/images/mysorpak-newbanner.jpg",
+  //   content: "",
+  //   description: "",
+  // },
+  // {
+  //   url: "assets/images/ribonpakkoda-newbanner.jpg",
+  //   content: "",
+  //   description: "",
+  // },
 ];
 
 
