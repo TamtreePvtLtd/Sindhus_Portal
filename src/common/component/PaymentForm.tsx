@@ -241,7 +241,9 @@ function PaymentDialog({
       (r: any) => r.objectId === rateObj.rateObjId
     );
     if (selectedRateData) {
-      const amount = Number(selectedRateData.amount) || 0;
+      /* +2 added with rate as customer told */
+
+      const amount = (Number(selectedRateData.amount) || 0) + 2;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
     }

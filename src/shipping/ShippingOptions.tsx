@@ -149,7 +149,8 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
 
                   <Box sx={{ pl: 1, display: "flex", alignItems: "center" }}>
                     <Typography variant="body1" sx={{ mr: 1 }}>
-                      ${Number(rate.amount).toFixed(2)}
+                      {/* +2 added with rate as customer told */}$
+                      {(Number(rate.amount) + 2).toFixed(2)}
                     </Typography>
                     <FormControlLabel
                       value={rate.objectId}
