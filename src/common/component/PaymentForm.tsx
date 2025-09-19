@@ -35,8 +35,13 @@ import {
   useCreatePaymentIntent,
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
-import { ParsedAddress, ToAddressPayload } from "../../interface/types";
+import { Parcel, ParsedAddress, ShipmentPayload } from "../../interface/types";
 import { createShipment, validateAddressApi } from "../../services/api";
+import { useCart } from "../../context/CartContext";
+import {
+  CalculateTotalWeight,
+  getParcelObjectByWeight,
+} from "../../../parcelConfig";
 
 interface PaymentFormData {
   firstName: string;
@@ -139,6 +144,7 @@ function PaymentDialog({
     null
   );
   const [shipmentJson, setShipmentJson] = useState<any>({});
+  const { cartItems, setCartItems } = useCart();
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
@@ -146,6 +152,7 @@ function PaymentDialog({
   const [selectedRate, setSelectedRate] = useState<string | null>(null);
   const [selectedShippingAmount, setSelectedShippingAmount] =
     useState<number>(0);
+  const [parcelObj, setParcelObj] = useState<Parcel | null>(null);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -154,6 +161,14 @@ function PaymentDialog({
   const createPaymentMutation = useCreatePaymentIntent();
   const { data: lasttransaction, refetch } = useGetLastTransaction();
   const cartItemCreateMutation = useCreateCartItem();
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      var totalWeight = CalculateTotalWeight(cartItems);
+      var _parcelObj = getParcelObjectByWeight(totalWeight);
+      setParcelObj({ ..._parcelObj });
+    }
+  }, [cartItems]);
 
   useEffect(() => {
     setOrderNumber(lasttransaction);
@@ -328,20 +343,21 @@ function PaymentDialog({
   useEffect(() => {
     const validateAddress = async () => {
       if (selectedAddress) {
-        const toAddress = {
+        const shipmentPayload = {
           ...selectedAddress,
           name: getValues("firstName"),
           email: email,
           phone: getValues("phoneNumber"),
-        } as ToAddressPayload;
+          parcel: parcelObj,
+        } as ShipmentPayload;
 
         try {
           const addressValidationResponse: any = await validateAddressApi(
-            toAddress
+            shipmentPayload
           );
 
           if (addressValidationResponse?.validationResults?.isValid) {
-            var shipmentResponse: any = await createShipment(toAddress);
+            var shipmentResponse: any = await createShipment(shipmentPayload);
 
             if (shipmentResponse?.status == "SUCCESS") {
               setShipmentJson(shipmentResponse);

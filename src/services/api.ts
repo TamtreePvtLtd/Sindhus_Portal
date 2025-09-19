@@ -17,7 +17,7 @@ import {
   ICoupenResponse,
   DistanceBasedDeliveryCharge,
   PaymentData,
-  ToAddressPayload,
+  ShipmentPayload,
   CreateShipmentTransactionPayload,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
@@ -338,11 +338,11 @@ const createPaymentIntent = async (formData) => {
   }
 };
 
-const createShipment = async (ShipmentPayload: ToAddressPayload) => {
+const createShipment = async (shipmentPayload: ShipmentPayload) => {
   try {
     const response = await httpWithoutCredentials.post(
       "/shipment/createShipment",
-      ShipmentPayload
+      shipmentPayload
     );
     return response.data;
   } catch (error) {
@@ -364,7 +364,7 @@ const createShipmentTransaction = async (
   }
 };
 
-const validateAddressApi = async (payload: ToAddressPayload) => {
+const validateAddressApi = async (payload: ShipmentPayload) => {
   try {
     const response = await httpWithoutCredentials.post(
       "/shipment/validateAddress",

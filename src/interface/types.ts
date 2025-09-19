@@ -327,13 +327,23 @@ export interface ParsedAddress {
   country: string;
 }
 
-export interface ToAddressPayload extends ParsedAddress {
+export interface ShipmentPayload extends ParsedAddress {
   name: string;
   email?: string;
   phone: string;
+  parcel: Parcel;
 }
 
 export interface CreateShipmentTransactionPayload {
   rateObjId: string;
   carrierAccount: string;
+}
+
+export interface Parcel {
+  length: string;
+  width: string;
+  height: string;
+  distanceUnit: "in" | "cm"; // restrict to allowed units
+  weight: string;
+  massUnit: "lb";
 }
