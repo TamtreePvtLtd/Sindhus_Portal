@@ -22,7 +22,7 @@ interface PlacesAutocompleteProps {
   setAddressURL: (address: string) => void; // Adjust type based on your address type
   setDeliveryCharge: (charge: number) => void; // Add this prop for passing the delivery charge
   setIsPaymentDisabled: (disabled: boolean) => void;
-  onAddressSelected?: (toAddress: ParsedAddress | null) => void;
+  onAddressSelected?: (toAddress: ParsedAddress) => void;
 }
 
 export function PlacesAutocomplete({

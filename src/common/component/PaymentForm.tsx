@@ -194,9 +194,8 @@ function PaymentDialog({
     null
   );
   const [shipmentJson, setShipmentJson] = useState<any>({});
-  const { cartItems, setCartItems } = useCart();
+  const { cartItems } = useCart();
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
-  const [addressLine1, setAddressLine1] = useState("");
   const [isEditingAddress, setIsEditingAddress] = useState(false);
 
   const handleDeliveryChargeUpdate = (charge: number) => {
@@ -349,7 +348,6 @@ function PaymentDialog({
     const formattedAddress = `${address.street1}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}`;
 
     setAddress(formattedAddress);
-    setAddressLine1(address.street1);
     setValue("postalCode", address.zip || "");
     setAddressError("");
   };
@@ -371,7 +369,6 @@ function PaymentDialog({
 
     setSelectedAddress(parsedAddress);
     setAddress(formattedAddress);
-    setAddressLine1(data.addressLine1);
     setValue("postalCode", data.postalCode);
     setAddressError("");
     setOpenAddressDialog(false);
@@ -909,6 +906,8 @@ function PaymentDialog({
             onClick={() => {
               onClose();
               setShipmentJson(null);
+              resetAddress();
+              setAddress("");
             }}
           >
             Cancel
