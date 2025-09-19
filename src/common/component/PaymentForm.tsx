@@ -101,6 +101,7 @@ const addressSchema = yup.object({
   addressLine1: yup.string().required("Address Line 1 is required"),
   addressLine2: yup.string().optional(),
   city: yup.string().required("City is required"),
+  state: yup.string().required("State is required"),
   postalCode: yup.string().required("Postal Code is required"),
   county: yup.string().optional(),
   country: yup.string().required("Country is required"),
@@ -313,28 +314,31 @@ function PaymentDialog({
     setSelectedAddress(address);
 
     if (address.street1) {
-      setAddressValue("addressLine1", address.street1);
+      setAddressValue("addressLine1", address.street1, {
+        shouldValidate: true,
+      });
     }
     if (address.city) {
-      setAddressValue("city", address.city);
+      setAddressValue("city", address.city, { shouldValidate: true });
     }
     if (address.zip) {
-      setAddressValue("postalCode", address.zip);
+      setAddressValue("postalCode", address.zip, { shouldValidate: true });
     }
     if (address.state) {
-      setAddressValue("state", address.state);
+      setAddressValue("state", address.state, { shouldValidate: true });
     }
     if (address.country) {
-      setAddressValue("country", address.country);
+      setAddressValue("country", address.country, { shouldValidate: true });
     }
 
     const formattedAddress = `${address.street1}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}`;
 
     setAddress(formattedAddress);
     setAddressLine1(address.street1);
-    setValue("postalCode", address.zip || "");
+    setValue("postalCode", address.zip || "", { shouldValidate: true });
     setAddressError("");
   };
+
 
   const onAddressSubmit = (data: AddressFormData) => {
     const formattedAddress = `${data.addressLine1}${
@@ -975,6 +979,7 @@ function PaymentDialog({
                   {...field}
                   label="State"
                   placeholder="Enter State"
+                  InputLabelProps={{ shrink: true }}
                   error={!!addressErrors.state}
                   helperText={addressErrors.state?.message}
                   fullWidth

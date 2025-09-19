@@ -276,7 +276,7 @@ export function PlacesAutocomplete({
       />
 
       {/* Conditionally render the distance and amount fields */}
-      {distance !== null && (
+      {/* {distance !== null && (
         <TextField
           label="Distance from Shop"
           value={`${distance.toFixed(2)} miles`}
@@ -290,15 +290,15 @@ export function PlacesAutocomplete({
         orderAmountWithTax &&
         orderAmountWithTax.orderAmountWithTax != null &&
         nearestAmount?.amount == "0" && (
-          <>
+          <> */}
             {/* <p style={{ color: "red" }}>
               Distance is too far. Please choose the pickup option.
             </p> */}
-            {setAddressError(
+            {/* {setAddressError(
               "Distance is too far. Please choose the pickup option."
             )}
           </>
-        )}
+        )} */}
 
       {distance !== null && nearestAmount?.amount != "0" && (
         <TextField
