@@ -17,6 +17,7 @@ import {
   useMediaQuery,
   Typography,
   Divider,
+  IconButton,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -47,6 +48,8 @@ import {
   CalculateTotalWeight,
   getParcelObjectByWeight,
 } from "../../../parcelConfig";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface PaymentFormData {
   firstName: string;
@@ -60,6 +63,16 @@ interface PaymentFormData {
   notes?: string;
   rateObjId: string;
   carrierAccount: string;
+}
+
+interface AddressFormData {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  postalCode: string;
+  county: string;
+  state: string;
+  country: string;
 }
 
 const schema = yup.object({
@@ -90,6 +103,15 @@ const schema = yup.object({
   notes: yup.string().optional(),
 });
 
+const addressSchema = yup.object({
+  addressLine1: yup.string().required("Address Line 1 is required"),
+  addressLine2: yup.string().optional(),
+  city: yup.string().required("City is required"),
+  postalCode: yup.string().required("Postal Code is required"),
+  county: yup.string().optional(),
+  country: yup.string().required("Country is required"),
+});
+
 function PaymentDialog({
   open,
   onClose,
@@ -117,6 +139,7 @@ function PaymentDialog({
     reset,
     watch,
     getValues,
+    setValue,
     formState: { errors, isValid },
   } = useForm<PaymentFormData>({
     resolver: yupResolver(schema) as any,
@@ -131,6 +154,26 @@ function PaymentDialog({
       deliveryOption: "Pickup",
       deliveryDate: null,
       notes: "",
+    },
+  });
+
+  const {
+    control: addressControl,
+    handleSubmit: handleAddressSubmit,
+    reset: resetAddress,
+    setValue: setAddressValue,
+    formState: { errors: addressErrors },
+  } = useForm<AddressFormData>({
+    resolver: yupResolver(addressSchema) as any,
+    mode: "onChange",
+    defaultValues: {
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      postalCode: "",
+      state: "",
+      county: "",
+      country: "United Kingdom",
     },
   });
 
@@ -152,16 +195,19 @@ function PaymentDialog({
   );
   const [shipmentJson, setShipmentJson] = useState<any>({});
   const { cartItems, setCartItems } = useCart();
+  const [openAddressDialog, setOpenAddressDialog] = useState(false);
+  const [addressLine1, setAddressLine1] = useState("");
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
   };
 
-  const [selectedShippingAmount, setSelectedShippingAmount] =
-    useState<number>(0);
   const [parcelObj, setParcelObj] = useState<Parcel | null>(null);
   const [selectedRate, setSelectedRate] =
     useState<CreateShipmentTransactionPayload | null>(null);
+  const [selectedShippingAmount, setSelectedShippingAmount] =
+    useState<number>(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -249,6 +295,94 @@ function PaymentDialog({
     }
   };
 
+  const handleAddAddressClick = () => {
+    setIsEditingAddress(false);
+    resetAddress({
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      postalCode: "",
+      county: "",
+      country: "United Kingdom",
+    });
+    setOpenAddressDialog(true);
+  };
+
+  const handleEditAddressClick = () => {
+    setIsEditingAddress(true);
+    if (selectedAddress) {
+      resetAddress({
+        addressLine1: selectedAddress.street1 || "",
+        city: selectedAddress.city || "",
+        postalCode: selectedAddress.zip || "",
+        state: selectedAddress.state || "",
+        country: selectedAddress.country || "United Kingdom",
+      });
+    }
+    setOpenAddressDialog(true);
+  };
+
+  const handleAddressDialogClose = () => {
+    setOpenAddressDialog(false);
+    resetAddress();
+  };
+
+  const handleAddressSelected = (address: ParsedAddress) => {
+    setSelectedAddress(address);
+
+    if (address.street1) {
+      setAddressValue("addressLine1", address.street1);
+    }
+    if (address.city) {
+      setAddressValue("city", address.city);
+    }
+    if (address.zip) {
+      setAddressValue("postalCode", address.zip);
+    }
+    if (address.state) {
+      setAddressValue("state", address.state);
+    }
+    if (address.country) {
+      setAddressValue("country", address.country);
+    }
+
+    const formattedAddress = `${address.street1}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}`;
+
+    setAddress(formattedAddress);
+    setAddressLine1(address.street1);
+    setValue("postalCode", address.zip || "");
+    setAddressError("");
+  };
+
+  const onAddressSubmit = (data: AddressFormData) => {
+    const formattedAddress = `${data.addressLine1}${
+      data.addressLine2 ? ", " + data.addressLine2 : ""
+    }, ${data.city}, ${data.county ? data.county + ", " : ""}${
+      data.postalCode
+    }, ${data.country}`;
+
+    const parsedAddress: ParsedAddress = {
+      street1: data.addressLine1,
+      city: data.city,
+      state: data.state,
+      zip: data.postalCode,
+      country: data.country,
+    };
+
+    setSelectedAddress(parsedAddress);
+    setAddress(formattedAddress);
+    setAddressLine1(data.addressLine1);
+    setValue("postalCode", data.postalCode);
+    setAddressError("");
+    setOpenAddressDialog(false);
+    updateSnackBarState(true, "Address saved successfully", "success");
+    if (isEditingAddress) {
+      console.log("Edited Address:", formattedAddress);
+    } else {
+      console.log("Added Address:", formattedAddress);
+    }
+  };
+
   const subtotal = parseFloat(amount);
   const shippingCost =
     deliveryOptionValue === "Delivery"
@@ -258,6 +392,7 @@ function PaymentDialog({
       : 0;
   const orderTotal = subtotal + shippingCost;
   const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
+
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
@@ -274,7 +409,7 @@ function PaymentDialog({
       const updatedOrderNumber = transactionData || "1000";
 
       const selectedRateData = shipmentJson?.rates?.find(
-        (r: any) => r.objectId === selectedRate
+        (r: any) => r.objectId === selectedRate?.rateObjId
       );
 
       const capitalizedData = {
@@ -360,7 +495,7 @@ function PaymentDialog({
         const shipmentPayload = {
           ...selectedAddress,
           name: getValues("firstName"),
-          email: email,
+          email: getValues("email"),
           phone: getValues("phoneNumber"),
           parcel: parcelObj,
         } as ShipmentPayload;
@@ -408,7 +543,6 @@ function PaymentDialog({
                   display: "flex",
                   flexDirection: "column",
                   gap: "1rem",
-
                   maxHeight: 500,
                   overflowY: "auto",
                   pr: 1,
@@ -499,19 +633,49 @@ function PaymentDialog({
                   )}
                 />
                 {deliveryOptionValue === "Delivery" && (
-                  <PlacesAutocomplete
-                    orderAmountWithTax={{ orderAmountWithTax: amount }}
-                    setAddressError={setAddressError}
-                    setAddress={setAddress}
-                    setAddressURL={setAddressURL}
-                    setDeliveryCharge={handleDeliveryChargeUpdate}
-                    setIsPaymentDisabled={setIsPaymentDisabled}
-                    onAddressSelected={(address) => {
-                      setSelectedAddress({ ...address } as ParsedAddress);
-                    }}
-                  />
+                  <>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Typography variant="body1">Address</Typography>
+                      {address ? (
+                        <Button
+                          onClick={handleEditAddressClick}
+                          startIcon={<EditIcon />}
+                          size="small"
+                          variant="contained"
+                        >
+                          Edit Address
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleAddAddressClick}
+                          startIcon={<AddIcon />}
+                          size="small"
+                          variant="contained"
+                        >
+                          Add Address
+                        </Button>
+                      )}
+                    </Box>
+
+                    {address && (
+                      <Box
+                        sx={{
+                          p: 1,
+                          border: "1px solid #ccc",
+                          borderRadius: 1,
+                          backgroundColor: "#f9f9f9",
+                        }}
+                      >
+                        <Typography variant="body2">{address}</Typography>
+                      </Box>
+                    )}
+                  </>
                 )}
-                {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
                 {deliveryOptionValue === "Delivery" && (
                   <Controller
                     name="postalCode"
@@ -527,7 +691,43 @@ function PaymentDialog({
                       />
                     )}
                   />
-                )}
+                )} */}
+                {/* {address && (
+                      <Box
+                        sx={{ p: 1, border: "1px solid #ccc", borderRadius: 1 }}
+                      >
+                        <PlacesAutocomplete
+                          orderAmountWithTax={{ orderAmountWithTax: amount }}
+                          setAddressError={setAddressError}
+                          setAddress={setAddress}
+                          setAddressURL={setAddressURL}
+                          setDeliveryCharge={handleDeliveryChargeUpdate}
+                          setIsPaymentDisabled={setIsPaymentDisabled}
+                          onAddressSelected={(address) => {
+                            setSelectedAddress({ ...address } as ParsedAddress);
+                          }}
+                        />
+                      </Box>
+                    )} */}
+                {/* </> */}
+                {/* )} */}
+                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {deliveryOptionValue === "Delivery" && (
+                  <Controller
+                    name="postalCode"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Postal Code"
+                        error={!!errors.postalCode}
+                        helperText={errors.postalCode?.message}
+                        fullWidth
+                        required
+                      />
+                    )}
+                  />
+                )} */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Controller
                     name="deliveryDate"
@@ -726,6 +926,130 @@ function PaymentDialog({
             }
           >
             {loading ? "Processing..." : "Confirm Payment"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Address Dialog */}
+      <Dialog
+        open={openAddressDialog}
+        onClose={handleAddressDialogClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {isEditingAddress ? "Edit Address" : "Add Address"}
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              mt: 1,
+            }}
+          >
+            <Box>
+              <PlacesAutocomplete
+                orderAmountWithTax={{ orderAmountWithTax: amount }}
+                setAddressError={setAddressError}
+                setAddress={setAddress}
+                setAddressURL={setAddressURL}
+                setDeliveryCharge={handleDeliveryChargeUpdate}
+                setIsPaymentDisabled={setIsPaymentDisabled}
+                onAddressSelected={handleAddressSelected}
+              />
+            </Box>
+
+            <Controller
+              name="addressLine1"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Address Line 1"
+                  placeholder="Enter Address Line 1"
+                  error={!!addressErrors.addressLine1}
+                  helperText={addressErrors.addressLine1?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="city"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="City"
+                  placeholder="Enter City"
+                  error={!!addressErrors.city}
+                  helperText={addressErrors.city?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="state"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="State"
+                  placeholder="Enter State"
+                  error={!!addressErrors.state}
+                  helperText={addressErrors.state?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="postalCode"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Postal Code"
+                  placeholder="Enter Code"
+                  error={!!addressErrors.postalCode}
+                  helperText={addressErrors.postalCode?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="country"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Country"
+                  placeholder="Enter Country"
+                  error={!!addressErrors.country}
+                  helperText={addressErrors.country?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddressDialogClose}>Cancel</Button>
+          <Button
+            onClick={handleAddressSubmit(onAddressSubmit)}
+            variant="contained"
+          >
+            {isEditingAddress ? "Update Address" : "Save Address"}
           </Button>
         </DialogActions>
       </Dialog>
