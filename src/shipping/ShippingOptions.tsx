@@ -54,15 +54,15 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
     );
   }
 
-  const handleSelectRate = (rate: any) => {
-    const selectedObj: CreateShipmentTransactionPayload = {
-      rateObjId: rate.objectId,
-      carrierAccount: rate.carrierAccount,
-    };
-    setSelectedRateObj(selectedObj);
-    onSelectRate(rate.objectId);
-    console.log("Selected Shipping Option:", selectedObj);
-  };
+ const handleSelectRate = (rate: any) => {
+   const selectedObj: CreateShipmentTransactionPayload = {
+     rateObjId: rate.objectId,
+     carrierAccount: rate.carrierAccount,
+   };
+   setSelectedRateObj(selectedObj);
+   onSelectRate(selectedObj); // ✅ Pass the full object instead of just objectId
+   console.log("Selected Shipping Option:", selectedObj);
+ };
 
   return (
     <Box sx={{ p: 2, overflowX: "auto" }}>

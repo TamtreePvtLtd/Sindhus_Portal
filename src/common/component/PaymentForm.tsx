@@ -35,7 +35,7 @@ import {
   useCreatePaymentIntent,
   useGetLastTransaction,
 } from "../../customRQHooks/Hooks";
-import { ParsedAddress, ToAddressPayload } from "../../interface/types";
+import { CreateShipmentTransactionPayload, ParsedAddress, ToAddressPayload } from "../../interface/types";
 import { createShipment, validateAddressApi } from "../../services/api";
 
 interface PaymentFormData {
@@ -48,6 +48,8 @@ interface PaymentFormData {
   deliveryOption: string;
   deliveryDate: Date | null;
   notes?: string;
+  rateObjId: string;
+  carrierAccount: string;
 }
 
 const schema = yup.object({
@@ -143,9 +145,10 @@ function PaymentDialog({
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
   };
-  const [selectedRate, setSelectedRate] = useState<string | null>(null);
-  const [selectedShippingAmount, setSelectedShippingAmount] =
-    useState<number>(0);
+const [selectedRate, setSelectedRate] =
+  useState<CreateShipmentTransactionPayload | null>(null);
+const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
+
 
   const stripe = useStripe();
   const elements = useElements();
@@ -211,10 +214,10 @@ function PaymentDialog({
     setCardComplete(event.complete);
   };
 
-  const handleSelectRate = (rateId: string) => {
-    setSelectedRate(rateId);
+  const handleSelectRate = (rateObj: CreateShipmentTransactionPayload) => {
+    setSelectedRate(rateObj);
     const selectedRateData = shipmentJson?.rates?.find(
-      (r: any) => r.objectId === rateId
+      (r: any) => r.objectId === rateObj.rateObjId
     );
     if (selectedRateData) {
       const amount = Number(selectedRateData.amount) || 0;
@@ -267,6 +270,8 @@ function PaymentDialog({
         address: deliveryOptionValue === "Pickup" ? "" : address,
         amount: finalAmount,
         shippingOption: selectedRateData,
+        rateObjId: selectedRate?.rateObjId || "",
+        carrierAccount: selectedRate?.carrierAccount || "",
         orderedItems,
         createdAt: new Date(),
         orderNumber: updatedOrderNumber,
