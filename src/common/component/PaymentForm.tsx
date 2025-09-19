@@ -18,6 +18,7 @@ import {
   Typography,
   Divider,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -50,6 +51,7 @@ import {
 } from "../../../parcelConfig";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import axios from "axios";
 
 interface PaymentFormData {
   firstName: string;
@@ -165,7 +167,7 @@ function PaymentDialog({
     formState: { errors: addressErrors },
   } = useForm<AddressFormData>({
     resolver: yupResolver(addressSchema) as any,
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       addressLine1: "",
       addressLine2: "",
@@ -197,6 +199,9 @@ function PaymentDialog({
   const { cartItems } = useCart();
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [addressValidationErrorMsg, setAddressValidationErrorMsg] = useState<
+    string | null
+  >("");
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
@@ -372,12 +377,8 @@ function PaymentDialog({
     setValue("postalCode", data.postalCode);
     setAddressError("");
     setOpenAddressDialog(false);
-    updateSnackBarState(true, "Address saved successfully", "success");
-    if (isEditingAddress) {
-      console.log("Edited Address:", formattedAddress);
-    } else {
-      console.log("Added Address:", formattedAddress);
-    }
+
+    validateAddress();
   };
 
   const subtotal = parseFloat(amount);
@@ -485,37 +486,57 @@ function PaymentDialog({
     }
   };
 
-  useEffect(() => {
-    const validateAddress = async () => {
-      if (selectedAddress) {
-        setSelectedRate(null);
-        const shipmentPayload = {
-          ...selectedAddress,
-          name: getValues("firstName"),
-          email: getValues("email"),
-          phone: getValues("phoneNumber"),
-          parcel: parcelObj,
-        } as ShipmentPayload;
+  const validateAddress = async () => {
+    if (selectedAddress) {
+      setSelectedRate(null);
+      const shipmentPayload = {
+        ...selectedAddress,
+        name: getValues("firstName"),
+        email: getValues("email"),
+        phone: getValues("phoneNumber"),
+        parcel: parcelObj,
+      } as ShipmentPayload;
 
-        try {
-          const addressValidationResponse: any = await validateAddressApi(
-            shipmentPayload
-          );
+      try {
+        const addressValidationResponse: any = await validateAddressApi(
+          shipmentPayload
+        );
 
-          if (addressValidationResponse?.validationResults?.isValid) {
-            var shipmentResponse: any = await createShipment(shipmentPayload);
+        if (addressValidationResponse?.validationResults?.isValid) {
+          setAddressValidationErrorMsg(null);
 
-            if (shipmentResponse?.status == "SUCCESS") {
-              setShipmentJson(shipmentResponse);
-            }
+          const shipmentPayload = {
+            ...selectedAddress,
+            name: getValues("firstName"),
+            email: getValues("email"),
+            phone: getValues("phoneNumber"),
+            parcel: parcelObj,
+          } as ShipmentPayload;
+
+          var shipmentResponse: any = await createShipment(shipmentPayload);
+
+          if (shipmentResponse?.status == "SUCCESS") {
+            setShipmentJson(shipmentResponse);
           }
-        } catch (error) {
-          console.error("Address validation failed:", error);
+        } else if (addressValidationResponse?.validationResults?.messages) {
+          setAddressValidationErrorMsg(
+            addressValidationResponse?.validationResults?.messages[0].text ??
+              "Something went wrong!!"
+          );
+        }
+      } catch (error: any) {
+        setShipmentJson(null);
+        setAddress("");
+        if (axios.isAxiosError(error)) {
+          setAddressValidationErrorMsg(
+            error.response?.data?.error ?? "Something went wrong!!"
+          );
+        } else {
+          setAddressValidationErrorMsg("Unexpected error occurred");
         }
       }
-    };
-    validateAddress();
-  }, [selectedAddress]);
+    }
+  };
 
   return (
     <Box>
@@ -657,7 +678,11 @@ function PaymentDialog({
                         </Button>
                       )}
                     </Box>
-
+                    {addressValidationErrorMsg && (
+                      <Alert severity="error">
+                        {addressValidationErrorMsg}
+                      </Alert>
+                    )}
                     {address && (
                       <Box
                         sx={{
@@ -908,6 +933,7 @@ function PaymentDialog({
               setShipmentJson(null);
               resetAddress();
               setAddress("");
+              setAddressValidationErrorMsg(null);
             }}
           >
             Cancel
