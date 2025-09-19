@@ -165,7 +165,7 @@ function PaymentDialog({
       addressLine2: "",
       city: "",
       postalCode: "",
-      state:"",
+      state: "",
       county: "",
       country: "United Kingdom",
     },
@@ -310,10 +310,8 @@ function PaymentDialog({
   };
 
   const handleAddressSelected = (address: ParsedAddress) => {
-    // Set the selected address
     setSelectedAddress(address);
 
-    // Update the form fields with the address details
     if (address.street1) {
       setAddressValue("addressLine1", address.street1);
     }
@@ -330,29 +328,21 @@ function PaymentDialog({
       setAddressValue("country", address.country);
     }
 
-    // Format the address for display
     const formattedAddress = `${address.street1}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}`;
 
-    // Set the address in the parent component state
     setAddress(formattedAddress);
     setAddressLine1(address.street1);
-
-    // Set the postal code in the payment form
     setValue("postalCode", address.zip || "");
-
-    // Clear any address errors
     setAddressError("");
   };
 
   const onAddressSubmit = (data: AddressFormData) => {
-    // Format the address from the form data
     const formattedAddress = `${data.addressLine1}${
       data.addressLine2 ? ", " + data.addressLine2 : ""
     }, ${data.city}, ${data.county ? data.county + ", " : ""}${
       data.postalCode
     }, ${data.country}`;
 
-    // Create a parsed address object
     const parsedAddress: ParsedAddress = {
       street1: data.addressLine1,
       city: data.city,
@@ -361,23 +351,18 @@ function PaymentDialog({
       country: data.country,
     };
 
-    // Set the selected address
     setSelectedAddress(parsedAddress);
-
-    // Set the address in the parent component state
     setAddress(formattedAddress);
     setAddressLine1(data.addressLine1);
-
-    // Set the postal code in the payment form
     setValue("postalCode", data.postalCode);
-
-    // Clear any address errors
     setAddressError("");
-
-    // Close the dialog
     setOpenAddressDialog(false);
-
     updateSnackBarState(true, "Address saved successfully", "success");
+    if (isEditingAddress) {
+      console.log("Edited Address:", formattedAddress);
+    } else {
+      console.log("Added Address:", formattedAddress);
+    }
   };
 
   const subtotal = parseFloat(amount);
@@ -704,7 +689,7 @@ function PaymentDialog({
                         />
                       </Box>
                     )} */}
-                  {/* </> */}
+                {/* </> */}
                 {/* )} */}
                 {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
                 {deliveryOptionValue === "Delivery" && (
