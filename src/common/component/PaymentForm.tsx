@@ -354,6 +354,7 @@ function PaymentDialog({
   useEffect(() => {
     const validateAddress = async () => {
       if (selectedAddress) {
+        setSelectedRate(null);
         const shipmentPayload = {
           ...selectedAddress,
           name: getValues("firstName"),
@@ -702,7 +703,14 @@ function PaymentDialog({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              onClose();
+              setShipmentJson(null);
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={handleSubmit(onSubmit)}
             variant="contained"
