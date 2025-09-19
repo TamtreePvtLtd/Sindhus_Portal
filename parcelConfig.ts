@@ -14,7 +14,7 @@ const ParcelRules = [
 ];
 
 export function getParcelObjectByWeight(weight: number) {
-  const rule = ParcelRules.find((r) => weight < r.maxWeight);
+  const rule = ParcelRules.find((r) => weight <= r.maxWeight);
 
   if (!rule) {
     throw new Error(`No parcel configuration found for weight: ${weight} lbs`);
