@@ -67,7 +67,7 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
   return (
     <Box sx={{ p: 2, overflowX: "auto" }}>
       <RadioGroup
-        value={selectedRate || ""}
+        value={selectedRateObj?.rateObjId || ""}
         onChange={(e) => {
           const selectedRate = shipmentData.rates.find(
             (r: any) => r.objectId === e.target.value
@@ -80,6 +80,7 @@ const ShippingOptions = ({ shipmentData, selectedRate, onSelectRate }: any) => {
         {shipmentData.rates.map((rate: any) => (
           <Card
             key={rate.objectId}
+            onClick={() => handleSelectRate(rate)}
             sx={{
               display: "flex",
               alignItems: "center",
