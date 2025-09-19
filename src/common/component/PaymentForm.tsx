@@ -17,6 +17,7 @@ import {
   useMediaQuery,
   Typography,
   Divider,
+  IconButton,
 } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -37,6 +38,7 @@ import {
 } from "../../customRQHooks/Hooks";
 import { CreateShipmentTransactionPayload, ParsedAddress, ToAddressPayload } from "../../interface/types";
 import { createShipment, validateAddressApi } from "../../services/api";
+import AddIcon from "@mui/icons-material/Add";
 
 interface PaymentFormData {
   firstName: string;
@@ -50,6 +52,16 @@ interface PaymentFormData {
   notes?: string;
   rateObjId: string;
   carrierAccount: string;
+}
+
+interface AddressFormData {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  postalCode: string;
+  county: string;
+  state: string;
+  country: string;
 }
 
 const schema = yup.object({
@@ -80,6 +92,15 @@ const schema = yup.object({
   notes: yup.string().optional(),
 });
 
+const addressSchema = yup.object({
+  addressLine1: yup.string().required("Address Line 1 is required"),
+  addressLine2: yup.string().optional(),
+  city: yup.string().required("City is required"),
+  postalCode: yup.string().required("Postal Code is required"),
+  county: yup.string().optional(),
+  country: yup.string().required("Country is required"),
+});
+
 function PaymentDialog({
   open,
   onClose,
@@ -107,6 +128,7 @@ function PaymentDialog({
     reset,
     watch,
     getValues,
+    setValue,
     formState: { errors, isValid },
   } = useForm<PaymentFormData>({
     resolver: yupResolver(schema) as any,
@@ -121,6 +143,26 @@ function PaymentDialog({
       deliveryOption: "Pickup",
       deliveryDate: null,
       notes: "",
+    },
+  });
+
+  const {
+    control: addressControl,
+    handleSubmit: handleAddressSubmit,
+    reset: resetAddress,
+    setValue: setAddressValue,
+    formState: { errors: addressErrors },
+
+  } = useForm<AddressFormData>({
+    resolver: yupResolver(addressSchema) as any,
+    mode: "onChange",
+    defaultValues: {
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      postalCode: "",
+      county: "",
+      country:"",
     },
   });
 
@@ -141,14 +183,16 @@ function PaymentDialog({
     null
   );
   const [shipmentJson, setShipmentJson] = useState<any>({});
+  const [openAddressDialog, setOpenAddressDialog] = useState(false);
+  const [addressLine1, setAddressLine1] = useState("");
 
   const handleDeliveryChargeUpdate = (charge: number) => {
     setDeliveryCharge(charge);
   };
-const [selectedRate, setSelectedRate] =
-  useState<CreateShipmentTransactionPayload | null>(null);
-const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
-
+  
+  const [selectedRate, setSelectedRate] =
+    useState<CreateShipmentTransactionPayload | null>(null);
+  const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -226,6 +270,67 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
     }
   };
 
+  const handleAddAddressClick = () => {
+    setOpenAddressDialog(true);
+  };
+
+  const handleAddressDialogClose = () => {
+    setOpenAddressDialog(false);
+    resetAddress();
+  };
+  const handleAddressSelected = (address: ParsedAddress) => {
+    // Set the selected address
+    setSelectedAddress(address);
+
+    // Update the form fields with the address details
+    if (address.street1) {
+      setAddressValue("addressLine1", address.street1);
+    }
+    if (address.city) {
+      setAddressValue("city", address.city);
+    }
+    if (address.zip) {
+      setAddressValue("postalCode", address.zip);
+    }
+    if (address.state) {
+      setAddressValue("state", address.state);
+    }
+    if (address.country) {
+      setAddressValue("country", address.country);
+    }
+
+    // Format the address for display
+    const formattedAddress = `${address.street1}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}`;
+
+    // Set the address in the parent component state
+    setAddress(formattedAddress);
+    setAddressLine1(address.street1);
+
+    // Clear any address errors
+    setAddressError("");
+  };
+
+
+  const onAddressSubmit = (data: AddressFormData) => {
+    // Format the address from the form data
+    const formattedAddress = `${data.addressLine1}${data.addressLine2 ? ', ' + data.addressLine2 : ''}, ${data.city}, ${data.county ? data.county + ', ' : ''}${data.postalCode}, ${data.country}`;
+    
+    // Set the address in the parent component state
+    setAddress(formattedAddress);
+    setAddressLine1(data.addressLine1);
+    
+    // Set the postal code in the payment form
+    setValue("postalCode", data.postalCode);
+    
+    // Clear any address errors
+    setAddressError("");
+    
+    // Close the dialog
+    setOpenAddressDialog(false);
+    
+    updateSnackBarState(true, "Address added successfully", "success");
+  };
+
   const subtotal = parseFloat(amount);
   const shippingCost =
     deliveryOptionValue === "Delivery"
@@ -235,6 +340,7 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
       : 0;
   const orderTotal = subtotal + shippingCost;
   const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
+  
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
@@ -383,7 +489,6 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
                   display: "flex",
                   flexDirection: "column",
                   gap: "1rem",
-
                   maxHeight: 500,
                   overflowY: "auto",
                   pr: 1,
@@ -474,19 +579,40 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
                   )}
                 />
                 {deliveryOptionValue === "Delivery" && (
-                  <PlacesAutocomplete
-                    orderAmountWithTax={{ orderAmountWithTax: amount }}
-                    setAddressError={setAddressError}
-                    setAddress={setAddress}
-                    setAddressURL={setAddressURL}
-                    setDeliveryCharge={handleDeliveryChargeUpdate}
-                    setIsPaymentDisabled={setIsPaymentDisabled}
-                    onAddressSelected={(address) => {
-                      setSelectedAddress({ ...address } as ParsedAddress);
-                    }}
-                  />
+                  <>
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="body1" sx={{ mr: 1 }}>
+                        Address
+                      </Typography>
+                      <IconButton
+                        color="primary"
+                        onClick={handleAddAddressClick}
+                        size="small"
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Box>
+
+                    {/* {address && (
+                      <Box
+                        sx={{ p: 1, border: "1px solid #ccc", borderRadius: 1 }}
+                      >
+                        <PlacesAutocomplete
+                          orderAmountWithTax={{ orderAmountWithTax: amount }}
+                          setAddressError={setAddressError}
+                          setAddress={setAddress}
+                          setAddressURL={setAddressURL}
+                          setDeliveryCharge={handleDeliveryChargeUpdate}
+                          setIsPaymentDisabled={setIsPaymentDisabled}
+                          onAddressSelected={(address) => {
+                            setSelectedAddress({ ...address } as ParsedAddress);
+                          }}
+                        />
+                      </Box>
+                    )} */}
+                  </>
                 )}
-                {addressError && <p style={{ color: "red" }}>{addressError}</p>}
+                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
                 {deliveryOptionValue === "Delivery" && (
                   <Controller
                     name="postalCode"
@@ -502,7 +628,7 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
                       />
                     )}
                   />
-                )}
+                )} */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Controller
                     name="deliveryDate"
@@ -694,6 +820,112 @@ const [selectedShippingAmount, setSelectedShippingAmount] = useState<number>(0);
             }
           >
             {loading ? "Processing..." : "Confirm Payment"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Address Dialog */}
+      <Dialog
+        open={openAddressDialog}
+        onClose={handleAddressDialogClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Add Address</DialogTitle>
+        <DialogContent>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              mt: 1,
+            }}
+          >
+            <Box>
+              <PlacesAutocomplete
+                orderAmountWithTax={{ orderAmountWithTax: amount }}
+                setAddressError={setAddressError}
+                setAddress={setAddress}
+                setAddressURL={setAddressURL}
+                setDeliveryCharge={handleDeliveryChargeUpdate}
+                setIsPaymentDisabled={setIsPaymentDisabled}
+                onAddressSelected={handleAddressSelected}
+              />
+            </Box>
+
+            <Controller
+              name="city"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="City *"
+                  placeholder="Enter City"
+                  error={!!addressErrors.city}
+                  helperText={addressErrors.city?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="state"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="State *"
+                  placeholder="Enter State"
+                  error={!!addressErrors.state}
+                  helperText={addressErrors.state?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="postalCode"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Postal Code *"
+                  placeholder="Enter Code"
+                  error={!!addressErrors.postalCode}
+                  helperText={addressErrors.postalCode?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="country"
+              control={addressControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Country *"
+                  placeholder="Enter Country"
+                  error={!!addressErrors.country}
+                  helperText={addressErrors.country?.message}
+                  fullWidth
+                  required
+                />
+              )}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddressDialogClose}>Cancel</Button>
+          <Button
+            onClick={handleAddressSubmit(onAddressSubmit)}
+            variant="contained"
+          >
+        save
           </Button>
         </DialogActions>
       </Dialog>
