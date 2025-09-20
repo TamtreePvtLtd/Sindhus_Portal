@@ -132,7 +132,7 @@ export interface IMenuDatas {
   products?: IProductDinnigOut[];
 }
 export interface menuWithProduct {
-  menus: IMenuDatas[],
+  menus: IMenuDatas[];
   MenusWithProduct: { title: string; products: IProduct[] }[];
 }
 
@@ -290,7 +290,7 @@ export interface ICoupenResponse {
 }
 
 export interface DistanceBasedDeliveryCharge {
-  _id?: string
+  _id?: string;
   amount: string;
   uptoDistance: string;
 }
@@ -317,4 +317,33 @@ export interface PaymentData {
   totalWithoutCoupon: string;
   addressURL: string;
   __v: number;
+}
+
+export interface ParsedAddress {
+  street1: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+export interface ShipmentPayload extends ParsedAddress {
+  name: string;
+  email?: string;
+  phone: string;
+  parcel: Parcel;
+}
+
+export interface CreateShipmentTransactionPayload {
+  rateObjId: string;
+  carrierAccount: string;
+}
+
+export interface Parcel {
+  length: string;
+  width: string;
+  height: string;
+  distanceUnit: "in" | "cm"; // restrict to allowed units
+  weight: string;
+  massUnit: "lb";
 }

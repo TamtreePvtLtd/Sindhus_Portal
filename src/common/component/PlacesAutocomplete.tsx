@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { TextField, Autocomplete } from "@mui/material";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { useGetNearestGreaterDistance } from "../../customRQHooks/Hooks";
+import { ParsedAddress } from "../../interface/types";
+import { validateAddressApi } from "../../services/api";
 
 interface AutocompleteResult {
   label: string;
@@ -20,6 +22,7 @@ interface PlacesAutocompleteProps {
   setAddressURL: (address: string) => void; // Adjust type based on your address type
   setDeliveryCharge: (charge: number) => void; // Add this prop for passing the delivery charge
   setIsPaymentDisabled: (disabled: boolean) => void;
+  onAddressSelected?: (toAddress: ParsedAddress) => void;
 }
 
 export function PlacesAutocomplete({
@@ -29,16 +32,17 @@ export function PlacesAutocomplete({
   setAddressURL,
   setDeliveryCharge,
   setIsPaymentDisabled,
+  onAddressSelected,
 }: PlacesAutocompleteProps) {
   const [value, setValue] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<SelectedPlace | null>(
     null
   );
+
   const [distance, setDistance] = useState<number | null>(null);
   const [amount, setAmount] = useState<string | null>(null); // State to store the amount
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
   const [error, setError] = useState(false); // State to handle error status
-  
 
   const libraries: Libraries = ["places"];
   console.log("orderAmountWithTax", orderAmountWithTax);
@@ -61,22 +65,22 @@ export function PlacesAutocomplete({
     }
   }, [amount, setDeliveryCharge]);
 
-   useEffect(() => {
-     if (distance !== null && nearestAmount) {
-       setAmount(nearestAmount.amount);
+  useEffect(() => {
+    if (distance !== null && nearestAmount) {
+      setAmount(nearestAmount.amount);
 
-       // If distance is too far, disable payment and set error
-       if (nearestAmount?.amount === "0") {
-         setAddressError(
-           "Distance is too far. Please choose the pickup option."
-         );
-         setIsPaymentDisabled(true); // Disable confirm payment button
-       } else {
-         setAddressError("");
-         setIsPaymentDisabled(false); // Enable confirm payment button
-       }
-     }
-   }, [distance, nearestAmount, setAddressError, setIsPaymentDisabled]);
+      // If distance is too far, disable payment and set error
+      if (nearestAmount?.amount === "0") {
+        setAddressError(
+          "Distance is too far. Please choose the pickup option."
+        );
+        setIsPaymentDisabled(true); // Disable confirm payment button
+      } else {
+        setAddressError("");
+        setIsPaymentDisabled(false); // Enable confirm payment button
+      }
+    }
+  }, [distance, nearestAmount, setAddressError, setIsPaymentDisabled]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
@@ -117,6 +121,34 @@ export function PlacesAutocomplete({
     }
   };
 
+  const parseAddressComponents = (components: any[]): ParsedAddress | null => {
+    if (components.length <= 0) return null;
+    const componentByType = (type: string) =>
+      components.find((c) => c.types.includes(type));
+
+    const streetNumber = componentByType("street_number")?.long_name || "";
+    const route = componentByType("route")?.long_name || "";
+    const city =
+      componentByType("locality")?.long_name ||
+      componentByType("sublocality")?.long_name ||
+      componentByType("administrative_area_level_2")?.long_name ||
+      "";
+    const state =
+      componentByType("administrative_area_level_1")?.short_name || "";
+    const zip = componentByType("postal_code")?.long_name || "";
+    const country = componentByType("country")?.short_name || "";
+
+    const street1 = [streetNumber, route].filter(Boolean).join(" ");
+
+    return {
+      street1,
+      city,
+      state,
+      zip,
+      country,
+    };
+  };
+
   const handleSelect = async (address: AutocompleteResult) => {
     setValue(address.label);
     setSuggestions([]);
@@ -140,7 +172,21 @@ export function PlacesAutocomplete({
             const addressURL = `https://maps.google.com/?q=${lat},${lng}`;
             setAddressURL(addressURL);
             setSelectedPlace({ lat, lng });
-            await calculateDistance(origin, { lat, lng });
+            // Parse and store structured address object
+            try {
+              const components = results[0].address_components || [];
+              const parsedAddress: ParsedAddress | null =
+                parseAddressComponents(components);
+
+              console.log("parsedAddress", parsedAddress);
+
+              if (parsedAddress != null && onAddressSelected)
+                onAddressSelected({ ...parsedAddress });
+            } catch (e) {
+              // If parsing fails, keep existing flow intact
+              console.error("Failed to parse address components", e);
+            }
+            //await calculateDistance(origin, { lat, lng });
             setAddressError("");
           } else {
             console.error(
@@ -230,7 +276,7 @@ export function PlacesAutocomplete({
       />
 
       {/* Conditionally render the distance and amount fields */}
-      {distance !== null && (
+      {/* {distance !== null && (
         <TextField
           label="Distance from Shop"
           value={`${distance.toFixed(2)} miles`}
@@ -244,15 +290,15 @@ export function PlacesAutocomplete({
         orderAmountWithTax &&
         orderAmountWithTax.orderAmountWithTax != null &&
         nearestAmount?.amount == "0" && (
-          <>
+          <> */}
             {/* <p style={{ color: "red" }}>
               Distance is too far. Please choose the pickup option.
             </p> */}
-            {setAddressError(
+            {/* {setAddressError(
               "Distance is too far. Please choose the pickup option."
             )}
           </>
-        )}
+        )} */}
 
       {distance !== null && nearestAmount?.amount != "0" && (
         <TextField

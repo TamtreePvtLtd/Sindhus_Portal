@@ -17,6 +17,8 @@ import {
   ICoupenResponse,
   DistanceBasedDeliveryCharge,
   PaymentData,
+  ShipmentPayload,
+  CreateShipmentTransactionPayload,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -302,8 +304,6 @@ const getLastTransaction = async () => {
   }
 };
 
-
-
 const createCartItem = async (formData) => {
   try {
     const response = await httpWithoutCredentials.post<string[]>(
@@ -320,7 +320,7 @@ const createCartItem = async (formData) => {
 
 const createPaymentIntent = async (formData) => {
   try {
-    const response = await httpWithoutCredentials.post(
+    const response: any = await httpWithoutCredentials.post(
       "/payment/createPaymentIntent",
       formData
     );
@@ -334,6 +334,44 @@ const createPaymentIntent = async (formData) => {
     };
   } catch (error) {
     console.error("Error creating payment intent:", error);
+    throw error;
+  }
+};
+
+const createShipment = async (shipmentPayload: ShipmentPayload) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/createShipment",
+      shipmentPayload
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createShipmentTransaction = async (
+  payload: CreateShipmentTransactionPayload
+) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/createTransaction",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const validateAddressApi = async (payload: ShipmentPayload) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/validateAddress",
+      payload
+    );
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };
@@ -361,4 +399,7 @@ export {
   getMenuType3,
   getAllMenusInCatering,
   getAllCoupens,
+  createShipment,
+  createShipmentTransaction,
+  validateAddressApi,
 };

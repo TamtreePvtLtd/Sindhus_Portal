@@ -318,24 +318,6 @@ function MybagDrawer({ isOpen, onClose }) {
                           >
                             <IconButton
                               onClick={() =>
-                                handleIncrement(item.id, item.size)
-                              }
-                              sx={{
-                                border: "1px solid #ddd",
-                                borderRadius: "3px",
-                                height: "30px", // Adjust button height to fit better
-                                width: "30px", // Adjust button width
-                              }}
-                            >
-                              +
-                            </IconButton>
-                            <Typography
-                              sx={{ minWidth: "20px", textAlign: "center" }}
-                            >
-                              {item.quantity}
-                            </Typography>
-                            <IconButton
-                              onClick={() =>
                                 handleDecrement(item.id, item.size)
                               }
                               disabled={item.quantity <= 1}
@@ -347,6 +329,25 @@ function MybagDrawer({ isOpen, onClose }) {
                               }}
                             >
                               -
+                            </IconButton>
+
+                            <Typography
+                              sx={{ minWidth: "20px", textAlign: "center" }}
+                            >
+                              {item.quantity}
+                            </Typography>
+                            <IconButton
+                              onClick={() =>
+                                handleIncrement(item.id, item.size)
+                              }
+                              sx={{
+                                border: "1px solid #ddd",
+                                borderRadius: "3px",
+                                height: "30px", // Adjust button height to fit better
+                                width: "30px", // Adjust button width
+                              }}
+                            >
+                              +
                             </IconButton>
                           </Box>
                         </TableCell>
