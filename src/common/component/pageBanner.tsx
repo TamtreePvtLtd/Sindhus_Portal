@@ -14,11 +14,13 @@ function PageBanner(props: IProps) {
         className="page-banner-area"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          height: "20px",
+          height: "15%",
+
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          width: "100%",
         }}
       >
         <Box className="page-banner-content">
@@ -28,8 +30,9 @@ function PageBanner(props: IProps) {
                 textTransform: "uppercase",
                 marginBottom: "0 !important",
               }}
-              variant="h2"
-              fontWeight={"medium"}
+              variant="h3"
+              fontWeight={"bold"}
+              fontFamily={"Yeseva One"}
             >
               {content}
             </Typography>
@@ -43,9 +46,9 @@ function PageBanner(props: IProps) {
                   // textTransform: "uppercase",
                   marginBottom: "0 !important",
                 }}
-                variant="h6"
-                fontFamily={"Dancing Script, cursive"}
-                fontWeight={"small"}
+                variant="h5"
+                fontFamily={"Yeseva One"}
+                fontWeight={"bold"}
               >
                 {description}
               </Typography>

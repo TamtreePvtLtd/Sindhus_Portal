@@ -23,6 +23,7 @@ export interface IProductCardList {
   netWeight?: number;
   itemSizeWithPrice: itemSizeWithPrice[] | null;
   dailyMenuSizeWithPrice: DailyMenuSizeWithPrice[] | null;
+  availability: string;
 }
 
 export interface DailyMenuSizeWithPrice {
@@ -74,6 +75,7 @@ export interface IProduct {
   netWeight?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  availability?: string;
 }
 
 export interface IPrice {
@@ -114,7 +116,7 @@ export interface ICategory {
   title: string;
   image?: string;
   products?: IProduct[];
-  }
+}
 export interface ICategoryTitleDispay {
   menuDatas: ICategory;
 }
@@ -130,7 +132,7 @@ export interface IMenuDatas {
   products?: IProductDinnigOut[];
 }
 export interface menuWithProduct {
-  menus: IMenuDatas[],
+  menus: IMenuDatas[];
   MenusWithProduct: { title: string; products: IProduct[] }[];
 }
 
@@ -269,4 +271,79 @@ export interface ICateringSpecials {
   iconkey: string;
   title: string;
   description: string;
+}
+
+export interface ICoupen {
+  _id: string;
+  coupenName: string;
+  coupenType: string;
+  discountAmount: number;
+  minAmount: number;
+  maxAmount: number;
+  availability: boolean;
+  startDateWithTime: string;
+  endDateWithTime: string;
+}
+
+export interface ICoupenResponse {
+  items: ICoupen[];
+}
+
+export interface DistanceBasedDeliveryCharge {
+  _id?: string;
+  amount: string;
+  uptoDistance: string;
+}
+
+export interface PaymentData {
+  url: string;
+  quantity: string;
+  _id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  deliveryOption: string;
+  amount: number;
+  postalCode: number;
+  paymentId: string;
+  status: string;
+  deliveryDate: string;
+  createdAt: string;
+  orderNumber: string;
+  totalWithCoupon: string;
+  couponName: string;
+  totalWithoutCoupon: string;
+  addressURL: string;
+  __v: number;
+}
+
+export interface ParsedAddress {
+  street1: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+export interface ShipmentPayload extends ParsedAddress {
+  name: string;
+  email?: string;
+  phone: string;
+  parcel: Parcel;
+}
+
+export interface CreateShipmentTransactionPayload {
+  rateObjId: string;
+  carrierAccount: string;
+}
+
+export interface Parcel {
+  length: string;
+  width: string;
+  height: string;
+  distanceUnit: "in" | "cm"; // restrict to allowed units
+  weight: string;
+  massUnit: "lb";
 }

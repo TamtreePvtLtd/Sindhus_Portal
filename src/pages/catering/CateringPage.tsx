@@ -106,7 +106,7 @@ function CateringPage() {
               display: "flex",
               transform: "rotate(90deg) translate(50%, 50%)",
               zIndex: 99
-              
+
             }}
           >
             Enquire Now

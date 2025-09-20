@@ -5,7 +5,6 @@ import { fetchProductById } from "../../services/api";
 import { IProduct } from "../../interface/types";
 import { useSnackBar } from "../../context/SnackBarContext";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
@@ -13,11 +12,18 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import { useLocation } from "react-router-dom";
 import { paths } from "../../routes/path";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { CartItem, useCart } from "../../context/CartContext";
 
 function ProductDetail() {
   const settings = {
@@ -32,6 +38,9 @@ function ProductDetail() {
   const { productId } = useParams();
   const { updateSnackBarState } = useSnackBar();
   const [menuDetail, setMenuDetail] = useState<IProduct>();
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  const { cartItems, setCartItems, setCartCount } = useCart();
 
   const { state } = useLocation();
 
@@ -40,6 +49,18 @@ function ProductDetail() {
   const isFromSnacks = state && state.previousPath === paths.SNACKS;
 
   const isBelowMediumSize = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    if (
+      menuDetail &&
+      menuDetail.itemSizeWithPrice &&
+      menuDetail.itemSizeWithPrice.length > 0
+    ) {
+      const firstItem = menuDetail.itemSizeWithPrice[0];
+      setSelectedSize(firstItem.size);
+      setSelectedPrice(firstItem.price);
+    }
+  }, [menuDetail]);
 
   const fetchProductDetail = async () => {
     try {
@@ -51,6 +72,55 @@ function ProductDetail() {
         updateSnackBarState(true, error.response.data.message, "error");
       }
     }
+  };
+
+  const handleAddToCart = () => {
+    if (!menuDetail || !isFromSnacks) return;
+
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.id === productId && item.size === selectedSize
+    );
+
+    // Ensure productId is defined or handle undefined case
+    if (!productId) {
+      updateSnackBarState(true, "Product ID is missing", "error");
+      return;
+    }
+
+    let updatedItems = [...cartItems];
+
+    if (existingItemIndex > -1) {
+      // Update existing item
+      const existingItem = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = {
+        ...existingItem,
+        quantity: existingItem.quantity + 1,
+
+        totalPrice: (existingItem.quantity + 1) * existingItem.price,
+      };
+    } else {
+     
+      const newCartItem: CartItem = {
+        id: productId, 
+        title: menuDetail.title,
+        size: selectedSize,
+        price: selectedPrice,
+        imageUrl: menuDetail.images[0] || "",
+        quantity: 1,
+        totalPrice: selectedPrice,
+      };
+      updatedItems = [...updatedItems, newCartItem];
+      updateSnackBarState(true, "Item added to cart", "success");
+    }
+
+    // Update cart items
+    setCartItems(updatedItems);
+
+    // Update cart count
+    setCartCount(updatedItems.length);
+
+    // Show confirmation
+    
   };
 
   useEffect(() => {
@@ -237,7 +307,7 @@ function ProductDetail() {
                                     marginTop: "8px",
                                   }}
                                 >
-                                  Size(s) with Prices:
+                                  {/* Size(s) with Prices: */}
                                 </Typography>
                                 {menuDetail.itemSizeWithPrice.map(
                                   (item, index) => (
@@ -264,42 +334,36 @@ function ProductDetail() {
                                 )}
                               </>
                             )}
-                          {isFromSnacks && (
-                            <>
-                              {menuDetail.itemSizeWithPrice &&
-                                menuDetail.itemSizeWithPrice.length > 0 && (
-                                  <>
-                                    <Typography variant="h6">
-                                      Size(s) with Prices:
-                                    </Typography>
-                                    {menuDetail.itemSizeWithPrice.map(
-                                      (item, index) => (
-                                        <div key={index}>
-                                          <Typography
-                                            sx={{
-                                              fontSize: "18px",
-                                              fontWeight: "500",
-                                              margin: "8px 0",
-                                            }}
-                                          >
-                                            Size: {item.size}
-                                          </Typography>
-                                          <Typography
-                                            sx={{
-                                              fontSize: "18px",
-                                              fontWeight: "500",
-                                              margin: "8px 0",
-                                            }}
-                                          >
-                                            Price: ${item.price}
-                                          </Typography>
-                                        </div>
-                                      )
-                                    )}
-                                  </>
-                                )}
-                            </>
-                          )}
+                          {isFromSnacks &&
+                            menuDetail.itemSizeWithPrice &&
+                            menuDetail.itemSizeWithPrice.length > 0 && (
+                              <FormControl fullWidth>
+                                <InputLabel id="size-price-label">
+                                  Size(s) with Prices
+                                </InputLabel>
+                                <Select
+                                  labelId="size-price-label"
+                                  defaultValue=""
+                                  label="Size(s) with Prices"
+                                >
+                                  {menuDetail.itemSizeWithPrice.map(
+                                    (item, index) => (
+                                      <MenuItem key={index} value={item.size}>
+                                        <Typography
+                                          sx={{
+                                            fontSize: "16px",
+                                            fontWeight: "400",
+                                          }}
+                                        >
+                                          Size: {item.size} - Price: $
+                                          {item.price}
+                                        </Typography>
+                                      </MenuItem>
+                                    )
+                                  )}
+                                </Select>
+                              </FormControl>
+                            )}
                         </>
                       )}
                     </>
@@ -323,24 +387,53 @@ function ProductDetail() {
                             >
                               Size(s) with Prices:
                             </Typography>
-                            {menuDetail.itemSizeWithPrice.map((item, index) => (
-                              <div key={index}>
-                                <Typography
-                                  key={item._id}
-                                  sx={{ color: "#038265", fontWeight: 500 }}
-                                >
-                                  <span
-                                    style={{
-                                      color: "#038265",
-                                      fontWeight: 500,
-                                    }}
-                                  >
-                                    {item.size}-
-                                  </span>
-                                  &nbsp;${item.price}
-                                </Typography>
-                              </div>
-                            ))}
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="size-price-label"
+                                defaultValue={
+                                  menuDetail.itemSizeWithPrice[0]?.size
+                                }
+                                sx={{
+                                  height: "35px", // Adjust height here
+                                  width: "60%", // Ensure it takes the full width of FormControl
+                                }}
+                                onChange={(e) => {
+                                  const selectedItem =
+                                    menuDetail.itemSizeWithPrice.find(
+                                      (item) => item.size === e.target.value
+                                    );
+
+                                  if (selectedItem) {
+                                    console.log("Selected Item:", selectedItem);
+                                    setSelectedSize(selectedItem.size);
+                                    setSelectedPrice(selectedItem.price);
+                                  } else {
+                                    console.error(
+                                      "Selected item not found, setting to first item"
+                                    );
+                                    const firstItem =
+                                      menuDetail.itemSizeWithPrice[0];
+                                    setSelectedSize(firstItem.size);
+                                    setSelectedPrice(firstItem.price);
+                                  }
+                                }}
+                              >
+                                {menuDetail.itemSizeWithPrice.map(
+                                  (item, index) => (
+                                    <MenuItem key={index} value={item.size}>
+                                      <Typography
+                                        sx={{
+                                          fontSize: "16px",
+                                          fontWeight: "400",
+                                        }}
+                                      >
+                                        Size: {item.size} - Price: ${item.price}
+                                      </Typography>
+                                    </MenuItem>
+                                  )
+                                )}
+                              </Select>
+                            </FormControl>
                           </>
                         )}
                     </>
@@ -348,6 +441,54 @@ function ProductDetail() {
                 </>
               )}
             </>
+            <Box>
+              {menuDetail?.availability === "true" ? (
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#038265",
+                    color: "#fff",
+                    width: "30%",
+                    mt: "10px",
+                    borderRadius: "10px",
+                    height: "35px",
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "#025e46",
+                    },
+                  }}
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  // disabled
+                  sx={{
+                    backgroundColor: "#ff6666",
+                    color: "#fff",
+                    width: "30%",
+                    borderRadius: "10px",
+                    mt: "10px",
+                    height: "35px",
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "#ff6666",
+                    },
+                  }}
+                  // onClick={() =>
+                  //   updateSnackBarState(
+                  //     true,
+                  //     "The product is not available",
+                  //     "error"
+                  //   )
+                  // }
+                >
+                  Sold Out
+                </Button>
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Box>

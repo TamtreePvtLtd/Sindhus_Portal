@@ -14,6 +14,11 @@ import {
   ISpecials,
   IMenuDatastype,
   menuWithProduct,
+  ICoupenResponse,
+  DistanceBasedDeliveryCharge,
+  PaymentData,
+  ShipmentPayload,
+  CreateShipmentTransactionPayload,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -242,7 +247,7 @@ const getAllDailyMenus = async () => {
 const getMenuType3 = async (menuId?: string) => {
   try {
     const response = await httpWithoutCredentials.get<menuWithProduct>(
-      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ''}`
+      `/menu/getMenuType3?${menuId ? `menuId=${menuId}` : ""}`
     );
 
     console.log(response.data);
@@ -253,7 +258,130 @@ const getMenuType3 = async (menuId?: string) => {
   }
 };
 
+const getAllCoupens = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<ICoupenResponse>(
+      "/coupen/getAllCoupens"
+    );
+
+    return response.data;
+  } catch (error) {
+    var message = (error as Error).message;
+    throw new Error(message);
+  }
+};
+const getDistanceBasedDeliveryCharge = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<
+      DistanceBasedDeliveryCharge[]
+    >("/distance/getAllDistances");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getNearestGreaterDistance = async (distance: string) => {
+  try {
+    const response =
+      await httpWithoutCredentials.get<DistanceBasedDeliveryCharge>(
+        `/distance/getNearestDistance/${distance}`
+      );
+    return response.data; // Extract only the relevant data from the response
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getLastTransaction = async () => {
+  try {
+    const response = await httpWithoutCredentials.get<string>(
+      `/payment/lasttransaction`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createCartItem = async (formData) => {
+  try {
+    const response = await httpWithoutCredentials.post<string[]>(
+      "/cart/cartItem",
+      formData
+    );
+    console.log("response", response.data);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createPaymentIntent = async (formData) => {
+  try {
+    const response: any = await httpWithoutCredentials.post(
+      "/payment/createPaymentIntent",
+      formData
+    );
+
+    console.log("response", response.data);
+
+    return {
+      clientSecret: response.data.clientSecret,
+      message: response.data.message,
+      orderNumber: response.data.orderNumber,
+    };
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    throw error;
+  }
+};
+
+const createShipment = async (shipmentPayload: ShipmentPayload) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/createShipment",
+      shipmentPayload
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createShipmentTransaction = async (
+  payload: CreateShipmentTransactionPayload
+) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/createTransaction",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const validateAddressApi = async (payload: ShipmentPayload) => {
+  try {
+    const response = await httpWithoutCredentials.post(
+      "/shipment/validateAddress",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
+  createCartItem,
+  getLastTransaction,
+  createPaymentIntent,
+  getNearestGreaterDistance,
+  getDistanceBasedDeliveryCharge,
   getAllMenus,
   fetchProductById,
   cateringfetchProductData,
@@ -270,4 +398,8 @@ export {
   getAllSpecials,
   getMenuType3,
   getAllMenusInCatering,
+  getAllCoupens,
+  createShipment,
+  createShipmentTransaction,
+  validateAddressApi,
 };
