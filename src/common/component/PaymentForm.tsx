@@ -949,11 +949,13 @@ function PaymentDialog({
               loading ||
               !isValid ||
               addressError !== "" ||
-              (deliveryOptionValue === "Delivery" && !selectedRate) ||
-              !cardComplete
+              !cardComplete ||
+              (deliveryOptionValue === "Delivery" &&
+                (!selectedAddress || !selectedRate))
             }
           >
             {loading ? "Processing..." : "Confirm Payment"}
+                   
           </Button>
         </DialogActions>
       </Dialog>
