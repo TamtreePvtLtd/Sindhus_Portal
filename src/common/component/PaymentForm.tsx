@@ -65,6 +65,7 @@ interface PaymentFormData {
   notes?: string;
   rateObjId: string;
   carrierAccount: string;
+  shippingAmount: string;
 }
 
 interface AddressFormData {
@@ -293,7 +294,6 @@ function PaymentDialog({
     );
     if (selectedRateData) {
       /* +2 added with rate as customer told */
-
       const amount = (Number(selectedRateData.amount) || 0) + 2;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
@@ -391,7 +391,9 @@ function PaymentDialog({
         ? Number(selectedShippingAmount) || 0
         : 0
       : 0;
+
   const orderTotal = subtotal + shippingCost;
+  const finalAmount = Math.round(orderTotal * 100);
   const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
 
   const onSubmit = async (data: PaymentFormData) => {
@@ -419,10 +421,10 @@ function PaymentDialog({
         lastName: capitalizeFirstLetter(data.lastName),
       };
 
-      const finalAmount =
-        deliveryOptionValue === "Delivery"
-          ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
-          : Math.round(parseFloat(amount) * 100);
+      // const finalAmount =
+      //   deliveryOptionValue === "Delivery"
+      //     ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
+      //     : Math.round(parseFloat(amount) * 100);
 
       const paymentData = {
         ...capitalizedData,
@@ -439,7 +441,9 @@ function PaymentDialog({
         totalWithCoupon: totalAmountWithCoupon,
         addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
         notes: data.notes,
+        shippingAmount: deliveryOptionValue === "Delivery" ? shippingCost : 0, // Add shipping amount here
       };
+
       const { clientSecret, orderNumber } =
         await createPaymentMutation.mutateAsync(paymentData);
 
