@@ -25,6 +25,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Link as MUILink,
 } from "@mui/material";
 
 function Footer() {
@@ -65,7 +66,7 @@ function Footer() {
         className={`${classes.footerContainer} ${classes.innerBox}`}
       >
         <Box className={classes.overlay}></Box>
-        <Container >
+        <Container>
           <Fade top>
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
               <Typography variant="h4" fontWeight={400}>
@@ -84,7 +85,7 @@ function Footer() {
                 justifyContent: "center",
               }}
             >
-              <Grid item lg={3} xs={12} className={classes.commonGridStyle} >
+              <Grid item lg={3} xs={12} className={classes.commonGridStyle}>
                 <Fade left>
                   <Box sx={{ my: 1 }}>
                     <LocationOnIcon
@@ -195,7 +196,11 @@ function Footer() {
                       sx={{ color: theme.palette.secondary.main }}
                     ></PhoneIcon>
                     <Typography variant="h6">Call us</Typography>
-                    <Typography variant="body2">+1 940-279-2536</Typography>
+                    <Typography variant="body2">
+                      <MUILink href="tel:+12347463487" sx={{ color: "white" }}>
+                        +1-234-746-3487
+                      </MUILink>
+                    </Typography>
                     <Box mt={1}>
                       <Link
                         to={`${import.meta.env.VITE_SINDHUS_FACEBOOK}`}
