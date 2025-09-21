@@ -35,11 +35,10 @@ const ProductDetailComponent = lazy(
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(
-  "pk_live_51Q88lZIcHr1DaG9ME7cpqAHOL8U7bhmXs9o2dkVEcRuZwzdNRGgx5bctv76z5BrSWzu5SVG9TTKV1bl0kPPVthEy00o36pQFBn"
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
+
 // const stripePromise = loadStripe(
-//   "pk_test_51Q0H2607vIgVGrvrBHu66vPAra6sQeU9QMsjjb5pqJ3FmwJQvicMNirFWqWh1OtGSvgKr0KkJxeCARiB4q9Op2yH00S1xWaW3H"
+//   import.meta.env.VITE_STRIPE_KEY
 // );
 
 function App() {
