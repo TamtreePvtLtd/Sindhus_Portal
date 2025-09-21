@@ -65,6 +65,7 @@ interface PaymentFormData {
   notes?: string;
   rateObjId: string;
   carrierAccount: string;
+  shippingAmount: string;
 }
 
 interface AddressFormData {
@@ -222,6 +223,8 @@ function PaymentDialog({
   const { data: lasttransaction, refetch } = useGetLastTransaction();
   const cartItemCreateMutation = useCreateCartItem();
 
+  
+
   useEffect(() => {
     if (cartItems.length > 0) {
       var totalWeight = CalculateTotalWeight(cartItems);
@@ -293,7 +296,6 @@ function PaymentDialog({
     );
     if (selectedRateData) {
       /* +2 added with rate as customer told */
-
       const amount = (Number(selectedRateData.amount) || 0) + 2;
       setSelectedShippingAmount(amount);
       setDeliveryCharge(amount);
@@ -384,14 +386,16 @@ function PaymentDialog({
     validateAddress();
   };
 
-  const subtotal = parseFloat(amount);
-  const shippingCost =
-    deliveryOptionValue === "Delivery"
-      ? selectedRate
-        ? Number(selectedShippingAmount) || 0
-        : 0
-      : 0;
-  const orderTotal = subtotal + shippingCost;
+ const subtotal = parseFloat(amount);
+ const shippingCost =
+   deliveryOptionValue === "Delivery"
+     ? selectedRate
+       ? Number(selectedShippingAmount) || 0
+       : 0
+     : 0;
+
+ const orderTotal = subtotal + shippingCost;
+ const finalAmount = Math.round(orderTotal * 100);
   const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
 
   const onSubmit = async (data: PaymentFormData) => {
@@ -419,10 +423,10 @@ function PaymentDialog({
         lastName: capitalizeFirstLetter(data.lastName),
       };
 
-      const finalAmount =
-        deliveryOptionValue === "Delivery"
-          ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
-          : Math.round(parseFloat(amount) * 100);
+      // const finalAmount =
+      //   deliveryOptionValue === "Delivery"
+      //     ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
+      //     : Math.round(parseFloat(amount) * 100);
 
       const paymentData = {
         ...capitalizedData,
@@ -439,7 +443,9 @@ function PaymentDialog({
         totalWithCoupon: totalAmountWithCoupon,
         addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
         notes: data.notes,
+        shippingAmount: deliveryOptionValue === "Delivery" ? shippingCost : 0, // Add shipping amount here
       };
+
       const { clientSecret, orderNumber } =
         await createPaymentMutation.mutateAsync(paymentData);
 
@@ -908,6 +914,7 @@ function PaymentDialog({
                         : "Free"}
                     </Typography>
                   </Box>
+
                   <Divider sx={{ my: 1 }} />
                   <Box
                     sx={{
@@ -923,6 +930,7 @@ function PaymentDialog({
                       ${orderTotal.toFixed(2)}
                     </Typography>
                   </Box>
+                 
                 </Box>
               </Box>
             </Grid>
@@ -955,7 +963,6 @@ function PaymentDialog({
             }
           >
             {loading ? "Processing..." : "Confirm Payment"}
-                   
           </Button>
         </DialogActions>
       </Dialog>
