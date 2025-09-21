@@ -25,6 +25,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Link as MUILink,
 } from "@mui/material";
 
 function Footer() {
@@ -195,7 +196,11 @@ function Footer() {
                       sx={{ color: theme.palette.secondary.main }}
                     ></PhoneIcon>
                     <Typography variant="h6">Call us</Typography>
-                    <Typography variant="body2">+1-234-746-3487</Typography>
+                    <Typography variant="body2">
+                      <MUILink href="tel:+12347463487" sx={{ color: "white" }}>
+                        +1-234-746-3487
+                      </MUILink>
+                    </Typography>
                     <Box mt={1}>
                       <Link
                         to={`${import.meta.env.VITE_SINDHUS_FACEBOOK}`}

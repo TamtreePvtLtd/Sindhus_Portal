@@ -351,6 +351,7 @@ import {
   Typography,
   Badge,
   useMediaQuery,
+  Link as MUILink,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
@@ -465,9 +466,12 @@ function NavBar() {
                       color: "black",
                       marginLeft: "-25px",
                       marginBottom: "3px",
+                      cursor: "pointer",
                     }}
                   >
-                    Call us:+1-234-746-3487
+                    <MUILink href="tel:+12347463487" sx={{ color: "inherit" }}>
+                      Call us: +1-234-746-3487
+                    </MUILink>
                   </Typography>
                 </Box>
               )}
@@ -487,9 +491,12 @@ function NavBar() {
                   sx={{
                     fontSize: "16px",
                     fontWeight: 500,
+                    ml: 1,
                   }}
                 >
-                  &nbsp;Call us : +1-234-746-3487
+                  <MUILink href="tel:+12347463487">
+                    Call us: +1-234-746-3487
+                  </MUILink>
                 </Typography>
               </Box>
             )}
