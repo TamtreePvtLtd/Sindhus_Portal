@@ -181,7 +181,7 @@
 //                       marginBottom: "3px",
 //                     }}
 //                   >
-//                     Call us:+1 940-279-2536
+//                     Call us:+1-234-746-3487
 //                   </Typography>
 //                 </Box>
 //               )}
@@ -203,7 +203,7 @@
 //                     fontWeight: 500,
 //                   }}
 //                 >
-//                   &nbsp;Call us : +1 940-279-2536
+//                   &nbsp;Call us : +1-234-746-3487
 //                 </Typography>
 //               </Box>
 //             )}
@@ -467,7 +467,7 @@ function NavBar() {
                       marginBottom: "3px",
                     }}
                   >
-                    Call us:+1 940-279-2536
+                    Call us:+1-234-746-3487
                   </Typography>
                 </Box>
               )}
@@ -489,7 +489,7 @@ function NavBar() {
                     fontWeight: 500,
                   }}
                 >
-                  &nbsp;Call us : +1 940-279-2536
+                  &nbsp;Call us : +1-234-746-3487
                 </Typography>
               </Box>
             )}
@@ -519,7 +519,7 @@ function NavBar() {
                     color: "black",
                     marginRight: "6px",
                     fontSize: "40px",
-                    cursor:"pointer"
+                    cursor: "pointer",
                   }}
                   onClick={toggleDrawer}
                 />

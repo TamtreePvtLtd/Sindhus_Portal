@@ -762,7 +762,7 @@ function PaymentDialog({
                         label={
                           deliveryOptionValue === "Pickup"
                             ? "Pickup Date"
-                            : "Delivery Date"
+                            : "Expected Delivery Date"
                         }
                         {...field}
                         minDate={addDays(new Date(), 5)}
@@ -892,22 +892,22 @@ function PaymentDialog({
                       ${subtotal.toFixed(2)}
                     </Typography>
                   </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mb: 1,
-                    }}
-                  >
-                    <Typography variant="body2">Shipping</Typography>
-                    <Typography variant="body2">
-                      {deliveryOptionValue === "Delivery"
-                        ? selectedRate
+                  {deliveryOptionValue === "Delivery" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography variant="body2">Shipping</Typography>
+                      <Typography variant="body2">
+                        {selectedRate
                           ? `$${selectedShippingAmount.toFixed(2)}`
-                          : "Select shipping option"
-                        : "Free"}
-                    </Typography>
-                  </Box>
+                          : "Select shipping option"}
+                      </Typography>
+                    </Box>
+                  )}
                   <Divider sx={{ my: 1 }} />
                   <Box
                     sx={{
@@ -955,7 +955,6 @@ function PaymentDialog({
             }
           >
             {loading ? "Processing..." : "Confirm Payment"}
-                   
           </Button>
         </DialogActions>
       </Dialog>
