@@ -25,46 +25,29 @@ function SnacksPage() {
     setSelectedSubMenuId(subMenuId);
   };
 
-const sliderSettings = {
-  dots: true,
-  // infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 3000,
+  const sliderSettings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
   arrows:false
-};
+  };
 
-const bannerImages = [
-  {
-    url: "assets/images/banner1_19_09_25.jpg",
-    content: "",
-    description: "",
-  },
-  {
-    url: "assets/images/banner2_19_09_25.jpg",
-    content: "",
-    description: "",
-  },
-  // {
-  //   url: "assets/images/mixture-newbanner.jpg",
-  //   content: "",
-  //   description:
-  //     "",
-  // },
-  // {
-  //   url: "assets/images/mysorpak-newbanner.jpg",
-  //   content: "",
-  //   description: "",
-  // },
-  // {
-  //   url: "assets/images/ribonpakkoda-newbanner.jpg",
-  //   content: "",
-  //   description: "",
-  // },
-];
+  const bannerImages = [
+    {
+      url: "assets/images/Sindhu's-Diwali-MainBanner.png",
+      content: "",
+      description: "",
+    },
+    {
+      url: "assets/images/Sindhu's-Diwali-Slide-Banner .png",
+      content: "",
+      description: "",
+    },
 
+  ];
 
   return (
     <>
@@ -80,11 +63,20 @@ const bannerImages = [
         <Slider {...sliderSettings}>
           {bannerImages.map((banner, index) => (
             <Box key={index} position="relative">
-              <img
-                src={banner.url}
-                alt={banner.content}
-                style={{ width: "100%", height: "auto" }}
-              />
+              <Box key={index} position="relative">
+                <Box
+                  component="img"
+                  src={banner.url}
+                  alt={banner.content}
+                  sx={{
+                    width: "100%",
+                    height:"auto",
+                    objectFit: "contain",
+                    minHeight: "200px",
+                    maxHeight:"auto"
+                  }}
+                />
+              </Box>
               <Box
                 position="absolute"
                 bottom="0"
