@@ -225,9 +225,11 @@ function PaymentDialog({
 
   useEffect(() => {
     if (cartItems.length > 0) {
-      var totalWeight = CalculateTotalWeight(cartItems);
-      var _parcelObj = getParcelObjectByWeight(totalWeight);
-      setParcelObj({ ..._parcelObj });
+      if (deliveryOptionValue === "Delivery") {
+        var totalWeight = CalculateTotalWeight(cartItems);
+        var _parcelObj = getParcelObjectByWeight(totalWeight);
+        setParcelObj({ ..._parcelObj });
+      }
     }
   }, [cartItems]);
 
