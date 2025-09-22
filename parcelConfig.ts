@@ -10,14 +10,18 @@ const ParcelRules = [
     maxWeight: 15,
     size: { length: "18", width: "18", height: "16" },
   },
-  // add more rules as needed
+  {
+    maxWeight: 20,
+    size: { length: "24", width: "18", height: "18" },
+  },
 ];
 
 export function getParcelObjectByWeight(weight: number) {
-  const rule = ParcelRules.find((r) => weight <= r.maxWeight);
+  var rule = ParcelRules.find((r) => weight <= r.maxWeight);
 
+  // If no rule found (weight > all maxWeight), use the last rule
   if (!rule) {
-    throw new Error(`No parcel configuration found for weight: ${weight} lbs`);
+    rule = ParcelRules.find((r) => r.maxWeight == 20)!;
   }
 
   return {
