@@ -331,7 +331,7 @@ export interface ShipmentPayload extends ParsedAddress {
   name: string;
   email?: string;
   phone: string;
-  parcel: Parcel;
+  parcel?: Parcel;
 }
 
 export interface CreateShipmentTransactionPayload {
