@@ -209,7 +209,6 @@ function PaymentDialog({
     setDeliveryCharge(charge);
   };
 
-  const [parcelObj, setParcelObj] = useState<Parcel | null>(null);
   const [selectedRate, setSelectedRate] =
     useState<CreateShipmentTransactionPayload | null>(null);
   const [selectedShippingAmount, setSelectedShippingAmount] =
@@ -224,21 +223,13 @@ function PaymentDialog({
   const cartItemCreateMutation = useCreateCartItem();
 
   useEffect(() => {
-    if (cartItems.length > 0) {
-      if (deliveryOptionValue === "Delivery") {
-        var totalWeight = CalculateTotalWeight(cartItems);
-        var _parcelObj = getParcelObjectByWeight(totalWeight);
-        setParcelObj({ ..._parcelObj });
-      }
-    }
-  }, [cartItems]);
-
-  useEffect(() => {
     setOrderNumber(lasttransaction);
   }, [lasttransaction]);
 
   useEffect(() => {
-    if (deliveryOptionValue === "Pickup") setAddressError("");
+    if (deliveryOptionValue === "Pickup") {
+      setAddressError("");
+    }
   }, [deliveryOptionValue]);
 
   const handleStripeErrors = (error: any) => {
@@ -503,7 +494,6 @@ function PaymentDialog({
         name: getValues("firstName"),
         email: getValues("email"),
         phone: getValues("phoneNumber"),
-        parcel: parcelObj,
       } as ShipmentPayload;
 
       try {
@@ -514,12 +504,17 @@ function PaymentDialog({
         if (addressValidationResponse?.validationResults?.isValid) {
           setAddressValidationErrorMsg(null);
 
+          var totalWeight = CalculateTotalWeight(cartItems);
+          var _parcelObj = getParcelObjectByWeight(totalWeight);
+
+          console.log("_parcelObj", _parcelObj);
+
           const shipmentPayload = {
             ...selectedAddress,
             name: getValues("firstName"),
             email: getValues("email"),
             phone: getValues("phoneNumber"),
-            parcel: parcelObj,
+            parcel: _parcelObj,
           } as ShipmentPayload;
 
           var shipmentResponse: any = await createShipment(shipmentPayload);
