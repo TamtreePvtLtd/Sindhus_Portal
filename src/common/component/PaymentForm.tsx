@@ -414,10 +414,20 @@ function PaymentDialog({
         lastName: capitalizeFirstLetter(data.lastName),
       };
 
-      // const finalAmount =
-      //   deliveryOptionValue === "Delivery"
-      //     ? Math.round((parseFloat(amount) + (deliveryCharge || 0)) * 100)
-      //     : Math.round(parseFloat(amount) * 100);
+      // Calculate the final order total (including tax and shipping)
+      const discountedSubtotal = totalAmountWithCoupon; // $37.76
+      const shippingCost =
+        deliveryOptionValue === "Delivery"
+          ? selectedRate
+            ? Number(selectedShippingAmount) || 0
+            : 0
+          : 0;
+
+      const taxAmount = discountedSubtotal * 0.0825;
+
+      const orderTotal = discountedSubtotal + taxAmount + shippingCost;
+
+      const finalAmount = Math.round(orderTotal * 100);
 
       const paymentData = {
         ...capitalizedData,
@@ -432,9 +442,10 @@ function PaymentDialog({
         couponName: couponName,
         totalWithoutCoupon: totalWithoutCoupon,
         totalWithCoupon: totalAmountWithCoupon,
+        taxAmount: taxAmount,
         addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
         notes: data.notes,
-        shippingAmount: deliveryOptionValue === "Delivery" ? shippingCost : 0, // Add shipping amount here
+        shippingAmount: deliveryOptionValue === "Delivery" ? shippingCost : 0,
       };
 
       const { clientSecret, orderNumber } =
@@ -485,7 +496,6 @@ function PaymentDialog({
       setLoading(false);
     }
   };
-
   const validateAddress = async () => {
     if (selectedAddress) {
       setSelectedRate(null);
