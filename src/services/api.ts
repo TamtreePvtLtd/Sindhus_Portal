@@ -19,6 +19,7 @@ import {
   PaymentData,
   ShipmentPayload,
   CreateShipmentTransactionPayload,
+  CartItemRequest,
 } from "./../interface/types";
 import { httpWithoutCredentials } from "./http";
 
@@ -372,6 +373,23 @@ const validateAddressApi = async (payload: ShipmentPayload) => {
     );
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const getCartProducts = async (items: CartItemRequest[]) => {
+  try {
+    const response = await httpWithoutCredentials.get(
+      "/product/getCartProducts",
+      {
+        params: {
+          items: JSON.stringify(items),
+        },
+      }
+    );
+    return response.data; // Expected array of products
+  } catch (error) {
+    console.error("Error fetching cart products:", error);
     throw error;
   }
 };

@@ -347,3 +347,8 @@ export interface Parcel {
   weight: string;
   massUnit: "lb";
 }
+export interface CartItemRequest {
+  id: string;
+  size: string;
+  quantity: number;
+}

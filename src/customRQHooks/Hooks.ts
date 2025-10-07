@@ -18,8 +18,10 @@ import {
   getLastTransaction,
   createCartItem,
   createShipment,
+  getCartProducts,
 } from "../services/api";
 import { queryClient } from "../App";
+import { CartItemRequest } from "../interface/types";
 
 
 export const useGetAllMenus = () => {
@@ -178,5 +180,17 @@ export const useCreateCartItem = () => {
     onError: (error) => {
       console.log(error);
     },
+  });
+};
+
+export const useGetCartProducts = (
+  items: CartItemRequest[],
+  enabled: boolean = true
+) => {
+  return useQuery({
+    queryKey: ["getCartProducts", items],
+    queryFn: () => getCartProducts(items),
+    enabled: enabled && items.length > 0, // Only fetch when items exist
+    refetchOnWindowFocus: false,
   });
 };
