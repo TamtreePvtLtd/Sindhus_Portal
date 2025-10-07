@@ -316,6 +316,7 @@ export interface PaymentData {
   couponName: string;
   totalWithoutCoupon: string;
   addressURL: string;
+  taxAmount:number;
   __v: number;
 }
 
