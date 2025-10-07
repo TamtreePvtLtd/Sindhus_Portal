@@ -86,7 +86,7 @@ function SnacksMenuItem({
                 textDecorationStyle: "solid",
                 display: "inline-block",
                 fontFamily: "revert-layer",
-                fontSize: "1.2rem",
+                fontSize: { xs: "0.9rem", sm: "1.2rem" },
                 textTransform: "uppercase",
                 lineHeight: "1",
                 cursor: "pointer",

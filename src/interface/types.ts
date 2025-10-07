@@ -316,6 +316,7 @@ export interface PaymentData {
   couponName: string;
   totalWithoutCoupon: string;
   addressURL: string;
+  taxAmount:number;
   __v: number;
 }
 
@@ -346,4 +347,9 @@ export interface Parcel {
   distanceUnit: "in" | "cm"; // restrict to allowed units
   weight: string;
   massUnit: "lb";
+}
+export interface CartItemRequest {
+  id: string;
+  size: string;
+  quantity: number;
 }

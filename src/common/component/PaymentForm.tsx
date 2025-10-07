@@ -66,6 +66,7 @@ interface PaymentFormData {
   rateObjId: string;
   carrierAccount: string;
   shippingAmount: string;
+  taxAmount: number;
 }
 
 interface AddressFormData {
@@ -232,6 +233,22 @@ function PaymentDialog({
     }
   }, [deliveryOptionValue]);
 
+  // Calculate tax amount (8.25% of the discounted subtotal)
+  const taxAmount = totalAmountWithCoupon * 0.0825;
+
+  const subtotal = parseFloat(amount);
+  const shippingCost =
+    deliveryOptionValue === "Delivery"
+      ? selectedRate
+        ? Number(selectedShippingAmount) || 0
+        : 0
+      : 0;
+
+  // Calculate the final order total (including tax and shipping)
+  const orderTotal = totalAmountWithCoupon + taxAmount + shippingCost;
+  const finalAmount = Math.round(orderTotal * 100);
+  const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
+
   const handleStripeErrors = (error: any) => {
     const errorMessages: string[] = [];
     const errorCodeMap: Record<string, string> = {
@@ -377,18 +394,6 @@ function PaymentDialog({
     validateAddress();
   };
 
-  const subtotal = parseFloat(amount);
-  const shippingCost =
-    deliveryOptionValue === "Delivery"
-      ? selectedRate
-        ? Number(selectedShippingAmount) || 0
-        : 0
-      : 0;
-
-  const orderTotal = subtotal + shippingCost;
-  const finalAmount = Math.round(orderTotal * 100);
-  const savedAmount = totalWithoutCoupon - totalAmountWithCoupon;
-
   const onSubmit = async (data: PaymentFormData) => {
     if (!stripe || !elements || addressError !== "") return;
     if (deliveryOptionValue === "Delivery" && !address) {
@@ -414,25 +419,10 @@ function PaymentDialog({
         lastName: capitalizeFirstLetter(data.lastName),
       };
 
-      // Calculate the final order total (including tax and shipping)
-      const discountedSubtotal = totalAmountWithCoupon; // $37.76
-      const shippingCost =
-        deliveryOptionValue === "Delivery"
-          ? selectedRate
-            ? Number(selectedShippingAmount) || 0
-            : 0
-          : 0;
-
-      const taxAmount = discountedSubtotal * 0.0825;
-
-      const orderTotal = discountedSubtotal + taxAmount + shippingCost;
-
-      const finalAmount = Math.round(orderTotal * 100);
-
       const paymentData = {
         ...capitalizedData,
         address: deliveryOptionValue === "Pickup" ? "" : address,
-        amount: finalAmount,
+        amount: finalAmount, // This is the order total in cents ($23.79 * 100 = 2379)
         shippingOption: selectedRateData,
         rateObjId: selectedRate?.rateObjId || "",
         carrierAccount: selectedRate?.carrierAccount || "",
@@ -442,7 +432,7 @@ function PaymentDialog({
         couponName: couponName,
         totalWithoutCoupon: totalWithoutCoupon,
         totalWithCoupon: totalAmountWithCoupon,
-        taxAmount: taxAmount,
+        taxAmount: subtotal, // Store tax amount separately in DB for record keeping
         addressURL: deliveryOptionValue === "Pickup" ? "" : addressURL,
         notes: data.notes,
         shippingAmount: deliveryOptionValue === "Delivery" ? shippingCost : 0,
@@ -566,6 +556,7 @@ function PaymentDialog({
         }}
       >
         <DialogTitle sx={{ paddingBottom: "5px" }}>Checkout</DialogTitle>
+        
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -711,59 +702,6 @@ function PaymentDialog({
                     )}
                   </>
                 )}
-                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
-                {deliveryOptionValue === "Delivery" && (
-                  <Controller
-                    name="postalCode"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Postal Code"
-                        error={!!errors.postalCode}
-                        helperText={errors.postalCode?.message}
-                        fullWidth
-                        required
-                      />
-                    )}
-                  />
-                )} */}
-                {/* {address && (
-                      <Box
-                        sx={{ p: 1, border: "1px solid #ccc", borderRadius: 1 }}
-                      >
-                        <PlacesAutocomplete
-                          orderAmountWithTax={{ orderAmountWithTax: amount }}
-                          setAddressError={setAddressError}
-                          setAddress={setAddress}
-                          setAddressURL={setAddressURL}
-                          setDeliveryCharge={handleDeliveryChargeUpdate}
-                          setIsPaymentDisabled={setIsPaymentDisabled}
-                          onAddressSelected={(address) => {
-                            setSelectedAddress({ ...address } as ParsedAddress);
-                          }}
-                        />
-                      </Box>
-                    )} */}
-                {/* </> */}
-                {/* )} */}
-                {/* {addressError && <p style={{ color: "red" }}>{addressError}</p>}
-                {deliveryOptionValue === "Delivery" && (
-                  <Controller
-                    name="postalCode"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Postal Code"
-                        error={!!errors.postalCode}
-                        helperText={errors.postalCode?.message}
-                        fullWidth
-                        required
-                      />
-                    )}
-                  />
-                )} */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Controller
                     name="deliveryDate"
@@ -919,6 +857,7 @@ function PaymentDialog({
                       </Typography>
                     </Box>
                   )}
+                  
                   <Divider sx={{ my: 1 }} />
                   <Box
                     sx={{
