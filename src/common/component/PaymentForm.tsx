@@ -556,7 +556,7 @@ function PaymentDialog({
         }}
       >
         <DialogTitle sx={{ paddingBottom: "5px" }}>Checkout</DialogTitle>
-        
+
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -714,7 +714,7 @@ function PaymentDialog({
                             : "Expected Delivery Date"
                         }
                         {...field}
-                        minDate={addDays(new Date(), 5)}
+                        minDate={addDays(new Date(), 1)}
                         onChange={(date) => field.onChange(date)}
                         renderInput={(params) => (
                           <TextField
@@ -857,7 +857,7 @@ function PaymentDialog({
                       </Typography>
                     </Box>
                   )}
-                  
+
                   <Divider sx={{ my: 1 }} />
                   <Box
                     sx={{
