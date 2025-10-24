@@ -550,9 +550,9 @@ function PaymentDialog({
         maxWidth="lg"
         fullWidth
         PaperProps={{
-          sx: {
-            maxHeight: "100vh",
-          },
+          // sx: {
+          //   maxHeight: "100vh",
+          // },
         }}
       >
         <DialogTitle sx={{ paddingBottom: "5px" }}>Checkout</DialogTitle>
@@ -714,7 +714,7 @@ function PaymentDialog({
                             : "Expected Delivery Date"
                         }
                         {...field}
-                        minDate={addDays(new Date(), 1)}
+                        minDate={addDays(new Date(), 4)}
                         onChange={(date) => field.onChange(date)}
                         renderInput={(params) => (
                           <TextField
