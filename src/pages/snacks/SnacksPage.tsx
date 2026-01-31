@@ -35,19 +35,34 @@ function SnacksPage() {
   arrows:false
   };
 
-  const bannerImages = [
-    {
-      url: "assets/images/Sindhu's-Diwali-MainBanner.png",
-      content: "",
-      description: "",
-    },
-    {
-      url: "assets/images/Sindhu's-Diwali-Slide-Banner .png",
-      content: "",
-      description: "",
-    },
-
-  ];
+ const bannerImages = [
+   {
+     url: "assets/snacksPage-newBanner.jpg",
+     content: "Snacks",
+     description:
+       "Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!",
+   },
+   {
+     url: "assets/images/laddu-newbanner.jpg",
+     content: "",
+     description: "",
+   },
+   {
+     url: "assets/images/mixture-newbanner.jpg",
+     content: "",
+     description: "",
+   },
+   {
+     url: "assets/images/mysorpak-newbanner.jpg",
+     content: "",
+     description: "",
+   },
+   {
+     url: "assets/images/ribonpakkoda-newbanner.jpg",
+     content: "",
+     description: "",
+   },
+ ];
 
   return (
     <>
