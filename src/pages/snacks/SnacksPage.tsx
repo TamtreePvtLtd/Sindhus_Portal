@@ -66,6 +66,19 @@ function SnacksPage() {
 
   return (
     <>
+      <Box>
+        <Box
+          component="img"
+          src="assets/sindhu'skitchen_maintenance.jpeg"
+          alt="Website Under Maintenance"
+          sx={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+            objectFit: "contain",
+          }}
+        />
+      </Box>
       {/* <Box>
         {" "}
         <PageBanner
@@ -74,7 +87,7 @@ function SnacksPage() {
           description="Indulge in India's Irresistible Snack Delights - Flavorful, Spicy, and Simply Irresistible!"
         />
       </Box> */}
-      <Box>
+      {/* <Box>
         <Slider {...sliderSettings}>
           {bannerImages.map((banner, index) => (
             <Box key={index} position="relative">
@@ -120,9 +133,9 @@ function SnacksPage() {
             </Box>
           ))}
         </Slider>
-      </Box>
+      </Box> */}
 
-      <Container
+      {/* <Container
         sx={{
           marginTop: "10px",
           p: 2,
@@ -148,7 +161,7 @@ function SnacksPage() {
             <NoProductsAvailable />
           )}
         </Box>
-      </Container>
+      </Container> */}
     </>
   );
 }
